@@ -1,0 +1,9 @@
+@import "@fancyapps/ui/dist/fancybox/fancybox.css";
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
