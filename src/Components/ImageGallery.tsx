@@ -56,6 +56,7 @@ export function ImageGallery({
       {searchResult.map((t) => {
         return (
           <Paper
+            key={t.img.id}
             component="a"
             data-fancybox="gallery"
             href={t.img.url}
