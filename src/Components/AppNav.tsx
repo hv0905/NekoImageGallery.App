@@ -20,7 +20,7 @@ export function AppNav() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             NekoImageGallery
           </Typography>
-          <Button color="inherit" href="https://edgeneko.com" target="_blank"><OpenInNewIcon></OpenInNewIcon>EdgeNeko's Blog</Button>
+          <Button color="inherit" href="https://edgeneko.com" target="_blank"><OpenInNewIcon></OpenInNewIcon>EdgeNeko&apos;s Blog</Button>
         </Toolbar>
       </AppBar>
     </Box>

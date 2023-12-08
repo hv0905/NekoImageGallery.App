@@ -8,7 +8,7 @@ export function Home() {
     const [result, setResult] = useState<SearchResult[] | null>(null)
 
     function search(query: SearchQuery) {
-        query.querySearch(20).then(t => {
+        void query.querySearch(20).then(t => {
             setResult(t)
         });
     }

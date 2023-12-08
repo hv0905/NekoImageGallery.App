@@ -10,7 +10,7 @@ export class TextSearchQuery implements SearchQuery {
     constructor(public query: string) { }
 
     async querySearch(count = 20): Promise<SearchResult[]> {
-        const response = await axios.get(`${Environment.ApiUrl}/search/text/${encodeURIComponent(this.query)}?count=${count}`);
+        const response = await axios.get<SearchResult[]>(`${Environment.ApiUrl}/search/text/${encodeURIComponent(this.query)}?count=${count}`);
         return response.data;
         
     }
@@ -22,7 +22,7 @@ export class ImageSearchQuery implements SearchQuery {
     async querySearch(count = 20): Promise<SearchResult[]> {
         const formData = new FormData();
         formData.append("image", this.image);
-        const response = await axios.post(`${Environment.ApiUrl}/search/image`, formData, {
+        const response = await axios.post<SearchResult[]>(`${Environment.ApiUrl}/search/image`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             },

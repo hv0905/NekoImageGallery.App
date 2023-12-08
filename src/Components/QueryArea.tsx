@@ -78,6 +78,7 @@ export function QueryArea({
 
   const inputs = [
     <Box
+      key={0}
       component="form"
       sx={{ width: "100%", display: "flex", gap: 1 }}
       onSubmit={handleTextSubmit}
@@ -99,6 +100,7 @@ export function QueryArea({
       </Button>
     </Box>,
     <Box
+      key={1}
       sx={{ width: "100%", display: "flex", gap: 1, flexDirection: "column" }}
     >
       <Card sx={{ width: "100%", height: "200px" }}>
@@ -164,7 +166,7 @@ export function QueryArea({
         padding: 1,
       }}
     >
-      <Tabs value={tab} onChange={(_, v) => setTab(v)}>
+      <Tabs value={tab} onChange={(_, v: number) => setTab(v)}>
         <Tab label="Text Search" />
         <Tab label="Image Search" />
       </Tabs>
