@@ -3,36 +3,53 @@ import { SearchResult } from "../Models/SearchResult";
 import { Environment } from "../environment";
 import { useEffect, useRef } from "react";
 import { Fancybox } from "@fancyapps/ui";
+import { SearchQuery, SimilarSearchQuery } from "../Models/SearchQuery";
 
 export function ImageGallery({
   searchResult,
+  onSimilarSearch
 }: {
   searchResult: SearchResult[];
+  onSimilarSearch?: (query: SearchQuery) => void;
 }) {
   const containerRef = useRef(null);
   searchResult.forEach((t) => {
     if (t.img.url.startsWith("/")) {
       t.img.url = Environment.ApiUrl + t.img.url;
     }
+    if (t.img.thumbnail_url && t.img.thumbnail_url.startsWith("/")) {
+      t.img.thumbnail_url = Environment.ApiUrl + t.img.thumbnail_url;
+    }
+    
   });
 
   useEffect(() => {
     const container = containerRef.current;
-
+    const midToolbar = window.innerWidth > 750 ? [
+      "zoomIn",
+      "zoomOut",
+      "toggle1to1",
+      "rotateCCW",
+      "rotateCW",
+      "flipX",
+      "flipY",
+    ] : [];
     Fancybox.bind(container, "[data-fancybox]", {
         Toolbar: {
+            items: {
+              similar: {
+                tpl: `<button class="f-button">Similar Search</button>`,
+                click: () => {
+                  const index = Fancybox.getInstance()?.getSlide()?.index ?? -1;
+                  if (index == -1) return;
+                  onSimilarSearch?.(new SimilarSearchQuery(searchResult[index].img.id));
+                }
+              }
+            },
             display: {
               left: ["infobar"],
-              middle: [
-                "zoomIn",
-                "zoomOut",
-                "toggle1to1",
-                "rotateCCW",
-                "rotateCW",
-                "flipX",
-                "flipY",
-              ],
-              right: ["slideshow", "download", "thumbs", "close"],
+              middle: midToolbar,
+              right: ["similar", "download", "thumbs", "close"],
             },
           },
     });
@@ -63,7 +80,7 @@ export function ImageGallery({
             href={t.img.url}
             sx={{ margin: 1, display: "flex", alignItems: "center" }}
           >
-            <img src={t.img.url} style={{ width: "100%" }} />
+            <img src={t.img.thumbnail_url ?? t.img.url} style={{ width: "100%" }} />
           </Paper>
         );
       })}

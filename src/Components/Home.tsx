@@ -8,7 +8,7 @@ export function Home() {
     const [result, setResult] = useState<SearchResult[] | null>(null)
 
     function search(query: SearchQuery) {
-        void query.querySearch(20).then(t => {
+        void query.querySearch(30).then(t => {
             setResult(t.result)
         });
     }
@@ -16,7 +16,8 @@ export function Home() {
     return (
         <>
         <QueryArea onSubmit={search}></QueryArea>
-        {result ? <ImageGallery searchResult={result}></ImageGallery> : null}
+
+        {result ? <ImageGallery searchResult={result} onSimilarSearch={search}></ImageGallery> : null}
         </>
     )
 }
