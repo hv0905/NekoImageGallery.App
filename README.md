@@ -1,30 +1,69 @@
-# React + TypeScript + Vite
+# NekoImageGallery.App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A react webui app, for [NekoImageGallery](https://github.com/hv0905/NekoImageGallery)
 
-Currently, two official plugins are available:
+## Screenshots
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![Screenshot1](https://raw.githubusercontent.com/hv0905/NekoImageGallery/master/web/screenshots/1.png)
+![Screenshot2](https://raw.githubusercontent.com/hv0905/NekoImageGallery/master/web/screenshots/2.png)
+![Screenshot3](https://raw.githubusercontent.com/hv0905/NekoImageGallery/master/web/screenshots/3.png)
+![Screenshot4](https://raw.githubusercontent.com/hv0905/NekoImageGallery/master/web/screenshots/4.png)
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Prepare and build
 
-- Configure the top-level `parserOptions` property like this:
+#### Tools required
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+- git
+- Node.js
+- yarn
+- Visual studio code (strongly recommended) or other code editor
+
+#### Install dependencies
+
+1. Clone this repository
+2. Install dependencies using yarn
+
+   ```shell
+   yarn install
+   ```
+
+### Run development server
+
+Use the following command to run vite development server
+
+```shell
+yarn run dev
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Production deployment
+
+1. Change environment file to match your production environment
+
+   ```shell
+   cp env/.env.example env/.env.production.local
+   code env/.env.production.local
+   ```
+
+2. Build the project in production mode
+
+   ```shell
+   yarn run build
+   ```
+
+3. Deploy the `dist` folder to your own web server
+
+### Lint
+
+Use the following command to lint the project
+
+```shell
+yarn run lint
+```
+
+## Copyright
+
+Copyright 2023 EdgeNeko
+
+Licensed under GPLv3 license.
