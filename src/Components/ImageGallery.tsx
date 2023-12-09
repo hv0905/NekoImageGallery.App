@@ -59,6 +59,7 @@ export function ImageGallery({
             key={t.img.id}
             component="a"
             data-fancybox="gallery"
+            data-caption={`Similarity: ${(t.score * 100).toFixed(2)}%`}
             href={t.img.url}
             sx={{ margin: 1, display: "flex", alignItems: "center" }}
           >
