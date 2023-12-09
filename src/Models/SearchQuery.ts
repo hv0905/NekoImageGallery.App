@@ -1,16 +1,16 @@
 import axios from "axios";
-import { SearchResult } from "./SearchResult";
 import { Environment } from "../environment";
+import { SearchApiResponse } from "./SearchApiResponse";
 
 export interface SearchQuery {
-    querySearch(count: number): Promise<SearchResult[]>;
+    querySearch(count: number): Promise<SearchApiResponse>;
 }
 
 export class TextSearchQuery implements SearchQuery {
     constructor(public query: string) { }
 
-    async querySearch(count = 20): Promise<SearchResult[]> {
-        const response = await axios.get<SearchResult[]>(`${Environment.ApiUrl}/search/text/${encodeURIComponent(this.query)}?count=${count}`);
+    async querySearch(count = 20): Promise<SearchApiResponse> {
+        const response = await axios.get<SearchApiResponse>(`${Environment.ApiUrl}/search/text/${encodeURIComponent(this.query)}?count=${count}`);
         return response.data;
         
     }
@@ -19,10 +19,10 @@ export class TextSearchQuery implements SearchQuery {
 export class ImageSearchQuery implements SearchQuery {
     constructor(public image: File) { }
 
-    async querySearch(count = 20): Promise<SearchResult[]> {
+    async querySearch(count = 20): Promise<SearchApiResponse> {
         const formData = new FormData();
         formData.append("image", this.image);
-        const response = await axios.post<SearchResult[]>(`${Environment.ApiUrl}/search/image`, formData, {
+        const response = await axios.post<SearchApiResponse>(`${Environment.ApiUrl}/search/image`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             },

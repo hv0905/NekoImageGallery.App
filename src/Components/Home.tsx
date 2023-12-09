@@ -9,7 +9,7 @@ export function Home() {
 
     function search(query: SearchQuery) {
         void query.querySearch(20).then(t => {
-            setResult(t)
+            setResult(t.result)
         });
     }
 
