@@ -2,6 +2,8 @@
 
 A react webui app, for [NekoImageGallery](https://github.com/hv0905/NekoImageGallery)
 
+[中文文档](readme_cn.md)
+
 ## Screenshots
 
 ![Screenshot1](https://raw.githubusercontent.com/hv0905/NekoImageGallery/master/web/screenshots/1.png)
@@ -9,9 +11,11 @@ A react webui app, for [NekoImageGallery](https://github.com/hv0905/NekoImageGal
 ![Screenshot3](https://raw.githubusercontent.com/hv0905/NekoImageGallery/master/web/screenshots/3.png)
 ![Screenshot4](https://raw.githubusercontent.com/hv0905/NekoImageGallery/master/web/screenshots/4.png)
 
+> The above screenshots may contain copyrighted images from different artists, please do not use them for other purposes.
+
 ## Getting Started
 
-### Prepare and build
+### Prepare
 
 #### Tools required
 
