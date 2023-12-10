@@ -75,8 +75,15 @@ export function QueryArea({
 
   const pasteImage = (e: React.ClipboardEvent<HTMLDivElement>) => {
     const items = e.clipboardData.items;
-    if (items && items.length > 0) {
-      setImageFile(items[0].getAsFile()!);
+    if (!items) return;
+    for (const item of items) {
+      if (item.kind === 'file') {
+        const file = item.getAsFile();
+        if (file) {
+          setImageFile(file);
+          break;
+        }
+      }
     }
   };
 
