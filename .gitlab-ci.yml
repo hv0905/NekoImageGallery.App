@@ -5,7 +5,7 @@ build-job:       # This job runs in the build stage, which runs first.
   stage: build
   before_script:
     - pwd
-    - cp $ENV_PRODUCTION .env/.env.production.local
+    - cp $ENV_FILE_PRODUCTION .env/.env.production.local
   cache:
     policy: pull-push
     unprotect: false
