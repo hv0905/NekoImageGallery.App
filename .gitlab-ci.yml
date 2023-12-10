@@ -1,0 +1,25 @@
+stages:          # List of stages for jobs, and their order of execution
+  - build
+
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  before_script:
+    - pwd
+    - cp $ENV_PRODUCTION .env/.env.production.local
+  cache:
+    policy: pull-push
+    unprotect: false
+    untracked: false
+    when: on_success
+    paths:
+      - .yarn
+  script:
+    - yarn install --cache-folder .yarn
+    - yarn run build
+    - echo "Compile complete."
+  artifacts:
+    untracked: false
+    when: on_success
+    expire_in: 30 days
+    paths:
+      - dist/
