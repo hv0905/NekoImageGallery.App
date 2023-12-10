@@ -7,3 +7,7 @@
 body {
     margin: 0;
 }
+
+.fancybox__backdrop {
+    backdrop-filter: blur(8px);
+}

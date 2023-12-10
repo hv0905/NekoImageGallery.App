@@ -58,7 +58,7 @@ export function ImageGallery({
       Fancybox.unbind(container);
       Fancybox.close();
     };
-  });
+  }, [containerRef, searchResult, onSimilarSearch]);
 
   return (
     <Box
@@ -68,6 +68,7 @@ export function ImageGallery({
         gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
         gridAutoRows: "minmax(200px, auto)",
         justifyItems: "center",
+        gap: 1
       }}
     >
       {searchResult.map((t) => {
@@ -78,7 +79,7 @@ export function ImageGallery({
             data-fancybox="gallery"
             data-caption={`Similarity: ${(t.score * 100).toFixed(2)}%`}
             href={t.img.url}
-            sx={{ margin: 1, display: "flex", alignItems: "center" }}
+            sx={{ margin: 1, display: "flex", alignItems: "center", overflow: "Hidden", width: "100%", maxHeight: '500px' }}
           >
             <img src={t.img.thumbnail_url ?? t.img.url} style={{ width: "100%" }} />
           </Paper>

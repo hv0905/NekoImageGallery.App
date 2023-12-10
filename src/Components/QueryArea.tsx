@@ -9,9 +9,14 @@ import {
   Tabs,
   TextField,
 } from "@mui/material";
-import { ImageSearchQuery, SearchQuery, TextSearchQuery } from "../Models/SearchQuery";
+import {
+  ImageSearchQuery,
+  RandomSearchQuery,
+  SearchQuery,
+  TextSearchQuery,
+} from "../Models/SearchQuery";
 import { useState } from "react";
-import { Close } from "@mui/icons-material";
+import { Casino, Close, Search } from "@mui/icons-material";
 
 export function QueryArea({
   onSubmit,
@@ -30,8 +35,7 @@ export function QueryArea({
   };
 
   const handleImageSearch = () => {
-    if (file)
-        onSubmit?.(new ImageSearchQuery(file));
+    if (file) onSubmit?.(new ImageSearchQuery(file));
   };
 
   const setImageFile = (file: File) => {
@@ -80,7 +84,7 @@ export function QueryArea({
     <Box
       key={0}
       component="form"
-      sx={{ width: "100%", display: "flex", gap: 1 }}
+      sx={{ width: "100%", display: "flex", gap: 1}}
       onSubmit={handleTextSubmit}
     >
       <TextField
@@ -95,9 +99,14 @@ export function QueryArea({
         variant="contained"
         disabled={textPrompt.length < 3}
         sx={{ width: "clamp(80px, 10%, 200px)" }}
+        size="large"
+        endIcon={<Search />}
       >
         GO
       </Button>
+      <IconButton aria-label="random-pick" size="large" title="Random pick" onClick={() => onSubmit?.(new RandomSearchQuery())}>
+        <Casino />
+      </IconButton>
     </Box>,
     <Box
       key={1}
@@ -148,7 +157,12 @@ export function QueryArea({
         <Button fullWidth variant="outlined" onClick={selectImage}>
           Select Image
         </Button>
-        <Button fullWidth variant="contained" disabled={!file} onClick={handleImageSearch}>
+        <Button
+          fullWidth
+          variant="contained"
+          disabled={!file}
+          onClick={handleImageSearch}
+        >
           Search
         </Button>
       </Box>

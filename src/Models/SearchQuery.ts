@@ -48,3 +48,15 @@ export class SimilarSearchQuery extends SearchQuery {
         return response.data;
     }
 }
+
+export class RandomSearchQuery extends SearchQuery {
+    constructor() {
+        super();
+    }
+
+    async querySearch(count = 20): Promise<SearchApiResponse> {
+        const response = await axios.get<SearchApiResponse>(`${Environment.ApiUrl}/search/random?count=${count}`);
+        return response.data;
+    }
+
+}
