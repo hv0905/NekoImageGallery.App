@@ -1,5 +1,6 @@
 stages:          # List of stages for jobs, and their order of execution
   - build
+  - deploy
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -23,3 +24,15 @@ build-job:       # This job runs in the build stage, which runs first.
     expire_in: 30 days
     paths:
       - dist/
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  only:
+    - master
+  environment: production
+  variables:
+    DEPLOY_PATH: /opt/NekoImageGallery.App
+  before_script:
+    - chmod 600 $DEPLOY_PRIVATEKEY
+  script:
+    - rsync -rvz -e "ssh -i $DEPLOY_PRIVATEKEY -o StrictHostKeyChecking=no" --delete dist/ $DEPLOY_USER@$DEPLOY_SERVER:$DEPLOY_PATH
