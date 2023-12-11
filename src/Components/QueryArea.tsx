@@ -8,15 +8,15 @@ import {
   Tab,
   Tabs,
   TextField,
-} from "@mui/material";
+} from '@mui/material';
 import {
   ImageSearchQuery,
   RandomSearchQuery,
   SearchQuery,
   TextSearchQuery,
-} from "../Models/SearchQuery";
-import { useState } from "react";
-import { Casino, Close, Search } from "@mui/icons-material";
+} from '../Services/SearchQuery';
+import { useState } from 'react';
+import { Casino, Close, Search } from '@mui/icons-material';
 
 export function QueryArea({
   onSubmit,
@@ -24,7 +24,7 @@ export function QueryArea({
   onSubmit?: (query: SearchQuery) => void;
 }) {
   const [tab, setTab] = useState(0);
-  const [textPrompt, setTextPrompt] = useState("");
+  const [textPrompt, setTextPrompt] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [notificationOpen, setNotificationOpen] = useState(false);
@@ -40,7 +40,7 @@ export function QueryArea({
 
   const setImageFile = (file: File) => {
     console.log(file);
-    if (file.type === "image/jpeg" || file.type === "image/png") {
+    if (file.type === 'image/jpeg' || file.type === 'image/png') {
       setFile(file);
       setFileUrl(URL.createObjectURL(file));
     } else {
@@ -49,10 +49,10 @@ export function QueryArea({
   };
 
   const selectImage = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/jpeg, image/png";
-    input.onchange = (e) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/jpeg, image/png';
+    input.onchange = e => {
       const files = (e.target as HTMLInputElement).files;
       if (files && files.length > 0) {
         setImageFile(files[0]);
@@ -91,7 +91,7 @@ export function QueryArea({
     <Box
       key={0}
       component="form"
-      sx={{ width: "100%", display: "flex", gap: 1}}
+      sx={{ width: '100%', display: 'flex', gap: 1 }}
       onSubmit={handleTextSubmit}
     >
       <TextField
@@ -99,34 +99,44 @@ export function QueryArea({
         label="Search..."
         variant="outlined"
         value={textPrompt}
-        onChange={(e) => setTextPrompt(e.target.value)}
+        onChange={e => setTextPrompt(e.target.value)}
       />
       <Button
         type="submit"
         variant="contained"
         disabled={textPrompt.length < 3}
-        sx={{ width: "clamp(80px, 10%, 200px)" }}
+        sx={{ width: 'clamp(80px, 10%, 200px)' }}
         size="large"
         endIcon={<Search />}
       >
         GO
       </Button>
-      <IconButton aria-label="random-pick" size="large" title="Random pick" onClick={() => onSubmit?.(new RandomSearchQuery())}>
+      <IconButton
+        aria-label="random-pick"
+        size="large"
+        title="Random pick"
+        onClick={() => onSubmit?.(new RandomSearchQuery())}
+      >
         <Casino />
       </IconButton>
     </Box>,
     <Box
       key={1}
-      sx={{ width: "100%", display: "flex", gap: 1, flexDirection: "column" }}
+      sx={{
+        width: '100%',
+        display: 'flex',
+        gap: 1,
+        flexDirection: 'column',
+      }}
     >
-      <Card sx={{ width: "100%", height: "200px" }}>
+      <Card sx={{ width: '100%', height: '200px' }}>
         <div
           style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
           onDrop={dropImage}
           onPaste={pasteImage}
@@ -135,7 +145,11 @@ export function QueryArea({
           {fileUrl ? (
             <img
               src={fileUrl}
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+              }}
             ></img>
           ) : (
             <Box>Drop or paste your image here.</Box>
@@ -180,9 +194,9 @@ export function QueryArea({
     <Box
       display="flex"
       sx={{
-        flexDirection: "column",
-        justifyItems: "center",
-        alignItems: "center",
+        flexDirection: 'column',
+        justifyItems: 'center',
+        alignItems: 'center',
         gap: 1.5,
         padding: 1,
       }}
