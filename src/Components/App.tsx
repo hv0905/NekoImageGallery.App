@@ -3,6 +3,7 @@ import { AppNav } from './AppNav';
 import {
   CssBaseline,
   ThemeProvider,
+  colors,
   createTheme,
   useMediaQuery,
 } from '@mui/material';
@@ -17,6 +18,7 @@ function App() {
       createTheme({
         palette: {
           mode: prefersDarkMode ? 'dark' : 'light',
+          primary: colors.blue
         },
       }),
     [prefersDarkMode]

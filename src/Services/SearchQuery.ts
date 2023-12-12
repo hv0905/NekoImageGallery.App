@@ -1,3 +1,4 @@
+import { AdvancedSearchModel } from '../Models/AdvancedSearchModel';
 import { SearchApiResponse } from '../Models/SearchApiResponse';
 import { getClient } from './Base';
 
@@ -63,6 +64,25 @@ export class RandomSearchQuery extends SearchQuery {
   async querySearch(count = 20): Promise<SearchApiResponse> {
     const response = await getClient().get<SearchApiResponse>(
       `/search/random?count=${count}`
+    );
+    return response.data;
+  }
+}
+
+export class AdvancedSearchQuery extends SearchQuery {
+  constructor(public searchModel: AdvancedSearchModel) {
+    super();
+  }
+
+  async querySearch(count = 20): Promise<SearchApiResponse> {
+    const response = await getClient().post<SearchApiResponse>(
+      `/search/advanced`,
+      this.searchModel,
+      {
+        params: {
+          count: count,
+        },
+      }
     );
     return response.data;
   }

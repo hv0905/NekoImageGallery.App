@@ -3,6 +3,7 @@ import { SearchQuery } from '../Services/SearchQuery';
 import { useState } from 'react';
 import { TextQueryForm } from './TextQueryForm';
 import { ImageQueryForm } from './ImageQueryForm';
+import { AdvancedQueryForm } from './AdvancedQueryForm';
 
 export function QueryArea({
   onSubmit,
@@ -14,6 +15,7 @@ export function QueryArea({
   const inputs = [
     <TextQueryForm key={0} onSubmit={onSubmit} />,
     <ImageQueryForm key={1} onSubmit={onSubmit} />,
+    <AdvancedQueryForm key={2} onSubmit={onSubmit}/>
   ];
 
   return (
@@ -27,9 +29,10 @@ export function QueryArea({
         padding: 1,
       }}
     >
-      <Tabs value={tab} onChange={(_, v: number) => setTab(v)}>
+      <Tabs variant='scrollable' value={tab} onChange={(_, v: number) => setTab(v)}>
         <Tab label="Text Search" />
         <Tab label="Image Search" />
+        <Tab label="Advanced"/>
       </Tabs>
       {inputs[tab]}
     </Box>
