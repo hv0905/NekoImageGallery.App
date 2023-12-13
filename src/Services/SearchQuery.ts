@@ -1,5 +1,6 @@
 import { AdvancedSearchModel } from '../Models/AdvancedSearchModel';
 import { SearchApiResponse } from '../Models/SearchApiResponse';
+import { SearchBasis } from '../Models/SearchBasis';
 import { getClient } from './Base';
 
 export abstract class SearchQuery {
@@ -7,13 +8,13 @@ export abstract class SearchQuery {
 }
 
 export class TextSearchQuery extends SearchQuery {
-  constructor(public query: string) {
+  constructor(public query: string, public searchBasis: SearchBasis = SearchBasis.vision) {
     super();
   }
 
   async querySearch(count = 20): Promise<SearchApiResponse> {
     const response = await getClient().get<SearchApiResponse>(
-      `/search/text/${encodeURIComponent(this.query)}?count=${count}`
+      `/search/text/${encodeURIComponent(this.query)}?count=${count}&basis=${this.searchBasis}`
     );
     return response.data;
   }
@@ -44,13 +45,13 @@ export class ImageSearchQuery extends SearchQuery {
 }
 
 export class SimilarSearchQuery extends SearchQuery {
-  constructor(public id: string) {
+  constructor(public id: string, public searchBasis: SearchBasis = SearchBasis.vision) {
     super();
   }
 
   async querySearch(count = 20): Promise<SearchApiResponse> {
     const response = await getClient().get<SearchApiResponse>(
-      `/search/similar/${encodeURIComponent(this.id)}?count=${count}`
+      `/search/similar/${encodeURIComponent(this.id)}?count=${count}&basis=${this.searchBasis}`
     );
     return response.data;
   }
@@ -70,7 +71,7 @@ export class RandomSearchQuery extends SearchQuery {
 }
 
 export class AdvancedSearchQuery extends SearchQuery {
-  constructor(public searchModel: AdvancedSearchModel) {
+  constructor(public searchModel: AdvancedSearchModel, public searchBasis: SearchBasis = SearchBasis.vision) {
     super();
   }
 
@@ -81,6 +82,7 @@ export class AdvancedSearchQuery extends SearchQuery {
       {
         params: {
           count: count,
+          basis: this.searchBasis,
         },
       }
     );

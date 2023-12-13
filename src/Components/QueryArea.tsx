@@ -14,8 +14,9 @@ export function QueryArea({
 
   const inputs = [
     <TextQueryForm key={0} onSubmit={onSubmit} />,
-    <ImageQueryForm key={1} onSubmit={onSubmit} />,
-    <AdvancedQueryForm key={2} onSubmit={onSubmit}/>
+    <TextQueryForm key={1} onSubmit={onSubmit} ocrSearch />,
+    <ImageQueryForm key={2} onSubmit={onSubmit} />,
+    <AdvancedQueryForm key={3} onSubmit={onSubmit}/>
   ];
 
   return (
@@ -30,8 +31,9 @@ export function QueryArea({
       }}
     >
       <Tabs variant='scrollable' value={tab} onChange={(_, v: number) => setTab(v)}>
-        <Tab label="Text Search" />
-        <Tab label="Image Search" />
+        <Tab label="Text" />
+        <Tab label="OCR" />
+        <Tab label="Image" />
         <Tab label="Advanced"/>
       </Tabs>
       {inputs[tab]}

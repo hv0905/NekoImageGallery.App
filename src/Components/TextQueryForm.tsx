@@ -6,17 +6,20 @@ import {
   TextSearchQuery,
 } from '../Services/SearchQuery';
 import { useState } from 'react';
+import { SearchBasis } from '../Models/SearchBasis';
 
 export function TextQueryForm({
+  ocrSearch = false,
   onSubmit,
 }: {
+  ocrSearch?: boolean
   onSubmit?: (query: SearchQuery) => void;
 }) {
   const [textPrompt, setTextPrompt] = useState('');
 
   const handleTextSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmit?.(new TextSearchQuery(textPrompt));
+    onSubmit?.(new TextSearchQuery(textPrompt, ocrSearch ? SearchBasis.ocr : SearchBasis.vision));
   };
 
   return (
@@ -28,6 +31,7 @@ export function TextQueryForm({
       <TextField
         sx={{ flexGrow: 1 }}
         label="Search..."
+        placeholder={ocrSearch ? 'Keyword for text that image contains (Chinese / English)' : 'Natural language to describe image content (English only)'}
         variant="outlined"
         value={textPrompt}
         onChange={e => setTextPrompt(e.target.value)}
@@ -40,7 +44,7 @@ export function TextQueryForm({
         size="large"
         endIcon={<Search />}
       >
-        GO
+        {ocrSearch ? "OCR" : "GO"}
       </Button>
       <IconButton
         aria-label="random-pick"
