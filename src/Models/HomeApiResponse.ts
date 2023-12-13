@@ -8,4 +8,6 @@ export interface HomeApiResponse {
   server_time: Date;
   wiki: Map<string, string>;
   authorization: HomeAuthorizationResponse;
+  available_basis: string[];
+
 }

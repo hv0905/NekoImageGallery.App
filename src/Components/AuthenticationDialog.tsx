@@ -8,9 +8,10 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { Home } from '../Services/HomeApi';
+import { useEffect, useState, useContext } from 'react';
+import { WelcomeApi } from '../Services/WelcomeApi';
 import { resetClient } from '../Services/Base';
+import { ApiInfo } from './Home';
 
 export function AuthenticationDialog() {
   const [open, setOpen] = useState(false);
@@ -18,22 +19,19 @@ export function AuthenticationDialog() {
   const [token, setToken] = useState('');
   const [requesting, setRequesting] = useState(false);
   const [errMsg, setErrMsg] = useState('');
+  const apiInfo = useContext(ApiInfo);
 
   useEffect(() => {
-    void Home().then(resp => {
-      if (!resp.authorization.passed) {
+      if (apiInfo && !apiInfo.authorization.passed) {
         setOpen(true);
-      } else {
-        console.log("Already authenticated, don't show dialog.");
       }
-    });
-  }, []);
+  }, [apiInfo]);
 
   const verifyToken = () => {
     localStorage.setItem('access-token', token);
     resetClient();
     setRequesting(true);
-    Home()
+    WelcomeApi()
       .then(resp => {
         if (resp.authorization.passed) {
           setOpen(false);

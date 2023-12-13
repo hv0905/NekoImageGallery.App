@@ -10,22 +10,29 @@ import {
   TextField,
 } from '@mui/material';
 import { AdvancedSearchQuery, SearchQuery } from '../Services/SearchQuery';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   AdvancedSearchMode,
   AdvancedSearchModel,
 } from '../Models/AdvancedSearchModel';
 import { SearchBasis } from '../Models/SearchBasis';
+import { ApiInfo } from './Home';
 
 export function AdvancedQueryForm({
   onSubmit,
 }: {
+  availModes?: string[];
   onSubmit?: (query: SearchQuery) => void;
 }) {
   const [positivePrompt, setPositivePrompt] = useState('');
   const [negativePrompt, setNegativePrompt] = useState('');
-  const [mode, setMode] = useState<AdvancedSearchMode>(AdvancedSearchMode.average);
+  const [mode, setMode] = useState<AdvancedSearchMode>(
+    AdvancedSearchMode.average
+  );
   const [basis, setBasis] = useState<SearchBasis>(SearchBasis.vision);
+  const apiInfo = useContext(ApiInfo);
+
+  const ocrAvail = !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
 
   const submitable = positivePrompt.length > 0 || negativePrompt.length > 0;
 
@@ -75,18 +82,23 @@ export function AdvancedQueryForm({
         <FormControlLabel value="average" control={<Radio />} label="Average" />
         <FormControlLabel value="best" control={<Radio />} label="Best" />
       </RadioGroup>
+      { ocrAvail &&
       <RadioGroup
         row
         aria-labelledby="basis-sel-group"
         value={basis}
         onChange={e => setBasis(e.target.value as SearchBasis)}
       >
-        <FormLabel id="basis-sel-group" sx={{ alignSelf: 'center', marginX: 2 }}>
+        <FormLabel
+          id="basis-sel-group"
+          sx={{ alignSelf: 'center', marginX: 2 }}
+        >
           Basis
         </FormLabel>
         <FormControlLabel value="vision" control={<Radio />} label="Vision" />
         <FormControlLabel value="ocr" control={<Radio />} label="OCR" />
       </RadioGroup>
+      }
       <ButtonGroup fullWidth>
         <Button variant="outlined" sx={{ width: '30%' }}>
           Reset

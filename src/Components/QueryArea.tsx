@@ -1,9 +1,10 @@
 import { Box, Tab, Tabs } from '@mui/material';
 import { SearchQuery } from '../Services/SearchQuery';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { TextQueryForm } from './TextQueryForm';
 import { ImageQueryForm } from './ImageQueryForm';
 import { AdvancedQueryForm } from './AdvancedQueryForm';
+import { ApiInfo } from './Home';
 
 export function QueryArea({
   onSubmit,
@@ -11,13 +12,19 @@ export function QueryArea({
   onSubmit?: (query: SearchQuery) => void;
 }) {
   const [tab, setTab] = useState(0);
+  const apiInfo = useContext(ApiInfo);
+
+  const ocrAvail = !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
 
   const inputs = [
     <TextQueryForm key={0} onSubmit={onSubmit} />,
-    <TextQueryForm key={1} onSubmit={onSubmit} ocrSearch />,
     <ImageQueryForm key={2} onSubmit={onSubmit} />,
     <AdvancedQueryForm key={3} onSubmit={onSubmit}/>
   ];
+
+  if (ocrAvail) {
+    inputs.splice(1, 0, <TextQueryForm key={1} onSubmit={onSubmit} ocrSearch />);
+  }
 
   return (
     <Box
@@ -32,7 +39,7 @@ export function QueryArea({
     >
       <Tabs variant='scrollable' value={tab} onChange={(_, v: number) => setTab(v)}>
         <Tab label="Text" />
-        <Tab label="OCR" />
+        {ocrAvail && <Tab label="OCR" />}
         <Tab label="Image" />
         <Tab label="Advanced"/>
       </Tabs>
