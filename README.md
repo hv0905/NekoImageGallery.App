@@ -1,5 +1,7 @@
 # NekoImageGallery.App
 
+[![Gitlab pipeline status (self-managed)](https://img.shields.io/gitlab/pipeline-status/EdgeNeko%2FNekoImageGallery.App?gitlab_url=https%3A%2F%2Fgitlab.aiursoft.cn&branch=master&style=flat-square&logo=gitlab)](https://gitlab.aiursoft.cn/EdgeNeko/NekoImageGallery.App/pipelines)
+
 A react webui app, for [NekoImageGallery](https://github.com/hv0905/NekoImageGallery)
 
 [中文文档](readme_cn.md)
