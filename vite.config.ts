@@ -37,6 +37,9 @@ export default defineConfig({
             purpose: 'maskable'
           }
         ]
+      },
+      workbox: {
+      navigateFallbackDenylist: [/^\/api/],
       }
     })
   ],
