@@ -8,24 +8,20 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import { useEffect, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { WelcomeApi } from '../Services/WelcomeApi';
 import { resetClient } from '../Services/Base';
-import { ApiInfo } from './Home';
+import { ApiInfo } from './ApiInfo';
 
 export function AuthenticationDialog() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [err, setErr] = useState(false);
   const [token, setToken] = useState('');
   const [requesting, setRequesting] = useState(false);
   const [errMsg, setErrMsg] = useState('');
   const apiInfo = useContext(ApiInfo);
 
-  useEffect(() => {
-      if (apiInfo && !apiInfo.authorization.passed) {
-        setOpen(true);
-      }
-  }, [apiInfo]);
+  const shouldOpen = open && !!(apiInfo && !apiInfo.authorization.passed);
 
   const verifyToken = () => {
     localStorage.setItem('access-token', token);
@@ -51,7 +47,7 @@ export function AuthenticationDialog() {
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog open={shouldOpen}>
       <DialogTitle>Authentication required</DialogTitle>
       <DialogContent>
         <DialogContentText>

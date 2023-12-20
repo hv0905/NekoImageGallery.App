@@ -1,4 +1,4 @@
-import { createContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SearchResult } from '../Models/SearchResult';
 import { ImageGallery } from './ImageGallery';
 import { QueryArea } from './QueryArea';
@@ -7,8 +7,7 @@ import { AuthenticationDialog } from './AuthenticationDialog';
 import { WelcomeApi } from '../Services/WelcomeApi';
 import { HomeApiResponse } from '../Models/HomeApiResponse';
 import { Box, Button, CircularProgress } from '@mui/material';
-
-export const ApiInfo = createContext<HomeApiResponse | null>(null);
+import { ApiInfo } from './ApiInfo';
 
 export function Home() {
   const activeQuery = useRef<SearchQuery | null>(null);

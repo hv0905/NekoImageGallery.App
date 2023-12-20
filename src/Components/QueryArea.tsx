@@ -4,7 +4,7 @@ import { useContext, useState } from 'react';
 import { TextQueryForm } from './TextQueryForm';
 import { ImageQueryForm } from './ImageQueryForm';
 import { AdvancedQueryForm } from './AdvancedQueryForm';
-import { ApiInfo } from './Home';
+import { ApiInfo } from './ApiInfo';
 
 export function QueryArea({
   onSubmit,

@@ -8,6 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['favicon.png', 'apple-touch-icon.png'],
       manifest: {
         name: "Neko Image Gallery",
         short_name: "NekoGallery",
