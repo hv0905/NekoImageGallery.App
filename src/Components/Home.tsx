@@ -24,7 +24,12 @@ export function Home() {
         console.log("Reset!");
         setResult(t.result);
       } else {
-        setResult([...(result ?? []), ...t.result]);
+        // In a very rare situation, if two image are same, which means their score is literally equal (lets say it p_1 and p_2, p1.score = p2.score),
+        // and p_1 is the last result of previous request.
+        // The last result of the previous request may be the same as the first (or second) result of the next request.
+        // Previous query: [..., p1], Next query: [p2, p1, ...], the result will be [..., p1, p2, p1, ...], which will break the uniqueness of the result ID.
+        // So a distinct is required.
+        setResult([...(result ?? []), ...t.result].filter((v, i, a) => a.findIndex(t => t.img.id === v.img.id) === i));
       }
       if (t.result.length < 30) {
         setNoMore(true);
@@ -49,7 +54,7 @@ export function Home() {
     <ApiInfo.Provider value={apiInfo}>
       <QueryArea onSubmit={search}></QueryArea>
 
-      {result ? (
+      {result && (
         <>
           <ImageGallery
             searchResult={result}
@@ -65,7 +70,7 @@ export function Home() {
             </Button>
           )}
         </>
-      ) : null}
+      )}
       <AuthenticationDialog />
     </ApiInfo.Provider>
   );
