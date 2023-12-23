@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   Button,
+  IconButton,
   ListItemIcon,
   ListItemText,
   Menu,
@@ -11,7 +12,9 @@ import {
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { GitHub } from '@mui/icons-material';
+import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from 'react';
+import { Environment } from '../environment';
 
 export function AppNav() {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
@@ -25,7 +28,7 @@ export function AppNav() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {/* <IconButton
+          <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -33,10 +36,10 @@ export function AppNav() {
             sx={{ mr: 2 }}
           >
             <MenuIcon></MenuIcon>
-          </IconButton> */}
+          </IconButton>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            NekoImageGallery
+            {Environment.AppDisplayName}
           </Typography>
           <Button
             id="related-site-button"
