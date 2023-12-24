@@ -7,7 +7,7 @@ import {
   Switch,
   TextField,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SearchFilterOptions } from '../Models/SearchFilterOptions';
 
 const commonAspectRatios = [
@@ -97,7 +97,7 @@ export function FilterForm({
   const [minWidth, setMinWidth] = useState(0);
   const [minHeight, setMinHeight] = useState(0);
 
-  function updateFilterModel() {
+  useEffect(() => {
     if (
       minWidth < 0 ||
       minHeight < 0 ||
@@ -117,25 +117,27 @@ export function FilterForm({
       newFilterModel.min_width = minWidth;
       newFilterModel.min_height = minHeight;
     }
-
-
     onChange?.(newFilterModel);
-  }
+  }, [
+    aspectRatioEnabled,
+    aspectRatio,
+    aspectRatioTolerance,
+    minSizeEnabled,
+    minWidth,
+    minHeight,
+    onChange,
+  ]);
 
   const aspectRatioErr = aspectRatioTextToNumber(aspectRatio) < 0;
 
   return (
-    <Paper elevation={3}>
+    <Paper elevation={3} sx={{ mx: 1 }}>
       <Box sx={{ padding: 1 }} display="flex" flexDirection="column">
         <FormControlLabel
           control={
             <Switch
-              defaultChecked
               checked={aspectRatioEnabled}
-              onChange={e => {
-                setAspectRatioEnabled(e.target.checked);
-                updateFilterModel();
-              }}
+              onChange={e => setAspectRatioEnabled(e.target.checked)}
             />
           }
           label="Aspect Ratio"
@@ -148,20 +150,14 @@ export function FilterForm({
               freeSolo
               value={aspectRatio}
               fullWidth
-              onChange={(_, v) => {
-                setAspectRatio(v ?? '');
-                updateFilterModel();
-              }}
+              onChange={(_, v) => setAspectRatio(v ?? '')}
               renderInput={params => (
                 <TextField
                   variant="standard"
                   {...params}
                   label="Preferred Aspect Ratio"
                   error={aspectRatioErr}
-                  onChange={e => {
-                    setAspectRatio(e.target.value);
-                    updateFilterModel();
-                  }}
+                  onChange={e => setAspectRatio(e.target.value)}
                   helperText={aspectRatioErr ? 'Invalid aspect ratio' : ''}
                 />
               )}
@@ -170,10 +166,7 @@ export function FilterForm({
               label="Ratio tolerance"
               variant="standard"
               value={aspectRatioTolerance}
-              onChange={v => {
-                setAspectRatioTolerance(v);
-                updateFilterModel();
-              }}
+              onChange={v => setAspectRatioTolerance(v)}
               min={0}
               max={100}
               step={1}
@@ -184,12 +177,8 @@ export function FilterForm({
         <FormControlLabel
           control={
             <Switch
-              defaultChecked
               checked={minSizeEnabled}
-              onChange={e => {
-                setMinSizeEnabled(e.target.checked);
-                updateFilterModel();
-              }}
+              onChange={e => setMinSizeEnabled(e.target.checked)}
             />
           }
           label="Min Size"

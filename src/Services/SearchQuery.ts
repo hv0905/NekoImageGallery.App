@@ -1,10 +1,18 @@
 import { AdvancedSearchModel } from '../Models/AdvancedSearchModel';
 import { SearchApiResponse } from '../Models/SearchApiResponse';
 import { SearchBasis } from '../Models/SearchBasis';
+import { SearchFilterOptions } from '../Models/SearchFilterOptions';
 import { getClient } from './Base';
 
 export abstract class SearchQuery {
+
+  public filterOptions: SearchFilterOptions | null = null;
+
   abstract querySearch(count: number, skip: number): Promise<SearchApiResponse>;
+
+  public getFilterOptions(): SearchFilterOptions | null {
+    return this.filterOptions;
+  }
 }
 
 export class TextSearchQuery extends SearchQuery {
@@ -17,9 +25,15 @@ export class TextSearchQuery extends SearchQuery {
 
   async querySearch(count = 20, skip = 0): Promise<SearchApiResponse> {
     const response = await getClient().get<SearchApiResponse>(
-      `/search/text/${encodeURIComponent(
-        this.query
-      )}?count=${count}&skip=${skip}&basis=${this.searchBasis}`
+      `/search/text/${encodeURIComponent(this.query)}`,
+      {
+        params: {
+          count: count,
+          skip: skip,
+          basis: this.searchBasis,
+          ...this.getFilterOptions(),
+        },
+      }
     );
     return response.data;
   }
@@ -43,6 +57,7 @@ export class ImageSearchQuery extends SearchQuery {
         params: {
           count: count,
           skip: skip,
+          ...this.getFilterOptions(),
         },
       }
     );
@@ -60,9 +75,15 @@ export class SimilarSearchQuery extends SearchQuery {
 
   async querySearch(count = 20, skip = 0): Promise<SearchApiResponse> {
     const response = await getClient().get<SearchApiResponse>(
-      `/search/similar/${encodeURIComponent(
-        this.id
-      )}?count=${count}&skip=${skip}&basis=${this.searchBasis}`
+      `/search/similar/${encodeURIComponent(this.id)}`,
+      {
+        params: {
+          count: count,
+          skip: skip,
+          basis: this.searchBasis,
+          ...this.getFilterOptions(),
+        },
+      }
     );
     return response.data;
   }
@@ -75,7 +96,13 @@ export class RandomSearchQuery extends SearchQuery {
 
   async querySearch(count = 20): Promise<SearchApiResponse> {
     const response = await getClient().get<SearchApiResponse>(
-      `/search/random?count=${count}`
+      `/search/random`,
+      {
+        params: {
+          count: count,
+          ...this.getFilterOptions()
+        },
+      }
     );
     return response.data;
   }
@@ -98,6 +125,7 @@ export class AdvancedSearchQuery extends SearchQuery {
           count: count,
           skip: skip,
           basis: this.searchBasis,
+          ...this.getFilterOptions(),
         },
       }
     );

@@ -9,6 +9,7 @@ import { HomeApiResponse } from '../Models/HomeApiResponse';
 import { Box, Button, CircularProgress, Collapse } from '@mui/material';
 import { ApiInfo, AppSettings } from './Contexts';
 import { FilterForm } from './FilterForm';
+import { SearchFilterOptions } from '../Models/SearchFilterOptions';
 
 export function Home() {
   const activeQuery = useRef<SearchQuery | null>(null);
@@ -16,7 +17,10 @@ export function Home() {
   const [apiInfo, setApiInfo] = useState<HomeApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [noMore, setNoMore] = useState(false);
+
   const [appSettings] = useContext(AppSettings);
+
+  const filterOptions = useRef<SearchFilterOptions | null>(null);
 
   function queryNext(reset = false) {
     if (!activeQuery.current) return;
@@ -42,6 +46,9 @@ export function Home() {
   }
 
   function search(query: SearchQuery) {
+    if (appSettings.useFilter) {
+      query.filterOptions = filterOptions.current;
+    }
     activeQuery.current = query;
     queryNext(true);
   }
@@ -55,8 +62,8 @@ export function Home() {
   return (
     <ApiInfo.Provider value={apiInfo}>
       <QueryArea onSubmit={search}></QueryArea>
-      <Collapse in={appSettings.useFilter} sx={{width: '100%'}}>
-        <FilterForm />
+      <Collapse in={appSettings.useFilter}>
+        <FilterForm onChange={v => filterOptions.current = v} />
       </Collapse>
 
       {result && (
