@@ -19,7 +19,7 @@ export function TextQueryForm({
 
   const handleTextSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmit?.(new TextSearchQuery(textPrompt, ocrSearch ? SearchBasis.ocr : SearchBasis.vision));
+    onSubmit?.(new TextSearchQuery(textPrompt.trim(), ocrSearch ? SearchBasis.ocr : SearchBasis.vision));
   };
 
   return (
@@ -39,7 +39,7 @@ export function TextQueryForm({
       <Button
         type="submit"
         variant="contained"
-        disabled={textPrompt.length < 3}
+        disabled={textPrompt.trim().length == 0}
         sx={{ width: 'clamp(80px, 10%, 200px)' }}
         size="large"
         endIcon={<Search />}
