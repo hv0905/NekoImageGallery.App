@@ -1,7 +1,6 @@
 import {
   AppBar,
   Box,
-  Button,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -11,12 +10,13 @@ import {
   Typography,
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { GitHub } from '@mui/icons-material';
-import MenuIcon from "@mui/icons-material/Menu";
-import { useState } from 'react';
+import { FilterList, FilterListOff, GitHub } from '@mui/icons-material';
+import { useContext, useState } from 'react';
 import { Environment } from '../environment';
+import { AppSettings } from './Contexts';
 
 export function AppNav() {
+  const [appSettings, setAppSettings] = useContext(AppSettings);
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const menuOpen = !!menuAnchor;
 
@@ -28,7 +28,7 @@ export function AppNav() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
+          {/* <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -36,13 +36,23 @@ export function AppNav() {
             sx={{ mr: 2 }}
           >
             <MenuIcon></MenuIcon>
-          </IconButton>
+          </IconButton> */}
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {Environment.AppDisplayName}
           </Typography>
-          <Button
+          <IconButton
+            size="large"
+            color="inherit"
+            aria-label="filter"
+            onClick={() => setAppSettings({ ...appSettings, useFilter: !appSettings.useFilter })}
+          >
+            {appSettings.useFilter ? <FilterListOff/> : <FilterList/>}
+          </IconButton>
+          <IconButton
             id="related-site-button"
+            size='large'
+            edge="end"
             aria-controls={menuOpen ? 'related-site-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={menuOpen ? 'true' : undefined}
@@ -50,7 +60,7 @@ export function AppNav() {
             color="inherit"
           >
             <GitHub />
-          </Button>
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Menu

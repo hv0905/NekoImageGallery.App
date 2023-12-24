@@ -7,7 +7,7 @@ import { AuthenticationDialog } from './AuthenticationDialog';
 import { WelcomeApi } from '../Services/WelcomeApi';
 import { HomeApiResponse } from '../Models/HomeApiResponse';
 import { Box, Button, CircularProgress } from '@mui/material';
-import { ApiInfo } from './ApiInfo';
+import { ApiInfo } from './Contexts';
 
 export function Home() {
   const activeQuery = useRef<SearchQuery | null>(null);

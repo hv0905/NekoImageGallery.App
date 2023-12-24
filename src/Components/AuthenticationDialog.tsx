@@ -11,7 +11,7 @@ import {
 import { useState, useContext } from 'react';
 import { WelcomeApi } from '../Services/WelcomeApi';
 import { resetClient } from '../Services/Base';
-import { ApiInfo } from './ApiInfo';
+import { ApiInfo } from './Contexts';
 
 export function AuthenticationDialog() {
   const [open, setOpen] = useState(true);

@@ -16,7 +16,7 @@ import {
   AdvancedSearchModel,
 } from '../Models/AdvancedSearchModel';
 import { SearchBasis } from '../Models/SearchBasis';
-import { ApiInfo } from './ApiInfo';
+import { ApiInfo } from './Contexts';
 
 export function AdvancedQueryForm({
   onSubmit,
