@@ -13,6 +13,7 @@ export function QueryArea({
 }) {
   const [tab, setTab] = useState(0);
   const apiInfo = useContext(ApiInfo);
+  
 
   const ocrAvail = !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
 

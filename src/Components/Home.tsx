@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { SearchResult } from '../Models/SearchResult';
 import { ImageGallery } from './ImageGallery';
 import { QueryArea } from './QueryArea';
@@ -6,8 +6,9 @@ import { SearchQuery } from '../Services/SearchQuery';
 import { AuthenticationDialog } from './AuthenticationDialog';
 import { WelcomeApi } from '../Services/WelcomeApi';
 import { HomeApiResponse } from '../Models/HomeApiResponse';
-import { Box, Button, CircularProgress } from '@mui/material';
-import { ApiInfo } from './Contexts';
+import { Box, Button, CircularProgress, Collapse } from '@mui/material';
+import { ApiInfo, AppSettings } from './Contexts';
+import { FilterForm } from './FilterForm';
 
 export function Home() {
   const activeQuery = useRef<SearchQuery | null>(null);
@@ -15,6 +16,7 @@ export function Home() {
   const [apiInfo, setApiInfo] = useState<HomeApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [noMore, setNoMore] = useState(false);
+  const [appSettings] = useContext(AppSettings);
 
   function queryNext(reset = false) {
     if (!activeQuery.current) return;
@@ -53,6 +55,9 @@ export function Home() {
   return (
     <ApiInfo.Provider value={apiInfo}>
       <QueryArea onSubmit={search}></QueryArea>
+      <Collapse in={appSettings.useFilter} sx={{width: '100%'}}>
+        <FilterForm />
+      </Collapse>
 
       {result && (
         <>
