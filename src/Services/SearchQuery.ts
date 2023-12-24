@@ -1,4 +1,4 @@
-import { AdvancedSearchModel } from '../Models/AdvancedSearchModel';
+import { AdvancedSearchModel, CombinedSearchModel } from '../Models/AdvancedSearchModel';
 import { SearchApiResponse } from '../Models/SearchApiResponse';
 import { SearchBasis } from '../Models/SearchBasis';
 import { SearchFilterOptions } from '../Models/SearchFilterOptions';
@@ -119,6 +119,31 @@ export class AdvancedSearchQuery extends SearchQuery {
   async querySearch(count = 20, skip = 0): Promise<SearchApiResponse> {
     const response = await getClient().post<SearchApiResponse>(
       `/search/advanced`,
+      this.searchModel,
+      {
+        params: {
+          count: count,
+          skip: skip,
+          basis: this.searchBasis,
+          ...this.getFilterOptions(),
+        },
+      }
+    );
+    return response.data;
+  }
+}
+
+export class CombinedSearchQuery extends SearchQuery {
+  constructor(
+    public searchModel: CombinedSearchModel,
+    public searchBasis: SearchBasis = SearchBasis.vision
+  ) {
+    super();
+  }
+
+  async querySearch(count = 20, skip = 0): Promise<SearchApiResponse> {
+    const response = await getClient().post<SearchApiResponse>(
+      `/search/combined`,
       this.searchModel,
       {
         params: {

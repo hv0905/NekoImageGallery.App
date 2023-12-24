@@ -2,18 +2,22 @@ import { Search } from '@mui/icons-material';
 import {
   Button,
   ButtonGroup,
+  Collapse,
   FormControlLabel,
   FormLabel,
   Radio,
   RadioGroup,
   Stack,
+  Switch,
   TextField,
+  Tooltip,
 } from '@mui/material';
-import { AdvancedSearchQuery, SearchQuery } from '../Services/SearchQuery';
+import { AdvancedSearchQuery, CombinedSearchQuery, SearchQuery } from '../Services/SearchQuery';
 import { useContext, useState } from 'react';
 import {
   AdvancedSearchMode,
   AdvancedSearchModel,
+  CombinedSearchModel,
 } from '../Models/AdvancedSearchModel';
 import { SearchBasis } from '../Models/SearchBasis';
 import { ApiInfo } from './Contexts';
@@ -26,15 +30,20 @@ export function AdvancedQueryForm({
 }) {
   const [positivePrompt, setPositivePrompt] = useState('');
   const [negativePrompt, setNegativePrompt] = useState('');
+  const [combinedSearch, setCombinedSearch] = useState(false);
+  const [combinedSearchPrompt, setCombinedSearchPrompt] = useState('');
   const [mode, setMode] = useState<AdvancedSearchMode>(
     AdvancedSearchMode.average
   );
   const [basis, setBasis] = useState<SearchBasis>(SearchBasis.vision);
   const apiInfo = useContext(ApiInfo);
 
-  const ocrAvail = !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
+  const ocrAvail =
+    !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
 
-  const submitable = positivePrompt.length > 0 || negativePrompt.length > 0;
+  const submitable =
+    (positivePrompt.length > 0 || negativePrompt.length > 0) &&
+    (!combinedSearch || combinedSearchPrompt.length > 0);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -43,7 +52,16 @@ export function AdvancedQueryForm({
       negative_criteria: negativePrompt.split(',').map(s => s.trim()),
       mode: mode,
     };
-    onSubmit?.(new AdvancedSearchQuery(form, basis));
+    if (combinedSearch) {
+      const combinedForm: CombinedSearchModel = {
+        ...form,
+        extra_prompt: combinedSearchPrompt,
+      };
+      onSubmit?.(new CombinedSearchQuery(combinedForm, basis));
+    } else {
+      onSubmit?.(new AdvancedSearchQuery(form, basis));
+    }
+    
   }
 
   return (
@@ -54,7 +72,6 @@ export function AdvancedQueryForm({
       onSubmit={handleSubmit}
     >
       <TextField
-        sx={{ flexGrow: 1 }}
         label="Positive criteria (seperated by comma)"
         variant="outlined"
         value={positivePrompt}
@@ -62,7 +79,6 @@ export function AdvancedQueryForm({
         onChange={e => setPositivePrompt(e.target.value)}
       />
       <TextField
-        sx={{ flexGrow: 1 }}
         label="Negative criteria (seperated by comma)"
         variant="outlined"
         value={negativePrompt}
@@ -82,23 +98,54 @@ export function AdvancedQueryForm({
         <FormControlLabel value="average" control={<Radio />} label="Average" />
         <FormControlLabel value="best" control={<Radio />} label="Best" />
       </RadioGroup>
-      { ocrAvail &&
-      <RadioGroup
-        row
-        aria-labelledby="basis-sel-group"
-        value={basis}
-        onChange={e => setBasis(e.target.value as SearchBasis)}
-      >
-        <FormLabel
-          id="basis-sel-group"
-          sx={{ alignSelf: 'center', marginX: 2 }}
-        >
-          Basis
-        </FormLabel>
-        <FormControlLabel value="vision" control={<Radio />} label="Vision" />
-        <FormControlLabel value="ocr" control={<Radio />} label="OCR" />
-      </RadioGroup>
-      }
+      {ocrAvail && (
+        <>
+          <RadioGroup
+            row
+            aria-labelledby="basis-sel-group"
+            value={basis}
+            onChange={e => setBasis(e.target.value as SearchBasis)}
+          >
+            <FormLabel
+              id="basis-sel-group"
+              sx={{ alignSelf: 'center', marginX: 2 }}
+            >
+              Basis
+            </FormLabel>
+            <FormControlLabel
+              value="vision"
+              control={<Radio />}
+              label="Vision"
+            />
+            <FormControlLabel value="ocr" control={<Radio />} label="OCR" />
+          </RadioGroup>
+          <Tooltip
+            title="[Experimental] With this feature, besides the basis you have choosen before,
+                  you can add up to one criteria with the other basis to enhance your search result. 
+                  For example, you can search `Good Morning` with OCR search, than add `1girl` in the 
+                  combined search cirteria to filter all the good-morning stickers with a girl in it."
+          >
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={combinedSearch}
+                  onChange={e => setCombinedSearch(e.target.checked)}
+                />
+              }
+              label="Combined search"
+            />
+          </Tooltip>
+          <Collapse in={combinedSearch}>
+            <TextField
+              label="Combined search criteria"
+              variant="outlined"
+              value={combinedSearchPrompt}
+              fullWidth
+              onChange={e => setCombinedSearchPrompt(e.target.value)}
+            />
+          </Collapse>
+        </>
+      )}
       <ButtonGroup fullWidth>
         <Button variant="outlined" sx={{ width: '30%' }}>
           Reset

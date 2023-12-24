@@ -8,3 +8,7 @@ export interface AdvancedSearchModel {
   negative_criteria: string[];
   mode: AdvancedSearchMode;
 }
+
+export interface CombinedSearchModel extends AdvancedSearchModel {
+  extra_prompt: string;
+}
