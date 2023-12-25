@@ -1,9 +1,10 @@
-import { Box, Paper } from '@mui/material';
+import { Box, Paper, PopoverPosition } from '@mui/material';
 import { SearchResult } from '../Models/SearchResult';
 import { Environment } from '../environment';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Fancybox } from '@fancyapps/ui';
 import { SearchQuery, SimilarSearchQuery } from '../Services/SearchQuery';
+import { ImageOperationMenu } from './ImageOperationMenu';
 
 export function ImageGallery({
   searchResult,
@@ -13,6 +14,11 @@ export function ImageGallery({
   onSimilarSearch?: (query: SearchQuery) => void;
 }) {
   const containerRef = useRef(null);
+  const [contextMenu, setContextMenu] = useState<PopoverPosition | null>(null);
+  const [contextMenuItem, setContextMenuItem] = useState<SearchResult | null>(
+    null
+  );
+
   searchResult.forEach(t => {
     if (t.img.url.startsWith('/')) {
       t.img.url = Environment.ApiUrl + t.img.url;
@@ -64,9 +70,32 @@ export function ImageGallery({
     };
   }, [containerRef, searchResult, onSimilarSearch]);
 
+  function handleContextMenu(e: React.MouseEvent, item: SearchResult) {
+    e.preventDefault();
+    if (contextMenu) return;
+    setContextMenuItem(item);
+    setContextMenu({ top: e.clientY - 6, left: e.clientX + 2 });
+  }
+
+  function handleDelete() {
+    if (!contextMenuItem) return;
+    // onDelete?.(contextMenuItem);
+  }
+
+  function handleSimilarSearch() {
+    if (!contextMenuItem) return;
+    onSimilarSearch?.(new SimilarSearchQuery(contextMenuItem.img.id));
+  }
+
   return (
     <Box
       ref={containerRef}
+      onContextMenu={e => {
+        if (contextMenu) {
+          e.preventDefault();
+          setContextMenu(null);
+        }
+      }}
       sx={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
@@ -83,6 +112,7 @@ export function ImageGallery({
             data-fancybox="gallery"
             data-caption={`Similarity: ${(t.score * 100).toFixed(2)}%`}
             href={t.img.url}
+            onContextMenu={e => handleContextMenu(e, t)}
             sx={{
               margin: 1,
               display: 'flex',
@@ -99,6 +129,18 @@ export function ImageGallery({
           </Paper>
         );
       })}
+      {contextMenuItem && (
+        <ImageOperationMenu
+          open={!!contextMenu}
+          anchorReference="anchorPosition"
+          anchorPosition={contextMenu ?? undefined}
+          context={contextMenuItem}
+          onClose={() => setContextMenu(null)}
+          onDelete={handleDelete}
+          onSimilarSearch={handleSimilarSearch}
+          
+        />
+      )}
     </Box>
   );
 }
