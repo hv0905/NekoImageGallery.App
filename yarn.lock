@@ -1222,10 +1222,10 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.55.0.tgz#b721d52060f369aa259cf97392403cb9ce892ec6"
   integrity sha512-qQfo2mxH5yVom1kacMtZZJFVdW+E70mqHMJvVg6WTLo+VBuQJ4TojZlfWBjK0ve5BdEeNAVxOsl/nvNMpJOaJA==
 
-"@fancyapps/ui@^5.0.30":
-  version "5.0.30"
-  resolved "https://registry.yarnpkg.com/@fancyapps/ui/-/ui-5.0.30.tgz#8a2ea221e2f366522b4a2892da611237f5feea03"
-  integrity sha512-txzNA2uKe7Sdv1PZnyjMmR+W8jlJebTSBeaxhSjDyEQ0fKP5xyGdweJolZA7pOv4kbagdyd24F8GnW4MLZvfFw==
+"@fancyapps/ui@^5.0.32":
+  version "5.0.32"
+  resolved "https://registry.yarnpkg.com/@fancyapps/ui/-/ui-5.0.32.tgz#89b4d435f33904c0e2615951dbb38437b9f641de"
+  integrity sha512-jggsU+7W1nxLY4CM/GKcLNpBiaq9TcC8hxIDpTc/YEVTtVgj+ma1etkg9oVT1Q8BVGvcAcS24wScCCbIjeCufw==
 
 "@floating-ui/core@^1.4.2":
   version "1.5.2"
