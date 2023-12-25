@@ -7,19 +7,34 @@ import {
   createTheme,
   useMediaQuery,
 } from '@mui/material';
-import React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Home } from './Home';
-import { AppSettings } from './Contexts';
-import { AppSettingsModel } from '../Models/AppSettings';
+import { ApiInfo, AppSettings } from './Contexts';
+import { AppSettingsModel, loadFromLocalStorage, saveSettingsToLocalStorage } from '../Models/AppSettings';
+import { HomeApiResponse } from '../Models/HomeApiResponse';
+import { WelcomeApi } from '../Services/WelcomeApi';
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-  const appSettingsGroup = React.useState<AppSettingsModel>(
-    new AppSettingsModel()
+  const [appSettings, setAppSettings] = useState<AppSettingsModel>(
+    loadFromLocalStorage()
   );
 
-  const theme = React.useMemo(
+  const [apiInfo, setApiInfo] = useState<HomeApiResponse | null>(null);
+
+  useEffect(() => {
+    void WelcomeApi().then(resp => {
+      setApiInfo(resp);
+    });
+  }, []);
+
+  function handleSettingsUpdate(newval: AppSettingsModel) {
+    setAppSettings(newval);
+    saveSettingsToLocalStorage(newval);
+  }
+
+  const theme = useMemo(
     () =>
       createTheme({
         palette: {
@@ -33,9 +48,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline></CssBaseline>
-      <AppSettings.Provider value={appSettingsGroup}>
+      <AppSettings.Provider value={[appSettings, handleSettingsUpdate]}>
+        <ApiInfo.Provider value={apiInfo}>
         <AppNav></AppNav>
         <Home></Home>
+        </ApiInfo.Provider>
       </AppSettings.Provider>
     </ThemeProvider>
   );

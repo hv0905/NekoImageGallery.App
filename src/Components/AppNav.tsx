@@ -10,14 +10,17 @@ import {
   Typography,
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { FilterList, FilterListOff, GitHub } from '@mui/icons-material';
+import { FilterList, FilterListOff, GitHub, Settings } from '@mui/icons-material';
 import { useContext, useState } from 'react';
 import { Environment } from '../environment';
 import { AppSettings } from './Contexts';
+import { SettingsDialog } from './SettingsModal';
 
 export function AppNav() {
   const [appSettings, setAppSettings] = useContext(AppSettings);
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
+  const [displaySettings, setDisplaySettings] = useState(false);
+
   const menuOpen = !!menuAnchor;
 
   const handleClose = () => {
@@ -25,6 +28,7 @@ export function AppNav() {
   };
 
   return (
+    <>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
@@ -38,20 +42,42 @@ export function AppNav() {
             <MenuIcon></MenuIcon>
           </IconButton> */}
 
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{
+              flexGrow: 1,
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+            }}
+          >
             {Environment.AppDisplayName}
           </Typography>
           <IconButton
             size="large"
             color="inherit"
-            aria-label="filter"
-            onClick={() => setAppSettings({ ...appSettings, useFilter: !appSettings.useFilter })}
+            aria-label="settings"
+            onClick={() => setDisplaySettings(true)}
           >
-            {appSettings.useFilter ? <FilterListOff/> : <FilterList/>}
+            <Settings />
+          </IconButton>
+          <IconButton
+            size="large"
+            color="inherit"
+            aria-label="filter"
+            onClick={() =>
+              setAppSettings({
+                ...appSettings,
+                useFilter: !appSettings.useFilter,
+              })
+            }
+          >
+            {appSettings.useFilter ? <FilterListOff /> : <FilterList />}
           </IconButton>
           <IconButton
             id="related-site-button"
-            size='large'
+            size="large"
             edge="end"
             aria-controls={menuOpen ? 'related-site-menu' : undefined}
             aria-haspopup="true"
@@ -104,5 +130,7 @@ export function AppNav() {
         </MenuItem>
       </Menu>
     </Box>
+    <SettingsDialog open={displaySettings} onClose={() => setDisplaySettings(false)}></SettingsDialog>
+    </>
   );
 }

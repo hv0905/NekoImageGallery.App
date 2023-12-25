@@ -38,7 +38,7 @@ export function QueryArea({
         padding: 1,
       }}
     >
-      <Tabs variant='scrollable' value={tab} onChange={(_, v: number) => setTab(v)}>
+      <Tabs variant='scrollable' value={tab} onChange={(_, v: number) => setTab(v)} sx={{maxWidth: '100%'}}>
         <Tab label="Text" />
         {ocrAvail && <Tab label="OCR" />}
         <Tab label="Image" />
