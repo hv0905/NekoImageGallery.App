@@ -29,7 +29,7 @@ export function SettingsDialog({
   const [saving, setSaving] = useState(false);
   const [tokenErr, setTokenErr] = useState('');
 
-  const adminPortalAvail = apiInfo?.admin_api.available;
+  const adminPortalAvail = apiInfo?.admin_api.available ?? true;
   if (!adminPortalAvail && editingSettings.useAdminPortal) {
     setEditingSettings({ ...editingSettings, useAdminPortal: false });
   }
