@@ -97,6 +97,8 @@ export function FilterForm({
   const [minWidth, setMinWidth] = useState(0);
   const [minHeight, setMinHeight] = useState(0);
 
+  const [starredOnly, setStarredOnly] = useState(false);
+
   useEffect(() => {
     if (
       minWidth < 0 ||
@@ -117,6 +119,11 @@ export function FilterForm({
       newFilterModel.min_width = minWidth;
       newFilterModel.min_height = minHeight;
     }
+
+    if (starredOnly) {
+      newFilterModel.starred = true;
+    }
+
     onChange?.(newFilterModel);
   }, [
     aspectRatioEnabled,
@@ -125,6 +132,7 @@ export function FilterForm({
     minSizeEnabled,
     minWidth,
     minHeight,
+    starredOnly,
     onChange,
   ]);
 
@@ -203,6 +211,15 @@ export function FilterForm({
             />
           </Box>
         </Collapse>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={starredOnly}
+              onChange={e => setStarredOnly(e.target.checked)}
+            />
+          }
+          label="Starred only"
+        />
       </Box>
     </Paper>
   );
