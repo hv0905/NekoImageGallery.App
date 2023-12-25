@@ -1,6 +1,8 @@
 import {
   ContentCopy,
   Delete,
+  Favorite,
+  FavoriteBorder,
   Link,
   OpenInNew,
   Search,
@@ -28,6 +30,7 @@ export function ImageOperationMenu({
   open,
   onClose,
   onSimilarSearch,
+  onStar,
   onDelete,
   ...props
 }: {
@@ -35,6 +38,7 @@ export function ImageOperationMenu({
   open: boolean;
   onClose: () => void;
   onSimilarSearch: () => void;
+  onStar: () => void;
   onDelete: () => void;
 } & Omit<React.ComponentProps<typeof Menu>, 'open' | 'onClose' | 'children'>) {
   const [settings] = useContext(AppSettings);
@@ -98,11 +102,20 @@ export function ImageOperationMenu({
         {settings.useAdminPortal && (
           <>
             <Divider />
+            <MenuItem onClick={() => {
+              onStar();
+              onClose();
+            }}>
+              <ListItemIcon>
+                {context.img.starred ? <Favorite /> : <FavoriteBorder/>}
+              </ListItemIcon>
+              <ListItemText>{context.img.starred ? "Unstar" : "Star"}</ListItemText>
+            </MenuItem>
             <MenuItem onClick={handleDelete}>
               <ListItemIcon>
-                <Delete fontSize="small" color='error'/>
+                <Delete fontSize="small" color="error" />
               </ListItemIcon>
-              <ListItemText sx={{color: 'error.main'}}>Delete</ListItemText>
+              <ListItemText sx={{ color: 'error.main' }}>Delete</ListItemText>
             </MenuItem>
           </>
         )}
@@ -124,7 +137,7 @@ export function ImageOperationMenu({
             cancel
           </Button>
           <Button
-            color='error'
+            color="error"
             onClick={() => {
               onDelete();
               setDeleteDialogOpen(false);

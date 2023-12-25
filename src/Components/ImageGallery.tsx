@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Fancybox } from '@fancyapps/ui';
 import { SearchQuery, SimilarSearchQuery } from '../Services/SearchQuery';
 import { ImageOperationMenu } from './ImageOperationMenu';
-import { deleteImage } from '../Services/AdminApi';
+import { deleteImage, updateOpt } from '../Services/AdminApi';
 import { isAxiosError } from 'axios';
-import { NekoProtocol } from '../Models/ApiResponse';
+import { ErrorProtocol, NekoProtocol } from '../Models/ApiResponse';
 
 export function ImageGallery({
   searchResult,
@@ -111,6 +111,33 @@ export function ImageGallery({
     onSimilarSearch?.(new SimilarSearchQuery(contextMenuItem.img.id));
   }
 
+  function handleStar(): void {
+    if (!contextMenuItem) return;
+    updateOpt(contextMenuItem.img.id, !contextMenuItem.img.starred)
+    .then(() => {
+      setNotificationText(`Image ${contextMenuItem.img.starred ? 'unstarred' : 'starred'}.`);
+      setNotificationErr(false);
+      setNotificationOpen(true);
+
+      setSearchResult(searchResult.map(t => {
+        if (t.img.id == contextMenuItem.img.id) {
+          t.img.starred = !t.img.starred;
+        }
+        return t;
+      }));
+    }).catch(err => {
+      if (isAxiosError<ErrorProtocol>(err) && err.response?.data.detail) {
+        setNotificationText(err.response?.data?.detail);
+      } else {
+        setNotificationText('Unknown error');
+      }
+
+      setNotificationErr(true);
+      setNotificationOpen(true);
+    });
+    
+  }
+
   return (
     <Box
       ref={containerRef}
@@ -162,6 +189,7 @@ export function ImageGallery({
             context={contextMenuItem}
             onClose={() => setContextMenu(null)}
             onDelete={handleDelete}
+            onStar={handleStar}
             onSimilarSearch={handleSimilarSearch}
           />
           <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={() => setNotificationOpen(false)}>

@@ -6,5 +6,6 @@ export interface Image {
   ocr_text?: string;
   width?: number;
   height?: number;
+  starred?: boolean;
   aspect_ratio?: number;
 }
