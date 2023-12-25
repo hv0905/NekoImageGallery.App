@@ -43,6 +43,8 @@ export function Home() {
         }
         if (t.result.length < 30) {
           setNoMore(true);
+        } else {
+          setNoMore(false);
         }
       })
       .finally(() => {
