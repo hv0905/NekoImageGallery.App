@@ -69,6 +69,7 @@ export function Home() {
         <>
           <ImageGallery
             searchResult={result}
+            setSearchResult={setResult}
             onSimilarSearch={search}
           ></ImageGallery>
           {loading ? (

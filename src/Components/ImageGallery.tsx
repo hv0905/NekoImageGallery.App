@@ -1,16 +1,21 @@
-import { Box, Paper, PopoverPosition } from '@mui/material';
+import { Alert, Box, Paper, PopoverPosition, Snackbar } from '@mui/material';
 import { SearchResult } from '../Models/SearchResult';
 import { Environment } from '../environment';
 import { useEffect, useRef, useState } from 'react';
 import { Fancybox } from '@fancyapps/ui';
 import { SearchQuery, SimilarSearchQuery } from '../Services/SearchQuery';
 import { ImageOperationMenu } from './ImageOperationMenu';
+import { deleteImage } from '../Services/AdminApi';
+import { isAxiosError } from 'axios';
+import { NekoProtocol } from '../Models/ApiResponse';
 
 export function ImageGallery({
   searchResult,
+  setSearchResult,
   onSimilarSearch,
 }: {
   searchResult: SearchResult[];
+  setSearchResult: (result: SearchResult[]) => void;
   onSimilarSearch?: (query: SearchQuery) => void;
 }) {
   const containerRef = useRef(null);
@@ -18,6 +23,9 @@ export function ImageGallery({
   const [contextMenuItem, setContextMenuItem] = useState<SearchResult | null>(
     null
   );
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [notificationText, setNotificationText] = useState('');
+  const [notificationErr, setNotificationErr] = useState(false);
 
   searchResult.forEach(t => {
     if (t.img.url.startsWith('/')) {
@@ -79,7 +87,23 @@ export function ImageGallery({
 
   function handleDelete() {
     if (!contextMenuItem) return;
-    // onDelete?.(contextMenuItem);
+    deleteImage(contextMenuItem.img.id)
+      .then(resp => {
+        setNotificationText(resp.data.message);
+        setNotificationErr(false);
+        setNotificationOpen(true);
+        setSearchResult(searchResult.filter(t => t.img.id != contextMenuItem.img.id));
+      })
+      .catch(err => {
+        if (isAxiosError<NekoProtocol>(err) && err.response?.data.message) {
+          setNotificationText(err.response?.data?.message);
+        } else {
+          setNotificationText('Unknown error');
+        }
+
+        setNotificationErr(true);
+        setNotificationOpen(true);
+      });
   }
 
   function handleSimilarSearch() {
@@ -130,16 +154,26 @@ export function ImageGallery({
         );
       })}
       {contextMenuItem && (
-        <ImageOperationMenu
-          open={!!contextMenu}
-          anchorReference="anchorPosition"
-          anchorPosition={contextMenu ?? undefined}
-          context={contextMenuItem}
-          onClose={() => setContextMenu(null)}
-          onDelete={handleDelete}
-          onSimilarSearch={handleSimilarSearch}
-          
-        />
+        <>
+          <ImageOperationMenu
+            open={!!contextMenu}
+            anchorReference="anchorPosition"
+            anchorPosition={contextMenu ?? undefined}
+            context={contextMenuItem}
+            onClose={() => setContextMenu(null)}
+            onDelete={handleDelete}
+            onSimilarSearch={handleSimilarSearch}
+          />
+          <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={() => setNotificationOpen(false)}>
+            <Alert
+              onClose={() => setNotificationOpen(false)}
+              severity={notificationErr ? "error" : "success"}
+              sx={{ width: '100%' }}
+            >
+              {notificationText}
+            </Alert>
+          </Snackbar>
+        </>
       )}
     </Box>
   );

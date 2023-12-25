@@ -100,9 +100,9 @@ export function ImageOperationMenu({
             <Divider />
             <MenuItem onClick={handleDelete}>
               <ListItemIcon>
-                <Delete fontSize="small" />
+                <Delete fontSize="small" color='error'/>
               </ListItemIcon>
-              <ListItemText>Delete</ListItemText>
+              <ListItemText sx={{color: 'error.main'}}>Delete</ListItemText>
             </MenuItem>
           </>
         )}

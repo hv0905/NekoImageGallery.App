@@ -1,7 +1,7 @@
+import { NekoProtocol } from './ApiResponse';
 import { SearchResult } from './SearchResult';
 
-export interface SearchApiResponse {
+export interface SearchApiResponse extends NekoProtocol {
   query_id: string;
-  message: string;
   result: SearchResult[];
 }

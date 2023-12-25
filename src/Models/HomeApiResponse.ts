@@ -1,3 +1,5 @@
+import { NekoProtocol } from "./ApiResponse";
+
 export interface HomeAuthorizationResponse {
   required: boolean;
   passed: boolean;
@@ -8,8 +10,7 @@ export interface AdminAuthorizationRespose {
   passed: boolean;
 }
 
-export interface HomeApiResponse {
-  message: string;
+export interface HomeApiResponse extends NekoProtocol {
   server_time: Date;
   wiki: Map<string, string>;
   authorization: HomeAuthorizationResponse;
