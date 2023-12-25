@@ -13,6 +13,8 @@ import {
 } from '@mui/material';
 import { AppSettings, ApiInfo } from './Contexts';
 import { useContext, useState } from 'react';
+import { resetClient } from '../Services/Base';
+import { WelcomeApi } from '../Services/WelcomeApi';
 
 export function SettingsDialog({
   open,
@@ -24,6 +26,8 @@ export function SettingsDialog({
   const [appSettings, setAppSettings] = useContext(AppSettings);
   const apiInfo = useContext(ApiInfo);
   const [editingSettings, setEditingSettings] = useState(appSettings);
+  const [saving, setSaving] = useState(false);
+  const [tokenErr, setTokenErr] = useState('');
 
   const adminPortalAvail = apiInfo?.admin_api.available;
   if (!adminPortalAvail && editingSettings.useAdminPortal) {
@@ -32,6 +36,27 @@ export function SettingsDialog({
 
   function saveSettings() {
     setAppSettings(editingSettings);
+    if (editingSettings.useAdminPortal) {
+      setSaving(true);
+      resetClient();
+      WelcomeApi()
+        .then(resp => {
+          if (resp.admin_api.passed) {
+            setTokenErr('');
+            onClose();
+          } else {
+            setTokenErr('Invalid token.');
+          }
+        })
+        .catch(() => {
+          setTokenErr('Unknown error.');
+        })
+        .finally(() => {
+          setSaving(false);
+        });
+    } else {
+      onClose();
+    }
   }
 
   const canSave = !editingSettings.useAdminPortal || editingSettings.adminKey;
@@ -70,7 +95,9 @@ export function SettingsDialog({
               fullWidth
               required
               value={editingSettings.adminKey}
-              type='password'
+              type="password"
+              error={!!tokenErr}
+              helperText={tokenErr}
               onChange={e =>
                 setEditingSettings({
                   ...editingSettings,
@@ -89,7 +116,9 @@ export function SettingsDialog({
         <Button onClick={onClose} color="secondary">
           Cancel
         </Button>
-        <Button onClick={saveSettings} disabled={!canSave}>Save</Button>
+        <Button onClick={saveSettings} disabled={!canSave || saving}>
+          Save
+        </Button>
       </DialogActions>
     </Dialog>
   );
