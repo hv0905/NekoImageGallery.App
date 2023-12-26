@@ -196,7 +196,7 @@ export function ImageGallery({
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              overflow: 'Hidden',
+              overflow: 'hidden',
               width: '100%',
               maxHeight: '500px',
               flexDirection: 'column',
@@ -209,6 +209,7 @@ export function ImageGallery({
                 width: '100%',
                 display: 'flex',
                 alignItems: 'center',
+                overflow: 'hidden',
                 justifyContent: 'center',
               }}
               component="a"
