@@ -23,11 +23,19 @@ export function SettingsDialog({
   open: boolean;
   onClose: () => void;
 }) {
+  const [prevOpen, setPrevOpen] = useState(false);
   const [appSettings, setAppSettings] = useContext(AppSettings);
   const apiInfo = useContext(ApiInfo);
   const [editingSettings, setEditingSettings] = useState(appSettings);
   const [saving, setSaving] = useState(false);
   const [tokenErr, setTokenErr] = useState('');
+
+  if (open && !prevOpen) {
+    setPrevOpen(true);
+    setEditingSettings(appSettings);
+  } else if (!open && prevOpen) {
+    setPrevOpen(false);
+  }
 
   const adminPortalAvail = apiInfo?.admin_api.available ?? true;
   if (!adminPortalAvail && editingSettings.useAdminPortal) {
@@ -71,6 +79,21 @@ export function SettingsDialog({
     >
       <DialogTitle>Settings</DialogTitle>
       <DialogContent dividers>
+        <Typography variant="h6">Appearance</Typography>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={editingSettings.showInfoBar}
+              onChange={e =>
+                setEditingSettings({
+                  ...editingSettings,
+                  showInfoBar: e.target.checked,
+                })
+              }
+            />
+          }
+          label="Show info bar on each image"
+        />
         <Typography variant="h6">Admin</Typography>
         <FormControlLabel
           control={

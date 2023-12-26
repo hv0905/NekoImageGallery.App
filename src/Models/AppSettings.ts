@@ -2,6 +2,8 @@ export class AppSettingsModel {
   public useFilter = false;
   public useAdminPortal = false;
   public adminKey = '';
+
+  public showInfoBar = false;
 }
 
 export function saveSettingsToLocalStorage(context: AppSettingsModel) {

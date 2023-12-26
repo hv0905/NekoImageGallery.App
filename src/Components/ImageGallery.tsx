@@ -1,13 +1,23 @@
-import { Alert, Box, Paper, PopoverPosition, Snackbar } from '@mui/material';
+import {
+  Alert,
+  Box,
+  IconButton,
+  Paper,
+  PopoverPosition,
+  Snackbar,
+  Typography,
+} from '@mui/material';
 import { SearchResult } from '../Models/SearchResult';
 import { Environment } from '../environment';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Fancybox } from '@fancyapps/ui';
 import { SearchQuery, SimilarSearchQuery } from '../Services/SearchQuery';
 import { ImageOperationMenu } from './ImageOperationMenu';
 import { deleteImage, updateOpt } from '../Services/AdminApi';
 import { isAxiosError } from 'axios';
 import { ErrorProtocol, NekoProtocol } from '../Models/ApiResponse';
+import { AppSettings } from './Contexts';
+import { MoreVert } from '@mui/icons-material';
 
 export function ImageGallery({
   searchResult,
@@ -19,13 +29,17 @@ export function ImageGallery({
   onSimilarSearch?: (query: SearchQuery) => void;
 }) {
   const containerRef = useRef(null);
+  const [appSettings] = useContext(AppSettings);
   const [contextMenu, setContextMenu] = useState<PopoverPosition | null>(null);
+  const [contextMenuEl, setContextMenuEl] = useState<HTMLElement | null>(null);
   const [contextMenuItem, setContextMenuItem] = useState<SearchResult | null>(
     null
   );
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationText, setNotificationText] = useState('');
   const [notificationErr, setNotificationErr] = useState(false);
+
+  const contextMenuOpen = !!contextMenu || !!contextMenuEl;
 
   searchResult.forEach(t => {
     if (t.img.url.startsWith('/')) {
@@ -80,9 +94,19 @@ export function ImageGallery({
 
   function handleContextMenu(e: React.MouseEvent, item: SearchResult) {
     e.preventDefault();
-    if (contextMenu) return;
+    if (contextMenuOpen) return;
     setContextMenuItem(item);
     setContextMenu({ top: e.clientY - 6, left: e.clientX + 2 });
+  }
+
+  // onclick event
+  function handleContextMenuWithButton(
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    item: SearchResult
+  ) {
+    if (contextMenuOpen) return;
+    setContextMenuItem(item);
+    setContextMenuEl(e.currentTarget);
   }
 
   function handleDelete() {
@@ -92,7 +116,9 @@ export function ImageGallery({
         setNotificationText(resp.data.message);
         setNotificationErr(false);
         setNotificationOpen(true);
-        setSearchResult(searchResult.filter(t => t.img.id != contextMenuItem.img.id));
+        setSearchResult(
+          searchResult.filter(t => t.img.id != contextMenuItem.img.id)
+        );
       })
       .catch(err => {
         if (isAxiosError<NekoProtocol>(err) && err.response?.data.message) {
@@ -114,37 +140,42 @@ export function ImageGallery({
   function handleStar(): void {
     if (!contextMenuItem) return;
     updateOpt(contextMenuItem.img.id, !contextMenuItem.img.starred)
-    .then(() => {
-      setNotificationText(`Image ${contextMenuItem.img.starred ? 'unstarred' : 'starred'}.`);
-      setNotificationErr(false);
-      setNotificationOpen(true);
+      .then(() => {
+        setNotificationText(
+          `Image ${contextMenuItem.img.starred ? 'unstarred' : 'starred'}.`
+        );
+        setNotificationErr(false);
+        setNotificationOpen(true);
 
-      setSearchResult(searchResult.map(t => {
-        if (t.img.id == contextMenuItem.img.id) {
-          t.img.starred = !t.img.starred;
+        setSearchResult(
+          searchResult.map(t => {
+            if (t.img.id == contextMenuItem.img.id) {
+              t.img.starred = !t.img.starred;
+            }
+            return t;
+          })
+        );
+      })
+      .catch(err => {
+        if (isAxiosError<ErrorProtocol>(err) && err.response?.data.detail) {
+          setNotificationText(err.response?.data?.detail);
+        } else {
+          setNotificationText('Unknown error');
         }
-        return t;
-      }));
-    }).catch(err => {
-      if (isAxiosError<ErrorProtocol>(err) && err.response?.data.detail) {
-        setNotificationText(err.response?.data?.detail);
-      } else {
-        setNotificationText('Unknown error');
-      }
 
-      setNotificationErr(true);
-      setNotificationOpen(true);
-    });
-    
+        setNotificationErr(true);
+        setNotificationOpen(true);
+      });
   }
 
   return (
     <Box
       ref={containerRef}
       onContextMenu={e => {
-        if (contextMenu) {
+        if (contextMenuOpen) {
           e.preventDefault();
           setContextMenu(null);
+          setContextMenuEl(null);
         }
       }}
       sx={{
@@ -159,43 +190,87 @@ export function ImageGallery({
         return (
           <Paper
             key={t.img.id}
-            component="a"
-            data-fancybox="gallery"
-            data-caption={`Similarity: ${(t.score * 100).toFixed(2)}%`}
-            href={t.img.url}
             onContextMenu={e => handleContextMenu(e, t)}
             sx={{
               margin: 1,
               display: 'flex',
+              justifyContent: 'center',
               alignItems: 'center',
               overflow: 'Hidden',
               width: '100%',
               maxHeight: '500px',
+              flexDirection: 'column',
+              textDecoration: 'none',
             }}
           >
-            <img
-              src={t.img.thumbnail_url ?? t.img.url}
-              style={{ width: '100%' }}
-            />
+            <Box
+              sx={{
+                flexGrow: 1,
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              component="a"
+              data-fancybox="gallery"
+              href={t.img.url}
+              data-caption={`Similarity: ${(t.score * 100).toFixed(2)}%`}
+            >
+              <img
+                src={t.img.thumbnail_url ?? t.img.url}
+                style={{ width: '100%' }}
+              />
+            </Box>
+            {appSettings.showInfoBar && (
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                width="100%"
+                my="4px"
+              >
+                <Typography
+                  variant="body1"
+                  color="textSecondary"
+                  sx={{ textDecoration: 'none', userSelect: 'none', ml: 1 }}
+                >
+                  {`Similarity: ${(t.score * 100).toFixed(2)}%`}
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={e => handleContextMenuWithButton(e, t)}
+                >
+                  <MoreVert fontSize="small" />
+                </IconButton>
+              </Box>
+            )}
           </Paper>
         );
       })}
       {contextMenuItem && (
         <>
           <ImageOperationMenu
-            open={!!contextMenu}
-            anchorReference="anchorPosition"
+            open={contextMenuOpen}
+            anchorReference={contextMenuEl ? 'anchorEl' : 'anchorPosition'}
+            anchorEl={contextMenuEl}
             anchorPosition={contextMenu ?? undefined}
             context={contextMenuItem}
-            onClose={() => setContextMenu(null)}
+            onClose={() => {
+              setContextMenu(null);
+              setContextMenuEl(null);
+            }}
             onDelete={handleDelete}
             onStar={handleStar}
             onSimilarSearch={handleSimilarSearch}
           />
-          <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={() => setNotificationOpen(false)}>
+          <Snackbar
+            open={notificationOpen}
+            autoHideDuration={6000}
+            onClose={() => setNotificationOpen(false)}
+          >
             <Alert
               onClose={() => setNotificationOpen(false)}
-              severity={notificationErr ? "error" : "success"}
+              severity={notificationErr ? 'error' : 'success'}
               sx={{ width: '100%' }}
             >
               {notificationText}
