@@ -17,7 +17,7 @@ import { deleteImage, updateOpt } from '../Services/AdminApi';
 import { isAxiosError } from 'axios';
 import { ErrorProtocol, NekoProtocol } from '../Models/ApiResponse';
 import { AppSettings } from './Contexts';
-import { MoreVert } from '@mui/icons-material';
+import { Favorite, FavoriteBorder, MoreVert } from '@mui/icons-material';
 
 export function ImageGallery({
   searchResult,
@@ -137,19 +137,18 @@ export function ImageGallery({
     onSimilarSearch?.(new SimilarSearchQuery(contextMenuItem.img.id));
   }
 
-  function handleStar(): void {
-    if (!contextMenuItem) return;
-    updateOpt(contextMenuItem.img.id, !contextMenuItem.img.starred)
+  function handleStar(item: SearchResult): void {
+    updateOpt(item.img.id, !item.img.starred)
       .then(() => {
         setNotificationText(
-          `Image ${contextMenuItem.img.starred ? 'unstarred' : 'starred'}.`
+          `Image ${item.img.starred ? 'unstarred' : 'starred'}.`
         );
         setNotificationErr(false);
         setNotificationOpen(true);
 
         setSearchResult(
           searchResult.map(t => {
-            if (t.img.id == contextMenuItem.img.id) {
+            if (t.img.id == item.img.id) {
               t.img.starred = !t.img.starred;
             }
             return t;
@@ -230,10 +229,17 @@ export function ImageGallery({
                 width="100%"
                 my="4px"
               >
+                <IconButton
+                  size="small"
+                  color={t.img.starred ? 'secondary' : 'default'}
+                  onClick={() => handleStar(t)}
+                >
+                  {t.img.starred ? <Favorite fontSize="small" /> : <FavoriteBorder fontSize='small'/>}
+                </IconButton>
                 <Typography
                   variant="body1"
                   color="textSecondary"
-                  sx={{ textDecoration: 'none', userSelect: 'none', ml: 1 }}
+                  sx={{ userSelect: 'none' }}
                 >
                   {`Similarity: ${(t.score * 100).toFixed(2)}%`}
                 </Typography>
@@ -261,7 +267,7 @@ export function ImageGallery({
               setContextMenuEl(null);
             }}
             onDelete={handleDelete}
-            onStar={handleStar}
+            onStar={() => contextMenuItem && handleStar(contextMenuItem)}
             onSimilarSearch={handleSimilarSearch}
           />
           <Snackbar
