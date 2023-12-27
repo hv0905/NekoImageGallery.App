@@ -18,7 +18,8 @@ export abstract class SearchQuery {
 export class TextSearchQuery extends SearchQuery {
   constructor(
     public query: string,
-    public searchBasis: SearchBasis = SearchBasis.vision
+    public searchBasis: SearchBasis = SearchBasis.vision,
+    public exact = false
   ) {
     super();
   }
@@ -31,6 +32,7 @@ export class TextSearchQuery extends SearchQuery {
           count: count,
           skip: skip,
           basis: this.searchBasis,
+          exact: this.exact || undefined,
           ...this.getFilterOptions(),
         },
       }
