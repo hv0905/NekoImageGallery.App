@@ -52,18 +52,6 @@ export function ImageGallery({
 
   useEffect(() => {
     const container = containerRef.current;
-    const midToolbar =
-      window.innerWidth > 750
-        ? [
-            'zoomIn',
-            'zoomOut',
-            'toggle1to1',
-            'rotateCCW',
-            'rotateCW',
-            'flipX',
-            'flipY',
-          ]
-        : [];
     Fancybox.bind(container, '[data-fancybox]', {
       Toolbar: {
         items: {
@@ -80,7 +68,15 @@ export function ImageGallery({
         },
         display: {
           left: ['infobar'],
-          middle: midToolbar,
+          middle: [
+            'zoomIn',
+            'zoomOut',
+            'toggle1to1',
+            'rotateCCW',
+            'rotateCW',
+            'flipX',
+            'flipY',
+          ],
           right: ['similar', 'download', 'thumbs', 'close'],
         },
       },
@@ -234,7 +230,11 @@ export function ImageGallery({
                   color={t.img.starred ? 'secondary' : 'default'}
                   onClick={() => handleStar(t)}
                 >
-                  {t.img.starred ? <Favorite fontSize="small" /> : <FavoriteBorder fontSize='small'/>}
+                  {t.img.starred ? (
+                    <Favorite fontSize="small" />
+                  ) : (
+                    <FavoriteBorder fontSize="small" />
+                  )}
                 </IconButton>
                 <Typography
                   variant="body1"

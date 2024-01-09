@@ -1,13 +1,19 @@
-@import "@fancyapps/ui/dist/fancybox/fancybox.css";
+@import '@fancyapps/ui/dist/fancybox/fancybox.css';
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
+  margin: 0;
 }
 
 .fancybox__backdrop {
-    backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+@media screen and (max-width: 700px) {
+  .fancybox__toolbar__column.is-middle {
+    display: none;
+  }
 }
