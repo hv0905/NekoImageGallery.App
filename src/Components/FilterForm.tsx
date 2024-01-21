@@ -99,6 +99,12 @@ export function FilterForm({
 
   const [starredOnly, setStarredOnly] = useState(false);
 
+  const [categoriesEnabled, setCategoriesEnabled] = useState(false);
+  const [categories, setCategories] = useState('');
+
+  const [categoriesNegEnabled, setCategoriesNegEnabled] = useState(false);
+  const [categoriesNeg, setCategoriesNeg] = useState('');
+
   useEffect(() => {
     if (
       minWidth < 0 ||
@@ -124,6 +130,14 @@ export function FilterForm({
       newFilterModel.starred = true;
     }
 
+    if (categoriesEnabled) {
+      newFilterModel.categories = categories;
+    }
+
+    if (categoriesNegEnabled) {
+      newFilterModel.categories_negative = categoriesNeg;
+    }
+
     onChange?.(newFilterModel);
   }, [
     aspectRatioEnabled,
@@ -134,6 +148,10 @@ export function FilterForm({
     minHeight,
     starredOnly,
     onChange,
+    categoriesEnabled,
+    categoriesNegEnabled,
+    categories,
+    categoriesNeg,
   ]);
 
   const aspectRatioErr = aspectRatioTextToNumber(aspectRatio) < 0;
@@ -220,6 +238,42 @@ export function FilterForm({
           }
           label="Starred only"
         />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={categoriesEnabled}
+              onChange={e => setCategoriesEnabled(e.target.checked)}
+            />
+          }
+          label="Categories"
+        />
+        <Collapse in={categoriesEnabled}>
+          <TextField
+            variant="standard"
+            label="Seperate by comma"
+            value={categories}
+            onChange={e => setCategories(e.target.value)}
+            fullWidth
+          />
+        </Collapse>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={categoriesNegEnabled}
+              onChange={e => setCategoriesNegEnabled(e.target.checked)}
+            />
+          }
+          label="Negative Categories"
+        />
+        <Collapse in={categoriesNegEnabled}>
+          <TextField
+            variant="standard"
+            label="Seperate by comma"
+            value={categoriesNeg}
+            onChange={e => setCategoriesNeg(e.target.value)}
+            fullWidth
+          />
+        </Collapse>
       </Box>
     </Paper>
   );

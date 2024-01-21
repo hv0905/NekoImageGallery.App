@@ -1,3 +1,4 @@
 export interface ImageOptUpdateModel {
-    starred: boolean;
+    starred?: boolean;
+    categories?: string[];
 }

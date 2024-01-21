@@ -5,5 +5,7 @@ export class SearchFilterOptions {
     public min_width?: number,
     public min_height?: number,
     public starred?: boolean,
+    public categories?: string,
+    public categories_negative?: string,
   ) {}
 }

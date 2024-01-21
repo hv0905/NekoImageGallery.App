@@ -15,7 +15,7 @@ import { SearchQuery, SimilarSearchQuery } from '../Services/SearchQuery';
 import { ImageOperationMenu } from './ImageOperationMenu';
 import { deleteImage, updateOpt } from '../Services/AdminApi';
 import { isAxiosError } from 'axios';
-import { ErrorProtocol, NekoProtocol } from '../Models/ApiResponse';
+import { ErrorProtocol } from '../Models/ApiResponse';
 import { AppSettings } from './Contexts';
 import { Favorite, FavoriteBorder, MoreVert } from '@mui/icons-material';
 
@@ -117,8 +117,8 @@ export function ImageGallery({
         );
       })
       .catch(err => {
-        if (isAxiosError<NekoProtocol>(err) && err.response?.data.message) {
-          setNotificationText(err.response?.data?.message);
+        if (isAxiosError<ErrorProtocol>(err) && err.response?.data.detail) {
+          setNotificationText(err.response?.data?.detail);
         } else {
           setNotificationText('Unknown error');
         }
@@ -181,79 +181,77 @@ export function ImageGallery({
         gap: 1,
       }}
     >
-      {searchResult.map(t => {
-        return (
-          <Paper
-            key={t.img.id}
-            onContextMenu={e => handleContextMenu(e, t)}
+      {searchResult.map(t => (
+        <Paper
+          key={t.img.id}
+          onContextMenu={e => handleContextMenu(e, t)}
+          sx={{
+            margin: 1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflow: 'hidden',
+            width: '100%',
+            maxHeight: '500px',
+            flexDirection: 'column',
+            textDecoration: 'none',
+          }}
+        >
+          <Box
             sx={{
-              margin: 1,
+              flexGrow: 1,
+              width: '100%',
               display: 'flex',
-              justifyContent: 'center',
               alignItems: 'center',
               overflow: 'hidden',
-              width: '100%',
-              maxHeight: '500px',
-              flexDirection: 'column',
-              textDecoration: 'none',
+              justifyContent: 'center',
             }}
+            component="a"
+            data-fancybox="gallery"
+            href={t.img.url}
+            data-caption={`Similarity: ${(t.score * 100).toFixed(2)}%`}
           >
+            <img
+              src={t.img.thumbnail_url ?? t.img.url}
+              style={{ width: '100%' }}
+            />
+          </Box>
+          {appSettings.showInfoBar && (
             <Box
-              sx={{
-                flexGrow: 1,
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                overflow: 'hidden',
-                justifyContent: 'center',
-              }}
-              component="a"
-              data-fancybox="gallery"
-              href={t.img.url}
-              data-caption={`Similarity: ${(t.score * 100).toFixed(2)}%`}
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              width="100%"
+              my="4px"
             >
-              <img
-                src={t.img.thumbnail_url ?? t.img.url}
-                style={{ width: '100%' }}
-              />
-            </Box>
-            {appSettings.showInfoBar && (
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-                width="100%"
-                my="4px"
+              <IconButton
+                size="small"
+                color={t.img.starred ? 'secondary' : 'default'}
+                onClick={() => handleStar(t)}
               >
-                <IconButton
-                  size="small"
-                  color={t.img.starred ? 'secondary' : 'default'}
-                  onClick={() => handleStar(t)}
-                >
-                  {t.img.starred ? (
-                    <Favorite fontSize="small" />
-                  ) : (
-                    <FavoriteBorder fontSize="small" />
-                  )}
-                </IconButton>
-                <Typography
-                  variant="body1"
-                  color="textSecondary"
-                  sx={{ userSelect: 'none' }}
-                >
-                  {`Similarity: ${(t.score * 100).toFixed(2)}%`}
-                </Typography>
-                <IconButton
-                  size="small"
-                  onClick={e => handleContextMenuWithButton(e, t)}
-                >
-                  <MoreVert fontSize="small" />
-                </IconButton>
-              </Box>
-            )}
-          </Paper>
-        );
-      })}
+                {t.img.starred ? (
+                  <Favorite fontSize="small" />
+                ) : (
+                  <FavoriteBorder fontSize="small" />
+                )}
+              </IconButton>
+              <Typography
+                variant="body1"
+                color="textSecondary"
+                sx={{ userSelect: 'none' }}
+              >
+                {`Similarity: ${(t.score * 100).toFixed(2)}%`}
+              </Typography>
+              <IconButton
+                size="small"
+                onClick={e => handleContextMenuWithButton(e, t)}
+              >
+                <MoreVert fontSize="small" />
+              </IconButton>
+            </Box>
+          )}
+        </Paper>
+      ))}
       {contextMenuItem && (
         <>
           <ImageOperationMenu
