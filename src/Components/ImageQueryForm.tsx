@@ -2,6 +2,7 @@ import { Close } from '@mui/icons-material';
 import { Box, Card, Collapse, Alert, IconButton, Button } from '@mui/material';
 import { useState } from 'react';
 import { ImageSearchQuery, SearchQuery } from '../Services/SearchQuery';
+import { thumbnail } from '../Utils/ImageOps';
 
 export function ImageQueryForm({
   onSubmit,
@@ -12,14 +13,25 @@ export function ImageQueryForm({
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [notificationOpen, setNotificationOpen] = useState(false);
 
-  const handleImageSearch = () => {
-    if (file) onSubmit?.(new ImageSearchQuery(file));
+  const handleImageSearch = async () => {
+    if (!file) return;
+
+    let blob: Blob = file;
+
+    if (file.size > 9 * 1024 * 1024) {
+      // Entity too large
+      // compress image
+      blob = await thumbnail(fileUrl!, 1024, 1024);
+      console.log('Image compressed. New size: ', blob.size / 1024, 'K');
+    }
+
+    onSubmit?.(new ImageSearchQuery(blob));
   };
 
   const setImageFile = (file: File) => {
-    console.log(file);
     if (file.type === 'image/jpeg' || file.type === 'image/png') {
       setFile(file);
+      if (fileUrl) URL.revokeObjectURL(fileUrl);
       setFileUrl(URL.createObjectURL(file));
     } else {
       setNotificationOpen(true);
@@ -64,7 +76,7 @@ export function ImageQueryForm({
       }
     }
   };
-  
+
   return (
     <Box
       sx={{
@@ -127,7 +139,7 @@ export function ImageQueryForm({
           fullWidth
           variant="contained"
           disabled={!file}
-          onClick={handleImageSearch}
+          onClick={() => void handleImageSearch()}
         >
           Search
         </Button>

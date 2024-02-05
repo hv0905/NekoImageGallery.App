@@ -42,7 +42,7 @@ export class TextSearchQuery extends SearchQuery {
 }
 
 export class ImageSearchQuery extends SearchQuery {
-  constructor(public image: File) {
+  constructor(public image: Blob) {
     super();
   }
 
