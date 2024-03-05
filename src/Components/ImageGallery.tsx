@@ -253,36 +253,34 @@ export function ImageGallery({
         </Paper>
       ))}
       {contextMenuItem && (
-        <>
-          <ImageOperationMenu
-            open={contextMenuOpen}
-            anchorReference={contextMenuEl ? 'anchorEl' : 'anchorPosition'}
-            anchorEl={contextMenuEl}
-            anchorPosition={contextMenu ?? undefined}
-            context={contextMenuItem}
-            onClose={() => {
-              setContextMenu(null);
-              setContextMenuEl(null);
-            }}
-            onDelete={handleDelete}
-            onStar={() => contextMenuItem && handleStar(contextMenuItem)}
-            onSimilarSearch={handleSimilarSearch}
-          />
-          <Snackbar
-            open={notificationOpen}
-            autoHideDuration={6000}
-            onClose={() => setNotificationOpen(false)}
-          >
-            <Alert
-              onClose={() => setNotificationOpen(false)}
-              severity={notificationErr ? 'error' : 'success'}
-              sx={{ width: '100%' }}
-            >
-              {notificationText}
-            </Alert>
-          </Snackbar>
-        </>
+        <ImageOperationMenu
+          open={contextMenuOpen}
+          anchorReference={contextMenuEl ? 'anchorEl' : 'anchorPosition'}
+          anchorEl={contextMenuEl}
+          anchorPosition={contextMenu ?? undefined}
+          context={contextMenuItem}
+          onClose={() => {
+            setContextMenu(null);
+            setContextMenuEl(null);
+          }}
+          onDelete={handleDelete}
+          onStar={() => contextMenuItem && handleStar(contextMenuItem)}
+          onSimilarSearch={handleSimilarSearch}
+        />
       )}
+      <Snackbar
+        open={notificationOpen}
+        autoHideDuration={6000}
+        onClose={() => setNotificationOpen(false)}
+      >
+        <Alert
+          onClose={() => setNotificationOpen(false)}
+          severity={notificationErr ? 'error' : 'success'}
+          sx={{ width: '100%' }}
+        >
+          {notificationText}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
