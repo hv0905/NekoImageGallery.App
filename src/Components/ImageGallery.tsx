@@ -45,7 +45,7 @@ export function ImageGallery({
     if (t.img.url.startsWith('/')) {
       t.img.url = Environment.ApiUrl + t.img.url;
     }
-    if (t.img.thumbnail_url && t.img.thumbnail_url.startsWith('/')) {
+    if (t.img.thumbnail_url?.startsWith('/')) {
       t.img.thumbnail_url = Environment.ApiUrl + t.img.thumbnail_url;
     }
   });
