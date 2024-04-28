@@ -6,6 +6,8 @@ import {
   Favorite,
   FavoriteBorder,
   Flaky,
+  FontDownload,
+  FontDownloadOff,
   Pageview,
   Pending,
   PlaylistRemove,
@@ -149,7 +151,7 @@ export function UploadDialog({
           item.file,
           true,
           item.starred,
-          false,
+          item.skipOcr,
           item.categories
         );
         item.status = UploadTaskStatus.Complete;
@@ -281,7 +283,7 @@ export function UploadDialog({
             {(t.status === UploadTaskStatus.Duplicate) && (
               <Chip label="Duplicated" color="warning" />
             )}
-            <Chip label={humanReadableBytes(t.file.size)} />
+            {t.skipOcr && <Chip label="Skip OCR" color="secondary"/>}
             {t.categories && (
               <Chip
                 label={`categories: ${t.categories}`}
@@ -290,6 +292,7 @@ export function UploadDialog({
                 }}
               />
             )}
+            <Chip label={humanReadableBytes(t.file.size)} />
           </Box>
         </ListItemButton>
       </ListItem>
@@ -431,6 +434,32 @@ export function UploadDialog({
                   }
                 >
                   <FavoriteBorder />
+                </Button>
+              </Tooltip>
+              <Tooltip title="Skip OCR process for selection">
+                <Button
+                  onClick={() =>
+                    setUploadQueue(
+                      uploadQueue.map(t =>
+                        t.selected ? { ...t, skipOcr: true } : t
+                      )
+                    )
+                  }
+                >
+                  <FontDownloadOff/>
+                </Button>
+              </Tooltip>
+              <Tooltip title="Enable OCR process for selection">
+                <Button
+                  onClick={() =>
+                    setUploadQueue(
+                      uploadQueue.map(t =>
+                        t.selected ? { ...t, skipOcr: false } : t
+                      )
+                    )
+                  }
+                >
+                  <FontDownload/>
                 </Button>
               </Tooltip>
             </ButtonGroup>

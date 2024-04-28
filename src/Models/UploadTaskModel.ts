@@ -17,7 +17,8 @@ export class UploadTask {
     public status: UploadTaskStatus = UploadTaskStatus.Pending,
     public categories = '',
     public starred = false,
-    public selected = false
+    public selected = false,
+    public skipOcr = false
   ) {
     this.id = UploadTask.counter++;
   }
