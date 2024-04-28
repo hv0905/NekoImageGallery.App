@@ -17,6 +17,7 @@ import {
 } from '../Models/AppSettings';
 import { HomeApiResponse } from '../Models/HomeApiResponse';
 import { WelcomeApi } from '../Services/WelcomeApi';
+import type {} from '@mui/lab/themeAugmentation';
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');

@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+:root {
+  --fancybox-zIndex: 1350; /* To have a higher priority than Mui Dialog */
+}
+
 body {
   margin: 0;
 }

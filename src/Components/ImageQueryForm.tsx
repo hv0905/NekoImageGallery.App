@@ -3,6 +3,7 @@ import { Box, Card, Collapse, Alert, IconButton, Button } from '@mui/material';
 import { useState } from 'react';
 import { ImageSearchQuery, SearchQuery } from '../Services/SearchQuery';
 import { thumbnail } from '../Utils/ImageOps';
+import { selectFiles } from '../Utils/SystemDialog';
 
 export function ImageQueryForm({
   onSubmit,
@@ -39,16 +40,9 @@ export function ImageQueryForm({
   };
 
   const selectImage = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/jpeg, image/png';
-    input.onchange = e => {
-      const files = (e.target as HTMLInputElement).files;
-      if (files && files.length > 0) {
-        setImageFile(files[0]);
-      }
-    };
-    input.click();
+    selectFiles()
+    .then(t => setImageFile(t[0]))
+    .catch(() => undefined);
   };
 
   const dropImage = (e: React.DragEvent<HTMLDivElement>) => {
