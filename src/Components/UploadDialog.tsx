@@ -275,8 +275,11 @@ export function UploadDialog({
             </Typography>
           </Box>
           <Box display="flex" gridRow="2/3" gap={1}>
-            {t.status === UploadTaskStatus.Error && (
+            {(t.status === UploadTaskStatus.Error) && (
               <Chip label={t.errorText} color="error" />
+            )}
+            {(t.status === UploadTaskStatus.Duplicate) && (
+              <Chip label="Duplicated" color="warning" />
             )}
             <Chip label={humanReadableBytes(t.file.size)} />
             {t.categories && (
