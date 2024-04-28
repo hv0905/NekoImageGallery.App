@@ -155,25 +155,22 @@ export function UploadDialog({
         item.status = UploadTaskStatus.Complete;
       } catch (err) {
         if (isAxiosError<ErrorProtocol>(err)) {
-          if (!err.status) {
+          if (!err.response) {
             item.status = UploadTaskStatus.Error;
             item.errorText = 'Network error';
-          } else if (err.status === 409) {
+          } else if (err.response.status === 409) {
             item.status = UploadTaskStatus.Duplicate;
             item.errorText = 'Duplicated';
-          } else if (err.status === 400 || err.status === 415) {
+          } else if (err.response.status === 400 || err.response.status === 415) {
             item.status = UploadTaskStatus.Error;
             item.errorText = 'Invalid file';
-          } else if (err.response?.data?.detail) {
-            item.status = UploadTaskStatus.Error;
-            item.errorText = err.response?.data?.detail;
           } else {
             item.status = UploadTaskStatus.Error;
-            item.errorText = 'Unknown error';
+            item.errorText = err.response?.data?.detail ?? 'Unknown error';
           }
         } else {
           item.status = UploadTaskStatus.Error;
-          item.errorText = 'Unknown error';
+          item.errorText = 'Internal error';
         }
         console.error(err);
       } finally {
