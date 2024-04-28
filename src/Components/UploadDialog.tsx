@@ -378,7 +378,7 @@ export function UploadDialog({
                   width={width}
                   height={height}
                   itemCount={uploadQueue.length}
-                  itemSize={64}
+                  itemSize={72}
                   itemKey={idx => uploadQueue[idx].id}
                 >
                   {idx => renderForTask(uploadQueue[idx.index], idx.style)}
