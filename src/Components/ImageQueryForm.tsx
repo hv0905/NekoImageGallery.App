@@ -3,7 +3,7 @@ import { Box, Card, Collapse, Alert, IconButton, Button } from '@mui/material';
 import { useState } from 'react';
 import { ImageSearchQuery, SearchQuery } from '../Services/SearchQuery';
 import { thumbnail } from '../Utils/ImageOps';
-import { selectFiles } from '../Utils/SystemDialog';
+import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
 
 export function ImageQueryForm({
   onSubmit,
@@ -30,7 +30,7 @@ export function ImageQueryForm({
   };
 
   const setImageFile = (file: File) => {
-    if (file.type === 'image/jpeg' || file.type === 'image/png') {
+    if (imageFileTypes.includes(file.type)) {
       setFile(file);
       if (fileUrl) URL.revokeObjectURL(fileUrl);
       setFileUrl(URL.createObjectURL(file));

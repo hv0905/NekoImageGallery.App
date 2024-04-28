@@ -31,7 +31,7 @@ import {
 import { UploadTask, UploadTaskStatus } from '../Models/UploadTaskModel';
 import { CSSProperties, useRef, useState } from 'react';
 import { LoadingButton } from '@mui/lab';
-import { selectDirectory, selectFiles } from '../Utils/SystemDialog';
+import { imageFileTypes, selectDirectory, selectFiles } from '../Utils/SystemDialog';
 import { humanReadableBytes } from '../Utils/StringUtils';
 import { Fancybox } from '@fancyapps/ui';
 import { FixedSizeList } from 'react-window';
@@ -78,6 +78,17 @@ export function UploadDialog({
       .then(t => addImages(t))
       .catch(() => undefined);
   }
+
+  const dropImage = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    if (!files) return;
+    addImages(Array.from(files).filter(t => imageFileTypes.includes(t.type)));
+  };
+
+  const dragOverImage = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
 
   function previewImage(file: File) {
     const url = URL.createObjectURL(file);
@@ -265,6 +276,8 @@ export function UploadDialog({
       fullWidth
       maxWidth="lg"
       scroll="paper"
+      onDrop={dropImage}
+      onDragOver={dragOverImage}
     >
       <DialogTitle>Upload new images</DialogTitle>
       <DialogContent>
