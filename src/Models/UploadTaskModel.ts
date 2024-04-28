@@ -3,6 +3,7 @@ export enum UploadTaskStatus {
   Uploading = 'uploading',
   Complete = 'complete',
   Error = 'error',
+  Duplicate = 'duplicate',
 }
 
 export class UploadTask {

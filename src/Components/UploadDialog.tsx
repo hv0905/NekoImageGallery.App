@@ -52,6 +52,8 @@ export function UploadDialog({
   const [uploading, setUploading] = useState(false);
   const [categoriesInput, setCategoriesInput] = useState('');
   const [completedTasks, setCompletedTasks] = useState(0);
+  const [errorTasks, setErrorTasks] = useState(0);
+  const [duplicateTasks, setDuplicateTasks] = useState(0);
   const [totalTasks, setTotalTasks] = useState(1);
 
   const percentage = (completedTasks / totalTasks) * 100;
@@ -95,7 +97,18 @@ export function UploadDialog({
       workingUploadQueue.current.filter(
         t =>
           t.status === UploadTaskStatus.Complete ||
-          t.status === UploadTaskStatus.Error
+          t.status === UploadTaskStatus.Error ||
+          t.status === UploadTaskStatus.Duplicate
+      ).length
+    );
+    setErrorTasks(
+      workingUploadQueue.current.filter(
+        t => t.status === UploadTaskStatus.Error
+      ).length
+    );
+    setDuplicateTasks(
+      workingUploadQueue.current.filter(
+        t => t.status === UploadTaskStatus.Duplicate
       ).length
     );
     setUploadQueue(
@@ -127,7 +140,7 @@ export function UploadDialog({
             item.status = UploadTaskStatus.Error;
             item.errorText = 'Network error';
           } else if (err.status === 409) {
-            item.status = UploadTaskStatus.Error;
+            item.status = UploadTaskStatus.Duplicate;
             item.errorText = 'Duplicated';
           } else if (err.status === 400 || err.status === 415) {
             item.status = UploadTaskStatus.Error;
@@ -152,9 +165,13 @@ export function UploadDialog({
 
   function startUpload() {
     setUploading(true);
-    workingUploadQueue.current = uploadQueue.filter(
-      t => t.status === UploadTaskStatus.Pending
-    );
+    workingUploadQueue.current = uploadQueue
+      .filter(
+        t =>
+          t.status === UploadTaskStatus.Pending ||
+          t.status === UploadTaskStatus.Error
+      )
+      .map(t => ({ ...t, status: UploadTaskStatus.Pending }));
     setTotalTasks(workingUploadQueue.current.length);
     const threadColl = [];
     for (let i = 0; i < 4; ++i) {
@@ -217,6 +234,7 @@ export function UploadDialog({
               textOverflow="ellipsis"
               maxWidth="100%"
               overflow="hidden"
+              noWrap
             >
               {t.file.name}
             </Typography>
@@ -402,9 +420,26 @@ export function UploadDialog({
           </Box>
         </Collapse>
         <Collapse in={uploading}>
-          <Box display="flex" flexDirection="column" alignItems="center" gap={1} mt={2}>
-            <Typography>Progress: {completedTasks}/{totalTasks} ({percentage.toFixed(0)}%)</Typography>
-            <LinearProgress variant="determinate" sx={{width: '100%'}} value={percentage}/>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap={1}
+            mt={2}
+          >
+            {(!!errorTasks || !!duplicateTasks) && (
+              <Typography>
+                Errors: {errorTasks} Duplicates: {duplicateTasks}
+              </Typography>
+            )}
+            <Typography>
+              Progress: {completedTasks}/{totalTasks} ({percentage.toFixed(0)}%)
+            </Typography>
+            <LinearProgress
+              variant="determinate"
+              sx={{ width: '100%' }}
+              value={percentage}
+            />
           </Box>
         </Collapse>
       </DialogContent>
