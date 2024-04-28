@@ -1,10 +1,13 @@
 import {
   Check,
+  ContentCopy,
   DoneAll,
+  Error,
   Favorite,
   FavoriteBorder,
   Flaky,
   Pageview,
+  Pending,
   PlaylistRemove,
   RemoveDone,
 } from '@mui/icons-material';
@@ -14,6 +17,7 @@ import {
   ButtonGroup,
   Checkbox,
   Chip,
+  CircularProgress,
   Collapse,
   Dialog,
   DialogActions,
@@ -31,7 +35,11 @@ import {
 import { UploadTask, UploadTaskStatus } from '../Models/UploadTaskModel';
 import { CSSProperties, useRef, useState } from 'react';
 import { LoadingButton } from '@mui/lab';
-import { imageFileTypes, selectDirectory, selectFiles } from '../Utils/SystemDialog';
+import {
+  imageFileTypes,
+  selectDirectory,
+  selectFiles,
+} from '../Utils/SystemDialog';
 import { humanReadableBytes } from '../Utils/StringUtils';
 import { Fancybox } from '@fancyapps/ui';
 import { FixedSizeList } from 'react-window';
@@ -227,12 +235,31 @@ export function UploadDialog({
             )
           }
         >
-          <Checkbox
-            edge="start"
-            disableRipple
-            sx={{ gridRow: '1 / -1' }}
-            checked={t.selected}
-          />
+          {uploading ? (
+            <Box gridRow="1 / -1" width={30}>
+              {t.status === UploadTaskStatus.Pending && <Pending />}
+              {t.status === UploadTaskStatus.Uploading && (
+                <CircularProgress size={30} />
+              )}
+              {t.status === UploadTaskStatus.Complete && (
+                <Check color="success"/>
+              )}
+              {t.status === UploadTaskStatus.Error && (
+                <Error color="error" />
+              )}
+              {t.status === UploadTaskStatus.Duplicate && (
+                <ContentCopy color="secondary" />
+              )}
+            </Box>
+          ) : (
+            <Checkbox
+              edge="start"
+              disableRipple
+              sx={{ gridRow: '1 / -1' }}
+              checked={t.selected}
+            />
+          )}
+
           <Box
             display="flex"
             alignItems="center"
