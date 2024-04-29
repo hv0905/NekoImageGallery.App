@@ -6,6 +6,6 @@ export class SearchFilterOptions {
     public min_height?: number,
     public starred?: boolean,
     public categories?: string,
-    public categories_negative?: string,
+    public categories_negative?: string
   ) {}
 }

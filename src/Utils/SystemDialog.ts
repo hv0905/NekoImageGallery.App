@@ -26,7 +26,9 @@ export function selectFiles(
   });
 }
 
-export function selectDirectory(accept: string[] | null = imageFileTypes): Promise<File[]> {
+export function selectDirectory(
+  accept: string[] | null = imageFileTypes
+): Promise<File[]> {
   return new Promise((resolve, reject) => {
     const input = document.createElement('input');
     input.type = 'file';

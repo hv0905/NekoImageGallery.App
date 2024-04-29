@@ -1,6 +1,6 @@
-import axios, { AxiosInstance } from 'axios';
-import { Environment } from '../environment';
-import { loadFromLocalStorage } from '../Models/AppSettings';
+import axios, {AxiosInstance} from 'axios';
+import {Environment} from '../environment';
+import {loadFromLocalStorage} from '../Models/AppSettings';
 
 let apiClient: AxiosInstance | null;
 

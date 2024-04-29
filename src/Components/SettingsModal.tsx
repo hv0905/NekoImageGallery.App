@@ -11,10 +11,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { AppSettings, ApiInfo } from './Contexts';
-import { useContext, useState } from 'react';
-import { resetClient } from '../Services/Base';
-import { WelcomeApi } from '../Services/WelcomeApi';
+import {AppSettings, ApiInfo} from './Contexts';
+import {useContext, useState} from 'react';
+import {resetClient} from '../Services/Base';
+import {WelcomeApi} from '../Services/WelcomeApi';
 
 export function SettingsDialog({
   open,
@@ -39,7 +39,7 @@ export function SettingsDialog({
 
   const adminPortalAvail = apiInfo?.admin_api.available ?? true;
   if (!adminPortalAvail && editingSettings.useAdminPortal) {
-    setEditingSettings({ ...editingSettings, useAdminPortal: false });
+    setEditingSettings({...editingSettings, useAdminPortal: false});
   }
 
   function saveSettings() {
@@ -73,13 +73,13 @@ export function SettingsDialog({
     <Dialog
       open={open}
       onClose={onClose}
-      maxWidth="md"
+      maxWidth='md'
       fullWidth
-      scroll="paper"
+      scroll='paper'
     >
       <DialogTitle>Settings</DialogTitle>
       <DialogContent dividers>
-        <Typography variant="h6">Appearance</Typography>
+        <Typography variant='h6'>Appearance</Typography>
         <FormControlLabel
           control={
             <Switch
@@ -92,9 +92,9 @@ export function SettingsDialog({
               }
             />
           }
-          label="Show info bar on each image"
+          label='Show info bar on each image'
         />
-        <Typography variant="h6">Admin</Typography>
+        <Typography variant='h6'>Admin</Typography>
         <FormControlLabel
           control={
             <Switch
@@ -108,17 +108,17 @@ export function SettingsDialog({
               }
             />
           }
-          label="Use admin portal"
+          label='Use admin portal'
         />
         {adminPortalAvail ? (
           <Collapse in={editingSettings.useAdminPortal}>
             <TextField
-              label="Admin Token"
-              variant="standard"
+              label='Admin Token'
+              variant='standard'
               fullWidth
               required
               value={editingSettings.adminKey}
-              type="password"
+              type='password'
               error={!!tokenErr}
               helperText={tokenErr}
               onChange={e =>
@@ -130,13 +130,13 @@ export function SettingsDialog({
             />
           </Collapse>
         ) : (
-          <Alert severity="info">
+          <Alert severity='info'>
             The admin portal of this server isn&apos;t enabled.
           </Alert>
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={onClose} color='secondary'>
           Cancel
         </Button>
         <Button onClick={saveSettings} disabled={!canSave || saving}>

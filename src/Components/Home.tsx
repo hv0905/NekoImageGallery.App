@@ -1,18 +1,18 @@
-import { useContext, useRef, useState } from 'react';
-import { SearchResult } from '../Models/SearchResult';
-import { ImageGallery } from './ImageGallery';
-import { QueryArea } from './QueryArea';
-import { SearchQuery } from '../Services/SearchQuery';
-import { AuthenticationDialog } from './AuthenticationDialog';
-import { Box, Button, CircularProgress, Collapse } from '@mui/material';
-import { AppSettings } from './Contexts';
-import { FilterForm } from './FilterForm';
-import { SearchFilterOptions } from '../Models/SearchFilterOptions';
+import {useContext, useRef, useState} from 'react';
+import {SearchResult} from '../Models/SearchResult';
+import {ImageGallery} from './ImageGallery';
+import {QueryArea} from './QueryArea';
+import {SearchQuery} from '../Services/SearchQuery';
+import {AuthenticationDialog} from './AuthenticationDialog';
+import {Box, Button, CircularProgress, Collapse} from '@mui/material';
+import {AppSettings} from './Contexts';
+import {FilterForm} from './FilterForm';
+import {SearchFilterOptions} from '../Models/SearchFilterOptions';
 
 export function Home() {
   const activeQuery = useRef<SearchQuery | null>(null);
   const [result, setResult] = useState<SearchResult[] | null>(null);
-  
+
   const [loading, setLoading] = useState(false);
   const [noMore, setNoMore] = useState(false);
 
@@ -75,12 +75,12 @@ export function Home() {
             onSimilarSearch={search}
           ></ImageGallery>
           {loading ? (
-            <Box display="flex" justifyContent="center" sx={{ width: '100%' }}>
-              <CircularProgress sx={{ my: '20px' }} />
+            <Box display='flex' justifyContent='center' sx={{width: '100%'}}>
+              <CircularProgress sx={{my: '20px'}} />
             </Box>
           ) : (
             !noMore && (
-              <Button fullWidth sx={{ my: '20px' }} onClick={() => queryNext()}>
+              <Button fullWidth sx={{my: '20px'}} onClick={() => queryNext()}>
                 Load More
               </Button>
             )

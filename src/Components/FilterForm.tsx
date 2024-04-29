@@ -7,8 +7,8 @@ import {
   Switch,
   TextField,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { SearchFilterOptions } from '../Models/SearchFilterOptions';
+import {useEffect, useState} from 'react';
+import {SearchFilterOptions} from '../Models/SearchFilterOptions';
 
 const commonAspectRatios = [
   '9:32',
@@ -69,8 +69,8 @@ function StrictNumberInput({
   return (
     <TextField
       label={label}
-      variant="standard"
-      type="number"
+      variant='standard'
+      type='number'
       value={value}
       onChange={e => {
         const v = Number(e.target.value);
@@ -80,7 +80,7 @@ function StrictNumberInput({
       }}
       error={!!err}
       helperText={err}
-      inputProps={{ min, max, step }}
+      inputProps={{min, max, step}}
       {...props}
     />
   );
@@ -159,8 +159,8 @@ export function FilterForm({
   const aspectRatioErr = aspectRatioTextToNumber(aspectRatio) < 0;
 
   return (
-    <Paper elevation={3} sx={{ mx: 1 }}>
-      <Box sx={{ padding: 1 }} display="flex" flexDirection="column">
+    <Paper elevation={3} sx={{mx: 1}}>
+      <Box sx={{padding: 1}} display='flex' flexDirection='column'>
         <FormControlLabel
           control={
             <Switch
@@ -168,12 +168,12 @@ export function FilterForm({
               onChange={e => setAspectRatioEnabled(e.target.checked)}
             />
           }
-          label="Aspect Ratio"
+          label='Aspect Ratio'
         />
         <Collapse in={aspectRatioEnabled}>
-          <Box display="flex" gap={2}>
+          <Box display='flex' gap={2}>
             <Autocomplete
-              id="combo-box-demo"
+              id='combo-box-demo'
               options={commonAspectRatios}
               freeSolo
               value={aspectRatio}
@@ -181,9 +181,9 @@ export function FilterForm({
               onChange={(_, v) => setAspectRatio(v ?? '')}
               renderInput={params => (
                 <TextField
-                  variant="standard"
+                  variant='standard'
                   {...params}
-                  label="Preferred Aspect Ratio"
+                  label='Preferred Aspect Ratio'
                   error={aspectRatioErr}
                   onChange={e => setAspectRatio(e.target.value)}
                   helperText={aspectRatioErr ? 'Invalid aspect ratio' : ''}
@@ -191,8 +191,8 @@ export function FilterForm({
               )}
             />
             <StrictNumberInput
-              label="Ratio tolerance"
-              variant="standard"
+              label='Ratio tolerance'
+              variant='standard'
               value={aspectRatioTolerance}
               onChange={v => setAspectRatioTolerance(v)}
               min={0}
@@ -209,13 +209,13 @@ export function FilterForm({
               onChange={e => setMinSizeEnabled(e.target.checked)}
             />
           }
-          label="Min Size"
+          label='Min Size'
         />
         <Collapse in={minSizeEnabled}>
-          <Box display="flex" gap={2}>
+          <Box display='flex' gap={2}>
             <StrictNumberInput
               fullWidth
-              label="Min Width"
+              label='Min Width'
               value={minWidth}
               min={0}
               step={100}
@@ -223,7 +223,7 @@ export function FilterForm({
             />
             <StrictNumberInput
               fullWidth
-              label="Min Height"
+              label='Min Height'
               value={minHeight}
               min={0}
               step={100}
@@ -238,7 +238,7 @@ export function FilterForm({
               onChange={e => setStarredOnly(e.target.checked)}
             />
           }
-          label="Starred only"
+          label='Starred only'
         />
         <FormControlLabel
           control={
@@ -247,12 +247,12 @@ export function FilterForm({
               onChange={e => setCategoriesEnabled(e.target.checked)}
             />
           }
-          label="Categories"
+          label='Categories'
         />
         <Collapse in={categoriesEnabled}>
           <TextField
-            variant="standard"
-            label="Seperate by comma"
+            variant='standard'
+            label='Seperate by comma'
             value={categories}
             onChange={e => setCategories(e.target.value)}
             fullWidth
@@ -265,12 +265,12 @@ export function FilterForm({
               onChange={e => setCategoriesNegEnabled(e.target.checked)}
             />
           }
-          label="Negative Categories"
+          label='Negative Categories'
         />
         <Collapse in={categoriesNegEnabled}>
           <TextField
-            variant="standard"
-            label="Seperate by comma"
+            variant='standard'
+            label='Seperate by comma'
             value={categoriesNeg}
             onChange={e => setCategoriesNeg(e.target.value)}
             fullWidth

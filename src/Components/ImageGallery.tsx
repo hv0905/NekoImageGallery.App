@@ -7,17 +7,17 @@ import {
   Snackbar,
   Typography,
 } from '@mui/material';
-import { SearchResult } from '../Models/SearchResult';
-import { Environment } from '../environment';
-import { useContext, useEffect, useRef, useState } from 'react';
-import { Fancybox } from '@fancyapps/ui';
-import { SearchQuery, SimilarSearchQuery } from '../Services/SearchQuery';
-import { ImageOperationMenu } from './ImageOperationMenu';
-import { deleteImage, updateOpt } from '../Services/AdminApi';
-import { isAxiosError } from 'axios';
-import { ErrorProtocol } from '../Models/ApiResponse';
-import { AppSettings } from './Contexts';
-import { Favorite, FavoriteBorder, MoreVert } from '@mui/icons-material';
+import {SearchResult} from '../Models/SearchResult';
+import {Environment} from '../environment';
+import {useContext, useEffect, useRef, useState} from 'react';
+import {Fancybox} from '@fancyapps/ui';
+import {SearchQuery, SimilarSearchQuery} from '../Services/SearchQuery';
+import {ImageOperationMenu} from './ImageOperationMenu';
+import {deleteImage, updateOpt} from '../Services/AdminApi';
+import {isAxiosError} from 'axios';
+import {ErrorProtocol} from '../Models/ApiResponse';
+import {AppSettings} from './Contexts';
+import {Favorite, FavoriteBorder, MoreVert} from '@mui/icons-material';
 
 export function ImageGallery({
   searchResult,
@@ -92,7 +92,7 @@ export function ImageGallery({
     e.preventDefault();
     if (contextMenuOpen) return;
     setContextMenuItem(item);
-    setContextMenu({ top: e.clientY - 6, left: e.clientX + 2 });
+    setContextMenu({top: e.clientY - 6, left: e.clientX + 2});
   }
 
   // onclick event
@@ -206,47 +206,47 @@ export function ImageGallery({
               overflow: 'hidden',
               justifyContent: 'center',
             }}
-            component="a"
-            data-fancybox="gallery"
+            component='a'
+            data-fancybox='gallery'
             href={t.img.url}
             data-caption={`Similarity: ${(t.score * 100).toFixed(2)}%`}
           >
             <img
               src={t.img.thumbnail_url ?? t.img.url}
-              style={{ width: '100%' }}
+              style={{width: '100%'}}
             />
           </Box>
           {appSettings.showInfoBar && (
             <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-              width="100%"
-              my="4px"
+              display='flex'
+              alignItems='center'
+              justifyContent='space-between'
+              width='100%'
+              my='4px'
             >
               <IconButton
-                size="small"
+                size='small'
                 color={t.img.starred ? 'secondary' : 'default'}
                 onClick={() => handleStar(t)}
               >
                 {t.img.starred ? (
-                  <Favorite fontSize="small" />
+                  <Favorite fontSize='small' />
                 ) : (
-                  <FavoriteBorder fontSize="small" />
+                  <FavoriteBorder fontSize='small' />
                 )}
               </IconButton>
               <Typography
-                variant="body1"
-                color="textSecondary"
-                sx={{ userSelect: 'none' }}
+                variant='body1'
+                color='textSecondary'
+                sx={{userSelect: 'none'}}
               >
                 {`Similarity: ${(t.score * 100).toFixed(2)}%`}
               </Typography>
               <IconButton
-                size="small"
+                size='small'
                 onClick={e => handleContextMenuWithButton(e, t)}
               >
-                <MoreVert fontSize="small" />
+                <MoreVert fontSize='small' />
               </IconButton>
             </Box>
           )}
@@ -276,7 +276,7 @@ export function ImageGallery({
         <Alert
           onClose={() => setNotificationOpen(false)}
           severity={notificationErr ? 'error' : 'success'}
-          sx={{ width: '100%' }}
+          sx={{width: '100%'}}
         >
           {notificationText}
         </Alert>

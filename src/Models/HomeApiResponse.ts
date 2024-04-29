@@ -1,4 +1,4 @@
-import { NekoProtocol } from "./ApiResponse";
+import {NekoProtocol} from './ApiResponse';
 
 export interface HomeAuthorizationResponse {
   required: boolean;
@@ -16,5 +16,4 @@ export interface HomeApiResponse extends NekoProtocol {
   authorization: HomeAuthorizationResponse;
   admin_api: AdminAuthorizationRespose;
   available_basis: string[];
-
 }

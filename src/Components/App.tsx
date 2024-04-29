@@ -1,5 +1,5 @@
 import '../Styles/App.css';
-import { AppNav } from './AppNav';
+import {AppNav} from './AppNav';
 import {
   CssBaseline,
   ThemeProvider,
@@ -7,16 +7,16 @@ import {
   createTheme,
   useMediaQuery,
 } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
-import { Home } from './Home';
-import { ApiInfo, AppSettings } from './Contexts';
+import {useEffect, useMemo, useState} from 'react';
+import {Home} from './Home';
+import {ApiInfo, AppSettings} from './Contexts';
 import {
   AppSettingsModel,
   loadFromLocalStorage,
   saveSettingsToLocalStorage,
 } from '../Models/AppSettings';
-import { HomeApiResponse } from '../Models/HomeApiResponse';
-import { WelcomeApi } from '../Services/WelcomeApi';
+import {HomeApiResponse} from '../Models/HomeApiResponse';
+import {WelcomeApi} from '../Services/WelcomeApi';
 import type {} from '@mui/lab/themeAugmentation';
 
 function App() {

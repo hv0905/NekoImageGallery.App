@@ -1,9 +1,9 @@
-import { Close } from '@mui/icons-material';
-import { Box, Card, Collapse, Alert, IconButton, Button } from '@mui/material';
-import { useState } from 'react';
-import { ImageSearchQuery, SearchQuery } from '../Services/SearchQuery';
-import { thumbnail } from '../Utils/ImageOps';
-import { imageFileTypes, selectFiles } from '../Utils/SystemDialog';
+import {Close} from '@mui/icons-material';
+import {Box, Card, Collapse, Alert, IconButton, Button} from '@mui/material';
+import {useState} from 'react';
+import {ImageSearchQuery, SearchQuery} from '../Services/SearchQuery';
+import {thumbnail} from '../Utils/ImageOps';
+import {imageFileTypes, selectFiles} from '../Utils/SystemDialog';
 
 export function ImageQueryForm({
   onSubmit,
@@ -41,8 +41,8 @@ export function ImageQueryForm({
 
   const selectImage = () => {
     selectFiles()
-    .then(t => setImageFile(t[0]))
-    .catch(() => undefined);
+      .then(t => setImageFile(t[0]))
+      .catch(() => undefined);
   };
 
   const dropImage = (e: React.DragEvent<HTMLDivElement>) => {
@@ -80,7 +80,7 @@ export function ImageQueryForm({
         flexDirection: 'column',
       }}
     >
-      <Card sx={{ width: '100%', height: '200px' }}>
+      <Card sx={{width: '100%', height: '200px'}}>
         <div
           style={{
             width: '100%',
@@ -109,29 +109,29 @@ export function ImageQueryForm({
       </Card>
       <Collapse in={notificationOpen}>
         <Alert
-          severity="error"
+          severity='error'
           action={
             <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
+              aria-label='close'
+              color='inherit'
+              size='small'
               onClick={() => setNotificationOpen(false)}
             >
-              <Close fontSize="inherit" />
+              <Close fontSize='inherit' />
             </IconButton>
           }
-          sx={{ mb: 2 }}
+          sx={{mb: 2}}
         >
           Invalid file type. Please select a PNG or JPEG image.
         </Alert>
       </Collapse>
-      <Box display="flex" gap={2}>
-        <Button fullWidth variant="outlined" onClick={selectImage}>
+      <Box display='flex' gap={2}>
+        <Button fullWidth variant='outlined' onClick={selectImage}>
           Select Image
         </Button>
         <Button
           fullWidth
-          variant="contained"
+          variant='contained'
           disabled={!file}
           onClick={() => void handleImageSearch()}
         >

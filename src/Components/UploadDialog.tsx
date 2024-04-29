@@ -34,21 +34,21 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { UploadTask, UploadTaskStatus } from '../Models/UploadTaskModel';
-import { CSSProperties, useRef, useState } from 'react';
-import { LoadingButton } from '@mui/lab';
+import {UploadTask, UploadTaskStatus} from '../Models/UploadTaskModel';
+import {CSSProperties, useRef, useState} from 'react';
+import {LoadingButton} from '@mui/lab';
 import {
   imageFileTypes,
   selectDirectory,
   selectFiles,
 } from '../Utils/SystemDialog';
-import { humanReadableBytes } from '../Utils/StringUtils';
-import { Fancybox } from '@fancyapps/ui';
-import { FixedSizeList } from 'react-window';
+import {humanReadableBytes} from '../Utils/StringUtils';
+import {Fancybox} from '@fancyapps/ui';
+import {FixedSizeList} from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { uploadImage } from '../Services/AdminApi';
-import { isAxiosError } from 'axios';
-import { ErrorProtocol } from '../Models/ApiResponse';
+import {uploadImage} from '../Services/AdminApi';
+import {isAxiosError} from 'axios';
+import {ErrorProtocol} from '../Models/ApiResponse';
 
 export function UploadDialog({
   open,
@@ -163,7 +163,10 @@ export function UploadDialog({
           } else if (err.response.status === 409) {
             item.status = UploadTaskStatus.Duplicate;
             item.errorText = 'Duplicated';
-          } else if (err.response.status === 400 || err.response.status === 415) {
+          } else if (
+            err.response.status === 400 ||
+            err.response.status === 415
+          ) {
             item.status = UploadTaskStatus.Error;
             item.errorText = 'Invalid file';
           } else {
@@ -189,7 +192,7 @@ export function UploadDialog({
           t.status === UploadTaskStatus.Pending ||
           t.status === UploadTaskStatus.Error
       )
-      .map(t => ({ ...t, status: UploadTaskStatus.Pending }));
+      .map(t => ({...t, status: UploadTaskStatus.Pending}));
     setTotalTasks(workingUploadQueue.current.length);
     const threadColl = [];
     for (let i = 0; i < 4; ++i) {
@@ -209,8 +212,8 @@ export function UploadDialog({
         style={style}
         secondaryAction={
           <IconButton
-            edge="end"
-            aria-label="view"
+            edge='end'
+            aria-label='view'
             onClick={() => previewImage(t.file)}
           >
             <Pageview />
@@ -229,61 +232,59 @@ export function UploadDialog({
           onClick={() =>
             setUploadQueue(
               uploadQueue.map(u =>
-                u.id === t.id ? { ...u, selected: !u.selected } : u
+                u.id === t.id ? {...u, selected: !u.selected} : u
               )
             )
           }
         >
           {uploading ? (
-            <Box gridRow="1 / -1" width={30}>
+            <Box gridRow='1 / -1' width={30}>
               {t.status === UploadTaskStatus.Pending && <Pending />}
               {t.status === UploadTaskStatus.Uploading && (
                 <CircularProgress size={30} />
               )}
               {t.status === UploadTaskStatus.Complete && (
-                <Check color="success"/>
+                <Check color='success' />
               )}
-              {t.status === UploadTaskStatus.Error && (
-                <Error color="error" />
-              )}
+              {t.status === UploadTaskStatus.Error && <Error color='error' />}
               {t.status === UploadTaskStatus.Duplicate && (
-                <ContentCopy color="secondary" />
+                <ContentCopy color='secondary' />
               )}
             </Box>
           ) : (
             <Checkbox
-              edge="start"
+              edge='start'
               disableRipple
-              sx={{ gridRow: '1 / -1' }}
+              sx={{gridRow: '1 / -1'}}
               checked={t.selected}
             />
           )}
 
           <Box
-            display="flex"
-            alignItems="center"
+            display='flex'
+            alignItems='center'
             gap={1}
-            maxWidth="100%"
-            overflow="hidden"
+            maxWidth='100%'
+            overflow='hidden'
           >
             {t.starred ? <Favorite /> : <FavoriteBorder />}
             <Typography
-              textOverflow="ellipsis"
-              maxWidth="100%"
-              overflow="hidden"
+              textOverflow='ellipsis'
+              maxWidth='100%'
+              overflow='hidden'
               noWrap
             >
               {t.file.name}
             </Typography>
           </Box>
-          <Box display="flex" gridRow="2/3" gap={1}>
-            {(t.status === UploadTaskStatus.Error) && (
-              <Chip label={t.errorText} color="error" />
+          <Box display='flex' gridRow='2/3' gap={1}>
+            {t.status === UploadTaskStatus.Error && (
+              <Chip label={t.errorText} color='error' />
             )}
-            {(t.status === UploadTaskStatus.Duplicate) && (
-              <Chip label="Duplicated" color="warning" />
+            {t.status === UploadTaskStatus.Duplicate && (
+              <Chip label='Duplicated' color='warning' />
             )}
-            {t.skipOcr && <Chip label="Skip OCR" color="secondary"/>}
+            {t.skipOcr && <Chip label='Skip OCR' color='secondary' />}
             {t.categories && (
               <Chip
                 label={`categories: ${t.categories}`}
@@ -304,30 +305,30 @@ export function UploadDialog({
       open={open}
       onClose={onClose}
       fullWidth
-      maxWidth="lg"
-      scroll="paper"
+      maxWidth='lg'
+      scroll='paper'
       onDrop={dropImage}
       onDragOver={dragOverImage}
     >
       <DialogTitle>Upload new images</DialogTitle>
       <DialogContent>
         <Box
-          display="flex"
+          display='flex'
           gap={2}
-          flexWrap="wrap"
-          justifyContent="space-between"
+          flexWrap='wrap'
+          justifyContent='space-between'
         >
-          <ButtonGroup variant="contained" disabled={uploading}>
+          <ButtonGroup variant='contained' disabled={uploading}>
             <Button onClick={selectImages}>Add File</Button>
             <Button onClick={selectImgDir}>Add Directory</Button>
           </ButtonGroup>
           <ButtonGroup disabled={uploading}>
-            <Tooltip title="Select All">
+            <Tooltip title='Select All'>
               <Button
                 onClick={() =>
                   setUploadQueue(
                     uploadQueue.map(t => {
-                      return { ...t, selected: true };
+                      return {...t, selected: true};
                     })
                   )
                 }
@@ -335,12 +336,12 @@ export function UploadDialog({
                 <DoneAll />
               </Button>
             </Tooltip>
-            <Tooltip title="Select None">
+            <Tooltip title='Select None'>
               <Button
                 onClick={() =>
                   setUploadQueue(
                     uploadQueue.map(t => {
-                      return { ...t, selected: false };
+                      return {...t, selected: false};
                     })
                   )
                 }
@@ -348,12 +349,12 @@ export function UploadDialog({
                 <RemoveDone />
               </Button>
             </Tooltip>
-            <Tooltip title="Reverse Selection">
+            <Tooltip title='Reverse Selection'>
               <Button
                 onClick={() =>
                   setUploadQueue(
                     uploadQueue.map(t => {
-                      return { ...t, selected: !t.selected };
+                      return {...t, selected: !t.selected};
                     })
                   )
                 }
@@ -361,9 +362,9 @@ export function UploadDialog({
                 <Flaky />
               </Button>
             </Tooltip>
-            <Tooltip title="Remove selection from list">
+            <Tooltip title='Remove selection from list'>
               <Button
-                color="error"
+                color='error'
                 onClick={() =>
                   setUploadQueue(uploadQueue.filter(t => !t.selected))
                 }
@@ -373,10 +374,10 @@ export function UploadDialog({
             </Tooltip>
           </ButtonGroup>
         </Box>
-        <Paper elevation={3} sx={{ my: 2, height: 300 }}>
+        <Paper elevation={3} sx={{my: 2, height: 300}}>
           {uploadQueue.length > 0 ? (
             <AutoSizer>
-              {({ height, width }) => (
+              {({height, width}) => (
                 <FixedSizeList
                   width={width}
                   height={height}
@@ -390,12 +391,12 @@ export function UploadDialog({
             </AutoSizer>
           ) : (
             <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              height="100%"
+              display='flex'
+              justifyContent='center'
+              alignItems='center'
+              height='100%'
             >
-              <Typography variant="h6" sx={{ userSelect: 'none' }}>
+              <Typography variant='h6' sx={{userSelect: 'none'}}>
                 Drop file here to upload.
               </Typography>
             </Box>
@@ -403,19 +404,19 @@ export function UploadDialog({
         </Paper>
         <Collapse in={!uploading} unmountOnExit>
           <Box
-            display="flex"
+            display='flex'
             mt={2}
             gap={2}
-            flexWrap="wrap"
-            justifyContent="space-between"
+            flexWrap='wrap'
+            justifyContent='space-between'
           >
-            <ButtonGroup color="secondary" disabled={uploading}>
-              <Tooltip title="Star selection">
+            <ButtonGroup color='secondary' disabled={uploading}>
+              <Tooltip title='Star selection'>
                 <Button
                   onClick={() =>
                     setUploadQueue(
                       uploadQueue.map(t =>
-                        t.selected ? { ...t, starred: true } : t
+                        t.selected ? {...t, starred: true} : t
                       )
                     )
                   }
@@ -423,12 +424,12 @@ export function UploadDialog({
                   <Favorite />
                 </Button>
               </Tooltip>
-              <Tooltip title="Unstar selection">
+              <Tooltip title='Unstar selection'>
                 <Button
                   onClick={() =>
                     setUploadQueue(
                       uploadQueue.map(t =>
-                        t.selected ? { ...t, starred: false } : t
+                        t.selected ? {...t, starred: false} : t
                       )
                     )
                   }
@@ -436,49 +437,49 @@ export function UploadDialog({
                   <FavoriteBorder />
                 </Button>
               </Tooltip>
-              <Tooltip title="Skip OCR process for selection">
+              <Tooltip title='Skip OCR process for selection'>
                 <Button
                   onClick={() =>
                     setUploadQueue(
                       uploadQueue.map(t =>
-                        t.selected ? { ...t, skipOcr: true } : t
+                        t.selected ? {...t, skipOcr: true} : t
                       )
                     )
                   }
                 >
-                  <FontDownloadOff/>
+                  <FontDownloadOff />
                 </Button>
               </Tooltip>
-              <Tooltip title="Enable OCR process for selection">
+              <Tooltip title='Enable OCR process for selection'>
                 <Button
                   onClick={() =>
                     setUploadQueue(
                       uploadQueue.map(t =>
-                        t.selected ? { ...t, skipOcr: false } : t
+                        t.selected ? {...t, skipOcr: false} : t
                       )
                     )
                   }
                 >
-                  <FontDownload/>
+                  <FontDownload />
                 </Button>
               </Tooltip>
             </ButtonGroup>
-            <Box display="flex" gap={1} justifyContent="right" flexGrow={1}>
+            <Box display='flex' gap={1} justifyContent='right' flexGrow={1}>
               <TextField
-                color="secondary"
-                variant="standard"
-                label="Categories of selection"
-                sx={{ flexGrow: 1, maxWidth: 400 }}
+                color='secondary'
+                variant='standard'
+                label='Categories of selection'
+                sx={{flexGrow: 1, maxWidth: 400}}
                 value={categoriesInput}
                 onChange={e => setCategoriesInput(e.target.value)}
               />
               <Button
-                variant="outlined"
-                color="secondary"
+                variant='outlined'
+                color='secondary'
                 onClick={() =>
                   setUploadQueue(
                     uploadQueue.map(t =>
-                      t.selected ? { ...t, categories: categoriesInput } : t
+                      t.selected ? {...t, categories: categoriesInput} : t
                     )
                   )
                 }
@@ -490,9 +491,9 @@ export function UploadDialog({
         </Collapse>
         <Collapse in={uploading}>
           <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
+            display='flex'
+            flexDirection='column'
+            alignItems='center'
             gap={1}
             mt={2}
           >
@@ -505,8 +506,8 @@ export function UploadDialog({
               Progress: {completedTasks}/{totalTasks} ({percentage.toFixed(0)}%)
             </Typography>
             <LinearProgress
-              variant="determinate"
-              sx={{ width: '100%' }}
+              variant='determinate'
+              sx={{width: '100%'}}
               value={percentage}
             />
           </Box>
@@ -515,7 +516,7 @@ export function UploadDialog({
       <DialogActions>
         <LoadingButton
           loading={uploading}
-          loadingPosition="start"
+          loadingPosition='start'
           startIcon={<Check />}
           onClick={startUpload}
           disabled={!ready}

@@ -20,10 +20,10 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
-import React, { useContext, useState } from 'react';
-import { SearchResult } from '../Models/SearchResult';
-import { copyTextToClipboard } from '../Utils/Clipboard';
-import { AppSettings } from './Contexts';
+import React, {useContext, useState} from 'react';
+import {SearchResult} from '../Models/SearchResult';
+import {copyTextToClipboard} from '../Utils/Clipboard';
+import {AppSettings} from './Contexts';
 
 export function ImageOperationMenu({
   context,
@@ -57,9 +57,9 @@ export function ImageOperationMenu({
   return (
     <>
       <Menu open={open} onClose={onClose} {...props}>
-        <MenuItem component="a" href={context.img.url} target="_blank">
+        <MenuItem component='a' href={context.img.url} target='_blank'>
           <ListItemIcon>
-            <OpenInNew fontSize="small" />
+            <OpenInNew fontSize='small' />
           </ListItemIcon>
           <ListItemText>Open in newtab</ListItemText>
         </MenuItem>
@@ -70,20 +70,20 @@ export function ImageOperationMenu({
           }}
         >
           <ListItemIcon>
-            <Search fontSize="small" />
+            <Search fontSize='small' />
           </ListItemIcon>
           <ListItemText>Similar search</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => handleCopyText(context.img.url)}>
           <ListItemIcon>
-            <Link fontSize="small" />
+            <Link fontSize='small' />
           </ListItemIcon>
           <ListItemText>Copy image link</ListItemText>
         </MenuItem>
         {context.img.ocr_text && (
           <MenuItem onClick={() => handleCopyText(context.img.ocr_text!)}>
             <ListItemIcon>
-              <ContentCopy fontSize="small" />
+              <ContentCopy fontSize='small' />
             </ListItemIcon>
             <ListItemText>Copy OCR text</ListItemText>
           </MenuItem>
@@ -102,20 +102,24 @@ export function ImageOperationMenu({
         {settings.useAdminPortal && (
           <>
             <Divider />
-            <MenuItem onClick={() => {
-              onStar();
-              onClose();
-            }}>
+            <MenuItem
+              onClick={() => {
+                onStar();
+                onClose();
+              }}
+            >
               <ListItemIcon>
-                {context.img.starred ? <Favorite /> : <FavoriteBorder/>}
+                {context.img.starred ? <Favorite /> : <FavoriteBorder />}
               </ListItemIcon>
-              <ListItemText>{context.img.starred ? "Unstar" : "Star"}</ListItemText>
+              <ListItemText>
+                {context.img.starred ? 'Unstar' : 'Star'}
+              </ListItemText>
             </MenuItem>
             <MenuItem onClick={handleDelete}>
               <ListItemIcon>
-                <Delete fontSize="small" color="error" />
+                <Delete fontSize='small' color='error' />
               </ListItemIcon>
-              <ListItemText sx={{ color: 'error.main' }}>Delete</ListItemText>
+              <ListItemText sx={{color: 'error.main'}}>Delete</ListItemText>
             </MenuItem>
           </>
         )}
@@ -123,12 +127,12 @@ export function ImageOperationMenu({
       <Dialog
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id="alert-dialog-title">Delete Image?</DialogTitle>
+        <DialogTitle id='alert-dialog-title'>Delete Image?</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id='alert-dialog-description'>
             This operation will delete this image from the server.
           </DialogContentText>
         </DialogContent>
@@ -137,7 +141,7 @@ export function ImageOperationMenu({
             cancel
           </Button>
           <Button
-            color="error"
+            color='error'
             onClick={() => {
               onDelete();
               setDeleteDialogOpen(false);

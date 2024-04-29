@@ -13,7 +13,10 @@ export function saveSettingsToLocalStorage(context: AppSettingsModel) {
 export function loadFromLocalStorage(): AppSettingsModel {
   const settings = localStorage.getItem('AppSettings');
   if (settings) {
-    return Object.assign(new AppSettingsModel(), JSON.parse(settings)) as AppSettingsModel;
+    return Object.assign(
+      new AppSettingsModel(),
+      JSON.parse(settings)
+    ) as AppSettingsModel;
   }
   return new AppSettingsModel();
 }

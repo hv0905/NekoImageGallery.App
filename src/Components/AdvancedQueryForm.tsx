@@ -1,4 +1,4 @@
-import { Search } from '@mui/icons-material';
+import {Search} from '@mui/icons-material';
 import {
   Button,
   ButtonGroup,
@@ -12,15 +12,19 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material';
-import { AdvancedSearchQuery, CombinedSearchQuery, SearchQuery } from '../Services/SearchQuery';
-import { useContext, useState } from 'react';
+import {
+  AdvancedSearchQuery,
+  CombinedSearchQuery,
+  SearchQuery,
+} from '../Services/SearchQuery';
+import {useContext, useState} from 'react';
 import {
   AdvancedSearchMode,
   AdvancedSearchModel,
   CombinedSearchModel,
 } from '../Models/AdvancedSearchModel';
-import { SearchBasis } from '../Models/SearchBasis';
-import { ApiInfo } from './Contexts';
+import {SearchBasis} from '../Models/SearchBasis';
+import {ApiInfo} from './Contexts';
 
 export function AdvancedQueryForm({
   onSubmit,
@@ -61,69 +65,68 @@ export function AdvancedQueryForm({
     } else {
       onSubmit?.(new AdvancedSearchQuery(form, basis));
     }
-    
   }
 
   return (
     <Stack
-      component="form"
+      component='form'
       spacing={2}
-      sx={{ width: '100%' }}
+      sx={{width: '100%'}}
       onSubmit={handleSubmit}
     >
       <TextField
-        label="Positive criteria (seperated by comma)"
-        variant="outlined"
+        label='Positive criteria (seperated by comma)'
+        variant='outlined'
         value={positivePrompt}
         fullWidth
         onChange={e => setPositivePrompt(e.target.value)}
       />
       <TextField
-        label="Negative criteria (seperated by comma)"
-        variant="outlined"
+        label='Negative criteria (seperated by comma)'
+        variant='outlined'
         value={negativePrompt}
-        color="secondary"
+        color='secondary'
         fullWidth
         onChange={e => setNegativePrompt(e.target.value)}
       />
       <RadioGroup
         row
-        aria-labelledby="mode-sel-group"
+        aria-labelledby='mode-sel-group'
         value={mode}
         onChange={e => setMode(e.target.value as AdvancedSearchMode)}
       >
-        <FormLabel id="mode-sel-group" sx={{ alignSelf: 'center', marginX: 2 }}>
+        <FormLabel id='mode-sel-group' sx={{alignSelf: 'center', marginX: 2}}>
           Mode
         </FormLabel>
-        <FormControlLabel value="average" control={<Radio />} label="Average" />
-        <FormControlLabel value="best" control={<Radio />} label="Best" />
+        <FormControlLabel value='average' control={<Radio />} label='Average' />
+        <FormControlLabel value='best' control={<Radio />} label='Best' />
       </RadioGroup>
       {ocrAvail && (
         <>
           <RadioGroup
             row
-            aria-labelledby="basis-sel-group"
+            aria-labelledby='basis-sel-group'
             value={basis}
             onChange={e => setBasis(e.target.value as SearchBasis)}
           >
             <FormLabel
-              id="basis-sel-group"
-              sx={{ alignSelf: 'center', marginX: 2 }}
+              id='basis-sel-group'
+              sx={{alignSelf: 'center', marginX: 2}}
             >
               Basis
             </FormLabel>
             <FormControlLabel
-              value="vision"
+              value='vision'
               control={<Radio />}
-              label="Vision"
+              label='Vision'
             />
-            <FormControlLabel value="ocr" control={<Radio />} label="OCR" />
+            <FormControlLabel value='ocr' control={<Radio />} label='OCR' />
           </RadioGroup>
           <Tooltip
-            title="[Experimental] With this feature, besides the basis you have choosen before,
+            title='[Experimental] With this feature, besides the basis you have choosen before,
                   you can add up to one criteria with the other basis to enhance your search result. 
                   For example, you can search `Good Morning` with OCR search, than add `1girl` in the 
-                  combined search cirteria to filter all the good-morning stickers with a girl in it."
+                  combined search cirteria to filter all the good-morning stickers with a girl in it.'
           >
             <FormControlLabel
               control={
@@ -132,13 +135,13 @@ export function AdvancedQueryForm({
                   onChange={e => setCombinedSearch(e.target.checked)}
                 />
               }
-              label="Combined search"
+              label='Combined search'
             />
           </Tooltip>
           <Collapse in={combinedSearch}>
             <TextField
-              label="Combined search criteria"
-              variant="outlined"
+              label='Combined search criteria'
+              variant='outlined'
               value={combinedSearchPrompt}
               fullWidth
               onChange={e => setCombinedSearchPrompt(e.target.value)}
@@ -147,15 +150,15 @@ export function AdvancedQueryForm({
         </>
       )}
       <ButtonGroup fullWidth>
-        <Button variant="outlined" sx={{ width: '30%' }}>
+        <Button variant='outlined' sx={{width: '30%'}}>
           Reset
         </Button>
         <Button
-          type="submit"
-          variant="contained"
+          type='submit'
+          variant='contained'
           disabled={!submitable}
           endIcon={<Search />}
-          sx={{ width: '70%' }}
+          sx={{width: '70%'}}
         >
           Search
         </Button>

@@ -1,4 +1,4 @@
-import { Key } from '@mui/icons-material';
+import {Key} from '@mui/icons-material';
 import {
   Button,
   Dialog,
@@ -8,10 +8,10 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import { useState, useContext } from 'react';
-import { WelcomeApi } from '../Services/WelcomeApi';
-import { resetClient } from '../Services/Base';
-import { ApiInfo } from './Contexts';
+import {useState, useContext} from 'react';
+import {WelcomeApi} from '../Services/WelcomeApi';
+import {resetClient} from '../Services/Base';
+import {ApiInfo} from './Contexts';
 
 export function AuthenticationDialog() {
   const [open, setOpen] = useState(true);
@@ -56,11 +56,11 @@ export function AuthenticationDialog() {
         </DialogContentText>
         <TextField
           autoFocus
-          margin="dense"
-          label="Access Token"
-          type="password"
+          margin='dense'
+          label='Access Token'
+          type='password'
           fullWidth
-          variant="standard"
+          variant='standard'
           value={token}
           onChange={e => setToken(e.target.value)}
           error={err}

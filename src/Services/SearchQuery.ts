@@ -1,11 +1,13 @@
-import { AdvancedSearchModel, CombinedSearchModel } from '../Models/AdvancedSearchModel';
-import { SearchApiResponse } from '../Models/SearchApiResponse';
-import { SearchBasis } from '../Models/SearchBasis';
-import { SearchFilterOptions } from '../Models/SearchFilterOptions';
-import { getClient } from './Base';
+import {
+  AdvancedSearchModel,
+  CombinedSearchModel,
+} from '../Models/AdvancedSearchModel';
+import {SearchApiResponse} from '../Models/SearchApiResponse';
+import {SearchBasis} from '../Models/SearchBasis';
+import {SearchFilterOptions} from '../Models/SearchFilterOptions';
+import {getClient} from './Base';
 
 export abstract class SearchQuery {
-
   public filterOptions: SearchFilterOptions | null = null;
 
   abstract querySearch(count: number, skip: number): Promise<SearchApiResponse>;
@@ -102,7 +104,7 @@ export class RandomSearchQuery extends SearchQuery {
       {
         params: {
           count: count,
-          ...this.getFilterOptions()
+          ...this.getFilterOptions(),
         },
       }
     );

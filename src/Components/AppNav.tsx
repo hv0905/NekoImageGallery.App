@@ -17,11 +17,11 @@ import {
   Settings,
   Upload,
 } from '@mui/icons-material';
-import { useContext, useState } from 'react';
-import { Environment } from '../environment';
-import { AppSettings } from './Contexts';
-import { SettingsDialog } from './SettingsModal';
-import { UploadDialog } from './UploadDialog';
+import {useContext, useState} from 'react';
+import {Environment} from '../environment';
+import {AppSettings} from './Contexts';
+import {SettingsDialog} from './SettingsModal';
+import {UploadDialog} from './UploadDialog';
 
 export function AppNav() {
   const [appSettings, setAppSettings] = useContext(AppSettings);
@@ -37,8 +37,8 @@ export function AppNav() {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
+      <Box sx={{flexGrow: 1}}>
+        <AppBar position='static'>
           <Toolbar>
             {/* <IconButton
             size="large"
@@ -51,8 +51,8 @@ export function AppNav() {
           </IconButton> */}
 
             <Typography
-              variant="h6"
-              component="div"
+              variant='h6'
+              component='div'
               sx={{
                 flexGrow: 1,
                 overflow: 'hidden',
@@ -64,26 +64,26 @@ export function AppNav() {
             </Typography>
             {appSettings.useAdminPortal && (
               <IconButton
-                size="large"
-                color="inherit"
-                aria-label="Upload Image"
+                size='large'
+                color='inherit'
+                aria-label='Upload Image'
                 onClick={() => setDisplayUpload(true)}
               >
                 <Upload />
               </IconButton>
             )}
             <IconButton
-              size="large"
-              color="inherit"
-              aria-label="settings"
+              size='large'
+              color='inherit'
+              aria-label='settings'
               onClick={() => setDisplaySettings(true)}
             >
               <Settings />
             </IconButton>
             <IconButton
-              size="large"
-              color="inherit"
-              aria-label="filter"
+              size='large'
+              color='inherit'
+              aria-label='filter'
               onClick={() =>
                 setAppSettings({
                   ...appSettings,
@@ -94,31 +94,31 @@ export function AppNav() {
               {appSettings.useFilter ? <FilterListOff /> : <FilterList />}
             </IconButton>
             <IconButton
-              id="related-site-button"
-              size="large"
-              edge="end"
+              id='related-site-button'
+              size='large'
+              edge='end'
               aria-controls={menuOpen ? 'related-site-menu' : undefined}
-              aria-haspopup="true"
+              aria-haspopup='true'
               aria-expanded={menuOpen ? 'true' : undefined}
               onClick={e => setMenuAnchor(e.currentTarget)}
-              color="inherit"
+              color='inherit'
             >
               <GitHub />
             </IconButton>
           </Toolbar>
         </AppBar>
         <Menu
-          id="related-site-menu"
-          aria-labelledby="related-site-button"
+          id='related-site-menu'
+          aria-labelledby='related-site-button'
           anchorEl={menuAnchor}
           open={menuOpen}
           onClose={handleClose}
         >
           <MenuItem
-            component="a"
+            component='a'
             onClick={handleClose}
-            href="https://edgeneko.com"
-            target="_blank"
+            href='https://edgeneko.com'
+            target='_blank'
           >
             <ListItemIcon>
               <OpenInNewIcon />
@@ -126,10 +126,10 @@ export function AppNav() {
             <ListItemText>EdgeNeko&apos;s Blog</ListItemText>
           </MenuItem>
           <MenuItem
-            component="a"
+            component='a'
             onClick={handleClose}
-            href="https://github.com/hv0905/NekoImageGallery"
-            target="_blank"
+            href='https://github.com/hv0905/NekoImageGallery'
+            target='_blank'
           >
             <ListItemIcon>
               <GitHub />
@@ -137,9 +137,9 @@ export function AppNav() {
             <ListItemText>Server</ListItemText>
           </MenuItem>
           <MenuItem
-            component="a"
-            href="https://github.com/hv0905/NekoImageGallery.App"
-            target="_blank"
+            component='a'
+            href='https://github.com/hv0905/NekoImageGallery.App'
+            target='_blank'
           >
             <ListItemIcon>
               <GitHub />
