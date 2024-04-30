@@ -15,6 +15,7 @@ import {AppSettings, ApiInfo} from './Contexts';
 import {useContext, useState} from 'react';
 import {resetClient} from '../Services/Base';
 import {WelcomeApi} from '../Services/WelcomeApi';
+import {LoadingButton} from '@mui/lab';
 
 export function SettingsDialog({
   open,
@@ -139,9 +140,13 @@ export function SettingsDialog({
         <Button onClick={onClose} color='secondary'>
           Cancel
         </Button>
-        <Button onClick={saveSettings} disabled={!canSave || saving}>
+        <LoadingButton
+          onClick={saveSettings}
+          disabled={!canSave}
+          loading={saving}
+        >
           Save
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );
