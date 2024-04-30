@@ -156,7 +156,7 @@ export function AppNav() {
         <UploadDialog
           open={displayUpload}
           onClose={() => setDisplayUpload(false)}
-        ></UploadDialog>
+        />
       )}
     </>
   );

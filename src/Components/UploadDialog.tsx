@@ -68,7 +68,12 @@ export function UploadDialog({
 
   const percentage = (completedTasks / totalTasks) * 100;
 
-  const ready = uploadQueue.length > 0;
+  const ready =
+    uploadQueue.filter(
+      t =>
+        t.status === UploadTaskStatus.Pending ||
+        t.status === UploadTaskStatus.Error
+    ).length > 0;
 
   function addImages(newEntries: File[]) {
     setUploadQueue([
@@ -374,7 +379,7 @@ export function UploadDialog({
             </Tooltip>
           </ButtonGroup>
         </Box>
-        <Paper elevation={3} sx={{my: 2, height: 300}}>
+        <Paper elevation={3} sx={{my: 2, height: 'max(300px, 45vh)'}}>
           {uploadQueue.length > 0 ? (
             <AutoSizer>
               {({height, width}) => (
