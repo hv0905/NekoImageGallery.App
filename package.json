@@ -15,7 +15,7 @@
     "@fancyapps/ui": "^5.0.36",
     "@mui/icons-material": "^5.15.15",
     "@mui/lab": "^5.0.0-alpha.170",
-    "@mui/material": "^5.15.15",
+    "@mui/material": "^5.15.17",
     "axios": "^1.6.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
