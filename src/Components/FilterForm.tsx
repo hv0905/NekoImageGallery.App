@@ -86,6 +86,28 @@ function StrictNumberInput({
   );
 }
 
+function LabelledSwitch ({
+  label,
+  checked,
+  setChecked,
+}: {
+  label: string;
+  checked: boolean;
+  setChecked: (v: boolean) => void;
+}) {
+  return (
+    <FormControlLabel
+      control={
+        <Switch
+          checked={checked}
+          onChange={e => setChecked(e.target.checked)}
+        />
+      }
+      label={label}
+    />
+  );
+}
+
 export function FilterForm({
   onChange,
 }: {
@@ -161,14 +183,10 @@ export function FilterForm({
   return (
     <Paper elevation={3} sx={{mx: 1}}>
       <Box sx={{padding: 1}} display='flex' flexDirection='column'>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={aspectRatioEnabled}
-              onChange={e => setAspectRatioEnabled(e.target.checked)}
-            />
-          }
+        <LabelledSwitch
           label='Aspect Ratio'
+          checked={aspectRatioEnabled}
+          setChecked={setAspectRatioEnabled}
         />
         <Collapse in={aspectRatioEnabled}>
           <Box display='flex' gap={2}>
@@ -202,14 +220,10 @@ export function FilterForm({
             />
           </Box>
         </Collapse>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={minSizeEnabled}
-              onChange={e => setMinSizeEnabled(e.target.checked)}
-            />
-          }
+        <LabelledSwitch
           label='Min Size'
+          checked={minSizeEnabled}
+          setChecked={setMinSizeEnabled}
         />
         <Collapse in={minSizeEnabled}>
           <Box display='flex' gap={2}>
@@ -231,23 +245,15 @@ export function FilterForm({
             />
           </Box>
         </Collapse>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={starredOnly}
-              onChange={e => setStarredOnly(e.target.checked)}
-            />
-          }
+        <LabelledSwitch
           label='Starred only'
+          checked={starredOnly}
+          setChecked={setStarredOnly}
         />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={categoriesEnabled}
-              onChange={e => setCategoriesEnabled(e.target.checked)}
-            />
-          }
+        <LabelledSwitch
           label='Categories'
+          checked={categoriesEnabled}
+          setChecked={setCategoriesEnabled}
         />
         <Collapse in={categoriesEnabled}>
           <TextField
@@ -258,14 +264,10 @@ export function FilterForm({
             fullWidth
           />
         </Collapse>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={categoriesNegEnabled}
-              onChange={e => setCategoriesNegEnabled(e.target.checked)}
-            />
-          }
+        <LabelledSwitch
           label='Negative Categories'
+          checked={categoriesNegEnabled}
+          setChecked={setCategoriesNegEnabled}
         />
         <Collapse in={categoriesNegEnabled}>
           <TextField

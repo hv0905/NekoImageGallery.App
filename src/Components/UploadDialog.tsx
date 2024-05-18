@@ -35,7 +35,7 @@ import {
   Typography,
 } from '@mui/material';
 import {UploadTask, UploadTaskStatus} from '../Models/UploadTaskModel';
-import {CSSProperties, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 import {LoadingButton} from '@mui/lab';
 import {
   imageFileTypes,
@@ -44,7 +44,7 @@ import {
 } from '../Utils/SystemDialog';
 import {humanReadableBytes} from '../Utils/StringUtils';
 import {Fancybox} from '@fancyapps/ui';
-import {FixedSizeList} from 'react-window';
+import {FixedSizeList, ListChildComponentProps} from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {uploadImage} from '../Services/AdminApi';
 import {isAxiosError} from 'axios';
@@ -210,11 +210,12 @@ export function UploadDialog({
       .catch(ex => console.error(ex));
   }
 
-  function renderForTask(t: UploadTask, style: CSSProperties) {
+  function renderForTask(context: ListChildComponentProps<void>) {
+    const t = uploadQueue[context.index];
     return (
       <ListItem
         key={t.id}
-        style={style}
+        style={context.style}
         secondaryAction={
           <IconButton
             edge='end'
@@ -390,7 +391,7 @@ export function UploadDialog({
                   itemSize={72}
                   itemKey={idx => uploadQueue[idx].id}
                 >
-                  {idx => renderForTask(uploadQueue[idx.index], idx.style)}
+                  {renderForTask}
                 </FixedSizeList>
               )}
             </AutoSizer>
