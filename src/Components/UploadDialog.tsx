@@ -75,6 +75,16 @@ export function UploadDialog({
         t.status === UploadTaskStatus.Error
     ).length > 0;
 
+  function mapSelect(pred: (t: UploadTask) => boolean) {
+    setUploadQueue(uploadQueue.map(t => ({...t, selected: pred(t)})));
+  }
+
+  function mapPropForSelection(newProps: Partial<UploadTask>) {
+    setUploadQueue(
+      uploadQueue.map(t => (t.selected ? {...t, ...newProps} : t))
+    );
+  }
+
   function addImages(newEntries: File[]) {
     setUploadQueue([
       ...uploadQueue,
@@ -330,41 +340,17 @@ export function UploadDialog({
           </ButtonGroup>
           <ButtonGroup disabled={uploading}>
             <Tooltip title='Select All'>
-              <Button
-                onClick={() =>
-                  setUploadQueue(
-                    uploadQueue.map(t => {
-                      return {...t, selected: true};
-                    })
-                  )
-                }
-              >
+              <Button onClick={() => mapSelect(() => true)}>
                 <DoneAll />
               </Button>
             </Tooltip>
             <Tooltip title='Select None'>
-              <Button
-                onClick={() =>
-                  setUploadQueue(
-                    uploadQueue.map(t => {
-                      return {...t, selected: false};
-                    })
-                  )
-                }
-              >
+              <Button onClick={() => mapSelect(() => false)}>
                 <RemoveDone />
               </Button>
             </Tooltip>
             <Tooltip title='Reverse Selection'>
-              <Button
-                onClick={() =>
-                  setUploadQueue(
-                    uploadQueue.map(t => {
-                      return {...t, selected: !t.selected};
-                    })
-                  )
-                }
-              >
+              <Button onClick={() => mapSelect(t => !t.selected)}>
                 <Flaky />
               </Button>
             </Tooltip>
@@ -418,54 +404,22 @@ export function UploadDialog({
           >
             <ButtonGroup color='secondary' disabled={uploading}>
               <Tooltip title='Star selection'>
-                <Button
-                  onClick={() =>
-                    setUploadQueue(
-                      uploadQueue.map(t =>
-                        t.selected ? {...t, starred: true} : t
-                      )
-                    )
-                  }
-                >
+                <Button onClick={() => mapPropForSelection({starred: true})}>
                   <Favorite />
                 </Button>
               </Tooltip>
               <Tooltip title='Unstar selection'>
-                <Button
-                  onClick={() =>
-                    setUploadQueue(
-                      uploadQueue.map(t =>
-                        t.selected ? {...t, starred: false} : t
-                      )
-                    )
-                  }
-                >
+                <Button onClick={() => mapPropForSelection({starred: false})}>
                   <FavoriteBorder />
                 </Button>
               </Tooltip>
               <Tooltip title='Skip OCR process for selection'>
-                <Button
-                  onClick={() =>
-                    setUploadQueue(
-                      uploadQueue.map(t =>
-                        t.selected ? {...t, skipOcr: true} : t
-                      )
-                    )
-                  }
-                >
+                <Button onClick={() => mapPropForSelection({skipOcr: true})}>
                   <FontDownloadOff />
                 </Button>
               </Tooltip>
               <Tooltip title='Enable OCR process for selection'>
-                <Button
-                  onClick={() =>
-                    setUploadQueue(
-                      uploadQueue.map(t =>
-                        t.selected ? {...t, skipOcr: false} : t
-                      )
-                    )
-                  }
-                >
+                <Button onClick={() => mapPropForSelection({skipOcr: false})}>
                   <FontDownload />
                 </Button>
               </Tooltip>
@@ -483,11 +437,7 @@ export function UploadDialog({
                 variant='outlined'
                 color='secondary'
                 onClick={() =>
-                  setUploadQueue(
-                    uploadQueue.map(t =>
-                      t.selected ? {...t, categories: categoriesInput} : t
-                    )
-                  )
+                  mapPropForSelection({categories: categoriesInput})
                 }
               >
                 Set
