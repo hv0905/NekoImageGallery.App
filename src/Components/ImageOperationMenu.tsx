@@ -99,6 +99,13 @@ export function ImageOperationMenu({
             Size: {context.img.width ?? -1} x {context.img.height ?? -1}
           </ListItemText>
         </MenuItem>
+        {!!context.img.categories?.length && (
+          <MenuItem disabled>
+            <ListItemText>
+              Categories: {context.img.categories.join(', ')}
+            </ListItemText>
+          </MenuItem>
+        )}
         {settings.useAdminPortal && (
           <>
             <Divider />

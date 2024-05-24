@@ -8,4 +8,5 @@ export interface Image {
   height?: number;
   starred?: boolean;
   aspect_ratio?: number;
+  categories: string[];
 }
