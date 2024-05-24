@@ -11,6 +11,7 @@ import {SearchFilterOptions} from '../Models/SearchFilterOptions';
 
 export function Home() {
   const activeQuery = useRef<SearchQuery | null>(null);
+  const [searchHistory, setSearchHistory] = useState([] as SearchQuery[]);
   const [result, setResult] = useState<SearchResult[] | null>(null);
 
   const [loading, setLoading] = useState(false);
@@ -52,17 +53,24 @@ export function Home() {
       });
   }
 
-  function search(query: SearchQuery) {
+  function search(query: SearchQuery, logInHistory = true) {
     if (appSettings.useFilter) {
       query.filterOptions = filterOptions.current;
     }
     activeQuery.current = query;
+    if (logInHistory) {
+      setSearchHistory([...searchHistory, query]);
+    }
     queryNext(true);
   }
 
   return (
     <>
-      <QueryArea onSubmit={search}></QueryArea>
+      <QueryArea
+        onSubmit={search}
+        searchHistory={searchHistory}
+        onClearHistory={() => setSearchHistory([])}
+      ></QueryArea>
       <Collapse in={appSettings.useFilter}>
         <FilterForm onChange={v => (filterOptions.current = v)} />
       </Collapse>

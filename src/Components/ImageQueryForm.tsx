@@ -1,6 +1,6 @@
 import {Close} from '@mui/icons-material';
 import {Box, Card, Collapse, Alert, IconButton, Button} from '@mui/material';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {ImageSearchQuery, SearchQuery} from '../Services/SearchQuery';
 import {thumbnail} from '../Utils/ImageOps';
 import {imageFileTypes, selectFiles} from '../Utils/SystemDialog';
@@ -14,9 +14,18 @@ export function ImageQueryForm({
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [notificationOpen, setNotificationOpen] = useState(false);
 
+  useEffect(() => {
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setFileUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setFileUrl(null);
+    }
+  }, [file]);
+
   const handleImageSearch = async () => {
     if (!file) return;
-
     let blob: Blob = file;
 
     if (file.size > 9 * 1024 * 1024) {
@@ -32,8 +41,6 @@ export function ImageQueryForm({
   const setImageFile = (file: File) => {
     if (imageFileTypes.includes(file.type)) {
       setFile(file);
-      if (fileUrl) URL.revokeObjectURL(fileUrl);
-      setFileUrl(URL.createObjectURL(file));
     } else {
       setNotificationOpen(true);
     }

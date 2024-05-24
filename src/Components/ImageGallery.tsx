@@ -61,7 +61,7 @@ export function ImageGallery({
               const index = Fancybox.getInstance()?.getSlide()?.index ?? -1;
               if (index == -1) return;
               onSimilarSearch?.(
-                new SimilarSearchQuery(searchResult[index].img.id)
+                new SimilarSearchQuery(searchResult[index].img)
               );
             },
           },
@@ -130,7 +130,7 @@ export function ImageGallery({
 
   function handleSimilarSearch() {
     if (!contextMenuItem) return;
-    onSimilarSearch?.(new SimilarSearchQuery(contextMenuItem.img.id));
+    onSimilarSearch?.(new SimilarSearchQuery(contextMenuItem.img));
   }
 
   function handleStar(item: SearchResult): void {

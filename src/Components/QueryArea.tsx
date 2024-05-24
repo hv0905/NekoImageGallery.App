@@ -5,31 +5,38 @@ import {TextQueryForm} from './TextQueryForm';
 import {ImageQueryForm} from './ImageQueryForm';
 import {AdvancedQueryForm} from './AdvancedQueryForm';
 import {ApiInfo} from './Contexts';
+import {History} from '@mui/icons-material';
+import {SearchHistoryList} from './SearchHistoryList';
 
 export function QueryArea({
   onSubmit,
+  searchHistory,
+  onClearHistory,
 }: {
-  onSubmit?: (query: SearchQuery) => void;
+  onSubmit: (query: SearchQuery, logInHistory?: boolean) => void;
+  searchHistory: SearchQuery[];
+  onClearHistory: () => void;
 }) {
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(1);
   const apiInfo = useContext(ApiInfo);
 
   const ocrAvail =
     !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
 
   const inputs = [
-    <TextQueryForm key={0} onSubmit={onSubmit} />,
-    <ImageQueryForm key={2} onSubmit={onSubmit} />,
-    <AdvancedQueryForm key={3} onSubmit={onSubmit} />,
+    <SearchHistoryList
+      history={searchHistory}
+      onSubmit={onSubmit}
+      key={0}
+      onClear={onClearHistory}
+    />,
+    <TextQueryForm key={1} onSubmit={onSubmit} />,
+    ...(ocrAvail
+      ? [<TextQueryForm key={2} onSubmit={onSubmit} ocrSearch />]
+      : []),
+    <ImageQueryForm key={3} onSubmit={onSubmit} />,
+    <AdvancedQueryForm key={4} onSubmit={onSubmit} />,
   ];
-
-  if (ocrAvail) {
-    inputs.splice(
-      1,
-      0,
-      <TextQueryForm key={1} onSubmit={onSubmit} ocrSearch />
-    );
-  }
 
   return (
     <Box
@@ -48,6 +55,7 @@ export function QueryArea({
         onChange={(_, v: number) => setTab(v)}
         sx={{maxWidth: '100%'}}
       >
+        <Tab icon={<History />} sx={{minWidth: 0}} />
         <Tab label='Text' />
         {ocrAvail && <Tab label='OCR' />}
         <Tab label='Image' />

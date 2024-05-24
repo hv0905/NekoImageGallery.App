@@ -52,8 +52,14 @@ export function AdvancedQueryForm({
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form: AdvancedSearchModel = {
-      criteria: positivePrompt.split(',').map(s => s.trim()),
-      negative_criteria: negativePrompt.split(',').map(s => s.trim()),
+      criteria: positivePrompt
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s),
+      negative_criteria: negativePrompt
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s),
       mode: mode,
     };
     if (combinedSearch) {

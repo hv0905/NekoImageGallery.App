@@ -86,7 +86,7 @@ function StrictNumberInput({
   );
 }
 
-function LabelledSwitch ({
+function LabelledSwitch({
   label,
   checked,
   setChecked,

@@ -2,6 +2,7 @@ import {
   AdvancedSearchModel,
   CombinedSearchModel,
 } from '../Models/AdvancedSearchModel';
+import {Image} from '../Models/Image';
 import {SearchApiResponse} from '../Models/SearchApiResponse';
 import {SearchBasis} from '../Models/SearchBasis';
 import {SearchFilterOptions} from '../Models/SearchFilterOptions';
@@ -71,7 +72,7 @@ export class ImageSearchQuery extends SearchQuery {
 
 export class SimilarSearchQuery extends SearchQuery {
   constructor(
-    public id: string,
+    public img: Image,
     public searchBasis: SearchBasis = SearchBasis.vision
   ) {
     super();
@@ -79,7 +80,7 @@ export class SimilarSearchQuery extends SearchQuery {
 
   async querySearch(count = 20, skip = 0): Promise<SearchApiResponse> {
     const response = await getClient().get<SearchApiResponse>(
-      `/search/similar/${encodeURIComponent(this.id)}`,
+      `/search/similar/${encodeURIComponent(this.img.id)}`,
       {
         params: {
           count: count,
