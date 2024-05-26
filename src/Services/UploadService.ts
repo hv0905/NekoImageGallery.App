@@ -62,4 +62,22 @@ export class UploadService {
     }
     return Promise.all(threadColl);
   }
+
+  public get finishedTasksCount(): number {
+    return this.completedTasksCount + this.errorTasksCount + this.duplicateTasksCount;
+  }
+
+  public get completedTasksCount(): number {
+    return this.queue.filter(t => t.status === UploadTaskStatus.Complete)
+      .length;
+  }
+
+  public get errorTasksCount(): number {
+    return this.queue.filter(t => t.status === UploadTaskStatus.Error).length;
+  }
+
+  public get duplicateTasksCount(): number {
+    return this.queue.filter(t => t.status === UploadTaskStatus.Duplicate)
+      .length;
+  }
 }

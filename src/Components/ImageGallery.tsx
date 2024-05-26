@@ -1,10 +1,8 @@
 import {
-  Alert,
   Box,
   IconButton,
   Paper,
   PopoverPosition,
-  Snackbar,
   Typography,
 } from '@mui/material';
 import {SearchResult} from '../Models/SearchResult';
@@ -18,6 +16,7 @@ import {isAxiosError} from 'axios';
 import {ErrorProtocol} from '../Models/ApiResponse';
 import {AppSettings} from './Contexts';
 import {Favorite, FavoriteBorder, MoreVert} from '@mui/icons-material';
+import {AlertSnack} from './AlertSnack';
 
 export function ImageGallery({
   searchResult,
@@ -35,7 +34,6 @@ export function ImageGallery({
   const [contextMenuItem, setContextMenuItem] = useState<SearchResult | null>(
     null
   );
-  const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationText, setNotificationText] = useState('');
   const [notificationErr, setNotificationErr] = useState(false);
 
@@ -111,7 +109,6 @@ export function ImageGallery({
       .then(resp => {
         setNotificationText(resp.data.message);
         setNotificationErr(false);
-        setNotificationOpen(true);
         setSearchResult(
           searchResult.filter(t => t.img.id != contextMenuItem.img.id)
         );
@@ -124,7 +121,6 @@ export function ImageGallery({
         }
 
         setNotificationErr(true);
-        setNotificationOpen(true);
       });
   }
 
@@ -140,7 +136,6 @@ export function ImageGallery({
           `Image ${item.img.starred ? 'unstarred' : 'starred'}.`
         );
         setNotificationErr(false);
-        setNotificationOpen(true);
 
         setSearchResult(
           searchResult.map(t => {
@@ -159,7 +154,6 @@ export function ImageGallery({
         }
 
         setNotificationErr(true);
-        setNotificationOpen(true);
       });
   }
 
@@ -268,19 +262,13 @@ export function ImageGallery({
           onSimilarSearch={handleSimilarSearch}
         />
       )}
-      <Snackbar
-        open={notificationOpen}
+      <AlertSnack
+        open={!!notificationText}
+        text={notificationText}
+        severity={notificationErr ? 'error' : 'success'}
+        onClose={() => setNotificationText('')}
         autoHideDuration={6000}
-        onClose={() => setNotificationOpen(false)}
-      >
-        <Alert
-          onClose={() => setNotificationOpen(false)}
-          severity={notificationErr ? 'error' : 'success'}
-          sx={{width: '100%'}}
-        >
-          {notificationText}
-        </Alert>
-      </Snackbar>
+      />
     </Box>
   );
 }

@@ -14,6 +14,7 @@ import {
   RemoveDone,
 } from '@mui/icons-material';
 import {
+  AlertColor,
   Box,
   Button,
   ButtonGroup,
@@ -43,11 +44,12 @@ import {
   selectFiles,
 } from '../Utils/SystemDialog';
 import {humanReadableBytes} from '../Utils/StringUtils';
-import {Fancybox} from '@fancyapps/ui';
 import {FixedSizeList, ListChildComponentProps} from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {UploadService} from '../Services/UploadService';
 import {useFileDropper} from '../Hooks/useFileDropper';
+import {viewImageFile} from '../Utils/FancyboxUtils';
+import {AlertSnack} from './AlertSnack';
 
 export function UploadDialog({
   open,
@@ -64,6 +66,10 @@ export function UploadDialog({
   const [errorTasks, setErrorTasks] = useState(0);
   const [duplicateTasks, setDuplicateTasks] = useState(0);
   const [totalTasks, setTotalTasks] = useState(1);
+
+  const [notificationText, setNotificationText] = useState('');
+  const [notificationSeverity, setNotificationSeverity] =
+    useState<AlertColor>('success');
 
   const percentage = (completedTasks / totalTasks) * 100;
 
@@ -91,47 +97,30 @@ export function UploadDialog({
     ]);
   }
 
+  function notifyBadImg() {
+    setNotificationText(
+      'Invalid file type. Only jpeg, png, webp, gif image files are currently allowed.'
+    );
+    setNotificationSeverity('error');
+  }
+
   function selectImages() {
     selectFiles(true)
       .then(t => addImages(t))
-      .catch(() => undefined);
+      .catch(notifyBadImg);
   }
 
   function selectImgDir() {
     selectDirectory()
       .then(t => addImages(t))
-      .catch(() => undefined);
-  }
-
-  function previewImage(file: File) {
-    const url = URL.createObjectURL(file);
-    const box = Fancybox.show([
-      {
-        src: url,
-      },
-    ]);
-
-    box.on('destroy', () => {
-      URL.revokeObjectURL(url);
-    });
+      .catch(notifyBadImg);
   }
 
   function updateRenderQueueFromWorking() {
     const queue = uploadService.current?.queue ?? [];
-    setCompletedTasks(
-      queue.filter(
-        t =>
-          t.status === UploadTaskStatus.Complete ||
-          t.status === UploadTaskStatus.Error ||
-          t.status === UploadTaskStatus.Duplicate
-      ).length
-    );
-    setErrorTasks(
-      queue.filter(t => t.status === UploadTaskStatus.Error).length
-    );
-    setDuplicateTasks(
-      queue.filter(t => t.status === UploadTaskStatus.Duplicate).length
-    );
+    setCompletedTasks(uploadService.current?.finishedTasksCount ?? 0);
+    setErrorTasks(uploadService.current?.errorTasksCount ?? 0);
+    setDuplicateTasks(uploadService.current?.duplicateTasksCount ?? 0);
     setUploadQueue(queue.filter(t => t.status !== UploadTaskStatus.Complete));
   }
 
@@ -154,6 +143,22 @@ export function UploadDialog({
       .upload()
       .then(() => {
         setUploading(false);
+        setNotificationText(
+          `Upload completed. ${uploadService.current!.completedTasksCount} images uploaded.` +
+            (uploadService.current!.errorTasksCount > 0
+              ? ` ${uploadService.current!.errorTasksCount} images failed.`
+              : '') +
+            (uploadService.current!.duplicateTasksCount > 0
+              ? ` ${uploadService.current!.duplicateTasksCount} images duplicated.`
+              : '')
+        );
+        setNotificationSeverity(
+          uploadService.current!.errorTasksCount > 0
+            ? 'error'
+            : uploadService.current!.duplicateTasksCount > 0
+              ? 'warning'
+              : 'success'
+        );
       })
       .catch(ex => console.error(ex));
   }
@@ -168,7 +173,7 @@ export function UploadDialog({
           <IconButton
             edge='end'
             aria-label='view'
-            onClick={() => previewImage(t.file)}
+            onClick={() => viewImageFile(t.file)}
           >
             <Pageview />
           </IconButton>
@@ -261,7 +266,7 @@ export function UploadDialog({
       fullWidth
       maxWidth='lg'
       scroll='paper'
-      {...useFileDropper(imageFileTypes, addImages)}
+      {...useFileDropper(imageFileTypes, addImages, notifyBadImg)}
     >
       <DialogTitle>Upload new images</DialogTitle>
       <DialogContent>
@@ -405,6 +410,13 @@ export function UploadDialog({
             />
           </Box>
         </Collapse>
+        <AlertSnack
+          open={!!notificationText}
+          text={notificationText}
+          severity={notificationSeverity}
+          onClose={() => setNotificationText('')}
+          autoHideDuration={6000}
+        />
       </DialogContent>
       <DialogActions>
         <LoadingButton
