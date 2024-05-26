@@ -46,9 +46,7 @@ import {humanReadableBytes} from '../Utils/StringUtils';
 import {Fancybox} from '@fancyapps/ui';
 import {FixedSizeList, ListChildComponentProps} from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import {uploadImage} from '../Services/AdminApi';
-import {isAxiosError} from 'axios';
-import {ErrorProtocol} from '../Models/ApiResponse';
+import {UploadService} from '../Services/UploadService';
 
 export function UploadDialog({
   open,
@@ -58,7 +56,7 @@ export function UploadDialog({
   onClose: () => void;
 }) {
   const [uploadQueue, setUploadQueue] = useState<UploadTask[]>([]);
-  const workingUploadQueue = useRef<UploadTask[]>([]);
+  const uploadService = useRef<UploadService | null>(null);
   const [uploading, setUploading] = useState(false);
   const [categoriesInput, setCategoriesInput] = useState('');
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -129,8 +127,9 @@ export function UploadDialog({
   }
 
   function updateRenderQueueFromWorking() {
+    const queue = uploadService.current?.queue ?? [];
     setCompletedTasks(
-      workingUploadQueue.current.filter(
+      queue.filter(
         t =>
           t.status === UploadTaskStatus.Complete ||
           t.status === UploadTaskStatus.Error ||
@@ -138,82 +137,31 @@ export function UploadDialog({
       ).length
     );
     setErrorTasks(
-      workingUploadQueue.current.filter(
-        t => t.status === UploadTaskStatus.Error
-      ).length
+      queue.filter(t => t.status === UploadTaskStatus.Error).length
     );
     setDuplicateTasks(
-      workingUploadQueue.current.filter(
-        t => t.status === UploadTaskStatus.Duplicate
-      ).length
+      queue.filter(t => t.status === UploadTaskStatus.Duplicate).length
     );
-    setUploadQueue(
-      workingUploadQueue.current.filter(
-        t => t.status !== UploadTaskStatus.Complete
-      )
-    );
-  }
-
-  async function uploadWorker() {
-    for (const item of workingUploadQueue.current) {
-      if (item.status != UploadTaskStatus.Pending) {
-        continue;
-      }
-      item.status = UploadTaskStatus.Uploading;
-      updateRenderQueueFromWorking();
-      try {
-        await uploadImage(
-          item.file,
-          true,
-          item.starred,
-          item.skipOcr,
-          item.categories
-        );
-        item.status = UploadTaskStatus.Complete;
-      } catch (err) {
-        if (isAxiosError<ErrorProtocol>(err)) {
-          if (!err.response) {
-            item.status = UploadTaskStatus.Error;
-            item.errorText = 'Network error';
-          } else if (err.response.status === 409) {
-            item.status = UploadTaskStatus.Duplicate;
-            item.errorText = 'Duplicated';
-          } else if (
-            err.response.status === 400 ||
-            err.response.status === 415
-          ) {
-            item.status = UploadTaskStatus.Error;
-            item.errorText = 'Invalid file';
-          } else {
-            item.status = UploadTaskStatus.Error;
-            item.errorText = err.response?.data?.detail ?? 'Unknown error';
-          }
-        } else {
-          item.status = UploadTaskStatus.Error;
-          item.errorText = 'Internal error';
-        }
-        console.error(err);
-      } finally {
-        updateRenderQueueFromWorking();
-      }
-    }
+    setUploadQueue(queue.filter(t => t.status !== UploadTaskStatus.Complete));
   }
 
   function startUpload() {
     setUploading(true);
-    workingUploadQueue.current = uploadQueue
+    const queue = uploadQueue
       .filter(
         t =>
           t.status === UploadTaskStatus.Pending ||
           t.status === UploadTaskStatus.Error
       )
       .map(t => ({...t, status: UploadTaskStatus.Pending}));
-    setTotalTasks(workingUploadQueue.current.length);
-    const threadColl = [];
-    for (let i = 0; i < 4; ++i) {
-      threadColl.push(uploadWorker());
-    }
-    Promise.all(threadColl)
+    setTotalTasks(queue.length);
+    uploadService.current = new UploadService(
+      queue,
+      4,
+      updateRenderQueueFromWorking
+    );
+    uploadService.current
+      .upload()
       .then(() => {
         setUploading(false);
       })
