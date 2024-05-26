@@ -47,6 +47,7 @@ import {Fancybox} from '@fancyapps/ui';
 import {FixedSizeList, ListChildComponentProps} from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {UploadService} from '../Services/UploadService';
+import {useFileDropper} from '../Hooks/useFileDropper';
 
 export function UploadDialog({
   open,
@@ -101,17 +102,6 @@ export function UploadDialog({
       .then(t => addImages(t))
       .catch(() => undefined);
   }
-
-  const dropImage = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const files = e.dataTransfer.files;
-    if (!files) return;
-    addImages(Array.from(files).filter(t => imageFileTypes.includes(t.type)));
-  };
-
-  const dragOverImage = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
 
   function previewImage(file: File) {
     const url = URL.createObjectURL(file);
@@ -271,8 +261,7 @@ export function UploadDialog({
       fullWidth
       maxWidth='lg'
       scroll='paper'
-      onDrop={dropImage}
-      onDragOver={dragOverImage}
+      {...useFileDropper(imageFileTypes, addImages)}
     >
       <DialogTitle>Upload new images</DialogTitle>
       <DialogContent>

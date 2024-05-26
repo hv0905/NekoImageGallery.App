@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react';
 import {ImageSearchQuery, SearchQuery} from '../Services/SearchQuery';
 import {thumbnail} from '../Utils/ImageOps';
 import {imageFileTypes, selectFiles} from '../Utils/SystemDialog';
+import {useFileDropper} from '../Hooks/useFileDropper';
 
 export function ImageQueryForm({
   onSubmit,
@@ -38,44 +39,10 @@ export function ImageQueryForm({
     onSubmit?.(new ImageSearchQuery(blob));
   };
 
-  const setImageFile = (file: File) => {
-    if (imageFileTypes.includes(file.type)) {
-      setFile(file);
-    } else {
-      setNotificationOpen(true);
-    }
-  };
-
   const selectImage = () => {
     selectFiles()
-      .then(t => setImageFile(t[0]))
-      .catch(() => undefined);
-  };
-
-  const dropImage = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const files = e.dataTransfer.files;
-    if (files && files.length > 0) {
-      setImageFile(files[0]);
-    }
-  };
-
-  const dragOverImage = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
-
-  const pasteImage = (e: React.ClipboardEvent<HTMLDivElement>) => {
-    const items = e.clipboardData.items;
-    if (!items) return;
-    for (const item of items) {
-      if (item.kind === 'file') {
-        const file = item.getAsFile();
-        if (file) {
-          setImageFile(file);
-          break;
-        }
-      }
-    }
+      .then(t => setFile(t[0]))
+      .catch(() => setNotificationOpen(true));
   };
 
   return (
@@ -96,9 +63,11 @@ export function ImageQueryForm({
             justifyContent: 'center',
             alignItems: 'center',
           }}
-          onDrop={dropImage}
-          onPaste={pasteImage}
-          onDragOver={dragOverImage}
+          {...useFileDropper(
+            imageFileTypes,
+            f => setFile(f[0]),
+            () => setNotificationOpen(true)
+          )}
         >
           {fileUrl ? (
             <img

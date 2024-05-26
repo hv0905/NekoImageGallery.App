@@ -12,12 +12,15 @@ export function selectFiles(
   return new Promise((resolve, reject) => {
     const input = document.createElement('input');
     input.type = 'file';
+    // The user can still select incorrect files even if the accept attribute is set
     input.accept = accept.join(', ');
     input.multiple = multiple;
     input.onchange = e => {
-      const files = (e.target as HTMLInputElement).files;
-      if (files && files.length > 0) {
-        resolve(Array.from(files));
+      const files = Array.from(
+        (e.target as HTMLInputElement).files ?? []
+      ).filter(t => accept.includes(t.type));
+      if (files.length > 0) {
+        resolve(files);
       } else {
         reject();
       }
@@ -34,13 +37,12 @@ export function selectDirectory(
     input.type = 'file';
     input.webkitdirectory = true;
     input.onchange = e => {
-      const files = (e.target as HTMLInputElement).files;
-      if (files && files.length > 0) {
-        if (accept) {
-          resolve(Array.from(files).filter(t => accept.includes(t.type)));
-        } else {
-          resolve(Array.from(files));
-        }
+      let files = Array.from((e.target as HTMLInputElement).files ?? []);
+      if (accept) {
+        files = files.filter(t => accept.includes(t.type));
+      }
+      if (files.length > 0) {
+        resolve(Array.from(files));
       } else {
         reject();
       }

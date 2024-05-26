@@ -51,7 +51,6 @@ export class UploadService {
         console.error(err);
       } finally {
         this.statusUpdateCallback?.();
-
       }
     }
   }
