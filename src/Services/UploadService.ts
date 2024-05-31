@@ -64,7 +64,9 @@ export class UploadService {
   }
 
   public get finishedTasksCount(): number {
-    return this.completedTasksCount + this.errorTasksCount + this.duplicateTasksCount;
+    return (
+      this.completedTasksCount + this.errorTasksCount + this.duplicateTasksCount
+    );
   }
 
   public get completedTasksCount(): number {

@@ -1,5 +1,4 @@
-import {Close} from '@mui/icons-material';
-import {Box, Card, Collapse, Alert, IconButton, Button} from '@mui/material';
+import {Box, Card, Collapse, Alert, Button} from '@mui/material';
 import {useEffect, useState} from 'react';
 import {ImageSearchQuery, SearchQuery} from '../Services/SearchQuery';
 import {thumbnail} from '../Utils/ImageOps';
@@ -55,8 +54,8 @@ export function ImageQueryForm({
       }}
     >
       <Card sx={{width: '100%', height: '200px'}}>
-        <div
-          style={{
+        <Box
+          sx={{
             width: '100%',
             height: '100%',
             display: 'flex',
@@ -81,21 +80,12 @@ export function ImageQueryForm({
           ) : (
             <Box>Drop or paste your image here.</Box>
           )}
-        </div>
+        </Box>
       </Card>
       <Collapse in={notificationOpen}>
         <Alert
           severity='error'
-          action={
-            <IconButton
-              aria-label='close'
-              color='inherit'
-              size='small'
-              onClick={() => setNotificationOpen(false)}
-            >
-              <Close fontSize='inherit' />
-            </IconButton>
-          }
+          onClose={() => setNotificationOpen(false)}
           sx={{mb: 2}}
         >
           Invalid file type. Please select a PNG or JPEG image.
