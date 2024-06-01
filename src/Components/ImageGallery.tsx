@@ -7,7 +7,16 @@ import {
 } from '@mui/material';
 import {SearchResult} from '../Models/SearchResult';
 import {Environment} from '../environment';
-import {useContext, useEffect, useRef, useState} from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {Fancybox} from '@fancyapps/ui';
 import {SearchQuery, SimilarSearchQuery} from '../Services/SearchQuery';
 import {ImageOperationMenu} from './ImageOperationMenu';
@@ -18,13 +27,99 @@ import {AppSettings} from './Contexts';
 import {Favorite, FavoriteBorder, MoreVert} from '@mui/icons-material';
 import {AlertSnack} from './AlertSnack';
 
+const ImageGalleryItem = memo(function ImageGalleryItem({
+  t,
+  showInfoBar,
+  handleStar,
+  handleContextMenu,
+  handleContextMenuWithButton,
+}: {
+  t: SearchResult;
+  showInfoBar: boolean;
+  handleStar: (item: SearchResult) => void;
+  handleContextMenu: (e: React.MouseEvent, item: SearchResult) => void;
+  handleContextMenuWithButton: (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    item: SearchResult
+  ) => void;
+}) {
+  window.ReactDOM
+  return (
+    <Paper
+      onContextMenu={e => handleContextMenu(e, t)}
+      sx={{
+        margin: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
+        width: '100%',
+        maxHeight: '500px',
+        flexDirection: 'column',
+        textDecoration: 'none',
+      }}
+    >
+      <Box
+        sx={{
+          flexGrow: 1,
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          overflow: 'hidden',
+          justifyContent: 'center',
+        }}
+        component='a'
+        data-fancybox='gallery'
+        href={t.img.url}
+        data-caption={`Similarity: ${(t.score * 100).toFixed(2)}%`}
+      >
+        <img src={t.img.thumbnail_url ?? t.img.url} style={{width: '100%'}} />
+      </Box>
+      {showInfoBar && (
+        <Box
+          display='flex'
+          alignItems='center'
+          justifyContent='space-between'
+          width='100%'
+          my='4px'
+        >
+          <IconButton
+            size='small'
+            color={t.img.starred ? 'secondary' : 'default'}
+            onClick={() => handleStar(t)}
+          >
+            {t.img.starred ? (
+              <Favorite fontSize='small' />
+            ) : (
+              <FavoriteBorder fontSize='small' />
+            )}
+          </IconButton>
+          <Typography
+            variant='body1'
+            color='textSecondary'
+            sx={{userSelect: 'none'}}
+          >
+            {`Similarity: ${(t.score * 100).toFixed(2)}%`}
+          </Typography>
+          <IconButton
+            size='small'
+            onClick={e => handleContextMenuWithButton(e, t)}
+          >
+            <MoreVert fontSize='small' />
+          </IconButton>
+        </Box>
+      )}
+    </Paper>
+  );
+});
+
 export function ImageGallery({
   searchResult,
   setSearchResult,
   onSimilarSearch,
 }: {
   searchResult: SearchResult[];
-  setSearchResult: (result: SearchResult[]) => void;
+  setSearchResult: Dispatch<SetStateAction<SearchResult[] | null>>;
   onSimilarSearch?: (query: SearchQuery) => void;
 }) {
   const containerRef = useRef(null);
@@ -86,22 +181,23 @@ export function ImageGallery({
     };
   }, [containerRef, searchResult, onSimilarSearch]);
 
-  function handleContextMenu(e: React.MouseEvent, item: SearchResult) {
-    e.preventDefault();
-    if (contextMenuOpen) return;
-    setContextMenuItem(item);
-    setContextMenu({top: e.clientY - 6, left: e.clientX + 2});
-  }
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent, item: SearchResult) => {
+      e.preventDefault();
+      setContextMenuItem(item);
+      setContextMenu({top: e.clientY - 6, left: e.clientX + 2});
+    },
+    []
+  );
 
   // onclick event
-  function handleContextMenuWithButton(
-    e: React.MouseEvent<HTMLElement, MouseEvent>,
-    item: SearchResult
-  ) {
-    if (contextMenuOpen) return;
-    setContextMenuItem(item);
-    setContextMenuEl(e.currentTarget);
-  }
+  const handleContextMenuWithButton = useCallback(
+    (e: React.MouseEvent<HTMLElement, MouseEvent>, item: SearchResult) => {
+      setContextMenuItem(item);
+      setContextMenuEl(e.currentTarget);
+    },
+    []
+  );
 
   function handleDelete() {
     if (!contextMenuItem) return;
@@ -129,33 +225,36 @@ export function ImageGallery({
     onSimilarSearch?.(new SimilarSearchQuery(contextMenuItem.img));
   }
 
-  function handleStar(item: SearchResult): void {
-    updateOpt(item.img.id, !item.img.starred)
-      .then(() => {
-        setNotificationText(
-          `Image ${item.img.starred ? 'unstarred' : 'starred'}.`
-        );
-        setNotificationErr(false);
+  const handleStar = useCallback(
+    (item: SearchResult) => {
+      updateOpt(item.img.id, !item.img.starred)
+        .then(() => {
+          setNotificationText(
+            `Image ${item.img.starred ? 'unstarred' : 'starred'}.`
+          );
+          setNotificationErr(false);
 
-        setSearchResult(
-          searchResult.map(t => {
-            if (t.img.id == item.img.id) {
-              t.img.starred = !t.img.starred;
-            }
-            return t;
-          })
-        );
-      })
-      .catch(err => {
-        if (isAxiosError<ErrorProtocol>(err) && err.response?.data.detail) {
-          setNotificationText(err.response?.data?.detail);
-        } else {
-          setNotificationText('Unknown error');
-        }
+          setSearchResult(s =>
+            s!.map(t => {
+              if (t.img.id == item.img.id) {
+                return {...t, img: {...t.img, starred: !t.img.starred}};
+              }
+              return t;
+            })
+          );
+        })
+        .catch(err => {
+          if (isAxiosError<ErrorProtocol>(err) && err.response?.data.detail) {
+            setNotificationText(err.response?.data?.detail);
+          } else {
+            setNotificationText('Unknown error');
+          }
 
-        setNotificationErr(true);
-      });
-  }
+          setNotificationErr(true);
+        });
+    },
+    [setSearchResult]
+  );
 
   return (
     <Box
@@ -176,75 +275,14 @@ export function ImageGallery({
       }}
     >
       {searchResult.map(t => (
-        <Paper
+        <ImageGalleryItem
           key={t.img.id}
-          onContextMenu={e => handleContextMenu(e, t)}
-          sx={{
-            margin: 1,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            overflow: 'hidden',
-            width: '100%',
-            maxHeight: '500px',
-            flexDirection: 'column',
-            textDecoration: 'none',
-          }}
-        >
-          <Box
-            sx={{
-              flexGrow: 1,
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              overflow: 'hidden',
-              justifyContent: 'center',
-            }}
-            component='a'
-            data-fancybox='gallery'
-            href={t.img.url}
-            data-caption={`Similarity: ${(t.score * 100).toFixed(2)}%`}
-          >
-            <img
-              src={t.img.thumbnail_url ?? t.img.url}
-              style={{width: '100%'}}
-            />
-          </Box>
-          {appSettings.showInfoBar && (
-            <Box
-              display='flex'
-              alignItems='center'
-              justifyContent='space-between'
-              width='100%'
-              my='4px'
-            >
-              <IconButton
-                size='small'
-                color={t.img.starred ? 'secondary' : 'default'}
-                onClick={() => handleStar(t)}
-              >
-                {t.img.starred ? (
-                  <Favorite fontSize='small' />
-                ) : (
-                  <FavoriteBorder fontSize='small' />
-                )}
-              </IconButton>
-              <Typography
-                variant='body1'
-                color='textSecondary'
-                sx={{userSelect: 'none'}}
-              >
-                {`Similarity: ${(t.score * 100).toFixed(2)}%`}
-              </Typography>
-              <IconButton
-                size='small'
-                onClick={e => handleContextMenuWithButton(e, t)}
-              >
-                <MoreVert fontSize='small' />
-              </IconButton>
-            </Box>
-          )}
-        </Paper>
+          t={t}
+          showInfoBar={appSettings.showInfoBar}
+          handleStar={handleStar}
+          handleContextMenu={handleContextMenu}
+          handleContextMenuWithButton={handleContextMenuWithButton}
+        />
       ))}
       {contextMenuItem && (
         <ImageOperationMenu
