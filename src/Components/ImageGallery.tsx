@@ -28,13 +28,13 @@ import {Favorite, FavoriteBorder, MoreVert} from '@mui/icons-material';
 import {AlertSnack} from './AlertSnack';
 
 const ImageGalleryItem = memo(function ImageGalleryItem({
-  t,
+  resultInfo,
   showInfoBar,
   handleStar,
   handleContextMenu,
   handleContextMenuWithButton,
 }: {
-  t: SearchResult;
+  resultInfo: SearchResult;
   showInfoBar: boolean;
   handleStar: (item: SearchResult) => void;
   handleContextMenu: (e: React.MouseEvent, item: SearchResult) => void;
@@ -43,10 +43,9 @@ const ImageGalleryItem = memo(function ImageGalleryItem({
     item: SearchResult
   ) => void;
 }) {
-  window.ReactDOM
   return (
     <Paper
-      onContextMenu={e => handleContextMenu(e, t)}
+      onContextMenu={e => handleContextMenu(e, resultInfo)}
       sx={{
         margin: 1,
         display: 'flex',
@@ -70,10 +69,13 @@ const ImageGalleryItem = memo(function ImageGalleryItem({
         }}
         component='a'
         data-fancybox='gallery'
-        href={t.img.url}
-        data-caption={`Similarity: ${(t.score * 100).toFixed(2)}%`}
+        href={resultInfo.img.url}
+        data-caption={`Similarity: ${(resultInfo.score * 100).toFixed(2)}%`}
       >
-        <img src={t.img.thumbnail_url ?? t.img.url} style={{width: '100%'}} />
+        <img
+          src={resultInfo.img.thumbnail_url ?? resultInfo.img.url}
+          style={{width: '100%'}}
+        />
       </Box>
       {showInfoBar && (
         <Box
@@ -85,10 +87,10 @@ const ImageGalleryItem = memo(function ImageGalleryItem({
         >
           <IconButton
             size='small'
-            color={t.img.starred ? 'secondary' : 'default'}
-            onClick={() => handleStar(t)}
+            color={resultInfo.img.starred ? 'secondary' : 'default'}
+            onClick={() => handleStar(resultInfo)}
           >
-            {t.img.starred ? (
+            {resultInfo.img.starred ? (
               <Favorite fontSize='small' />
             ) : (
               <FavoriteBorder fontSize='small' />
@@ -99,11 +101,11 @@ const ImageGalleryItem = memo(function ImageGalleryItem({
             color='textSecondary'
             sx={{userSelect: 'none'}}
           >
-            {`Similarity: ${(t.score * 100).toFixed(2)}%`}
+            {`Similarity: ${(resultInfo.score * 100).toFixed(2)}%`}
           </Typography>
           <IconButton
             size='small'
-            onClick={e => handleContextMenuWithButton(e, t)}
+            onClick={e => handleContextMenuWithButton(e, resultInfo)}
           >
             <MoreVert fontSize='small' />
           </IconButton>
@@ -277,7 +279,7 @@ export function ImageGallery({
       {searchResult.map(t => (
         <ImageGalleryItem
           key={t.img.id}
-          t={t}
+          resultInfo={t}
           showInfoBar={appSettings.showInfoBar}
           handleStar={handleStar}
           handleContextMenu={handleContextMenu}

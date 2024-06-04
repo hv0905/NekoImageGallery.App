@@ -17,7 +17,7 @@ import {
   CombinedSearchQuery,
   SearchQuery,
 } from '../Services/SearchQuery';
-import {useContext, useState} from 'react';
+import {FormEvent, useContext, useState} from 'react';
 import {
   AdvancedSearchMode,
   AdvancedSearchModel,
@@ -49,7 +49,7 @@ export function AdvancedQueryForm({
     (positivePrompt.length > 0 || negativePrompt.length > 0) &&
     (!combinedSearch || combinedSearchPrompt.length > 0);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form: AdvancedSearchModel = {
       criteria: positivePrompt

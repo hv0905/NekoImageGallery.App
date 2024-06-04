@@ -29,7 +29,9 @@ export function Home() {
       .then(t => {
         if (reset) {
           setResult(t.result);
-          setTimeout(() => { window.scrollTo({top: 0, behavior: 'smooth'}); }, 0);
+          setTimeout(() => {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+          }, 0);
         } else {
           // In a very rare situation, if two image are same, which means their score is literally equal (lets say it p_1 and p_2, p1.score = p2.score),
           // and p_1 is the last result of previous request.
