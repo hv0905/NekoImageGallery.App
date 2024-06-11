@@ -14,7 +14,6 @@ import {
   RemoveDone,
 } from '@mui/icons-material';
 import {
-  AlertColor,
   Box,
   Button,
   ButtonGroup,
@@ -50,6 +49,7 @@ import {UploadService} from '../Services/UploadService';
 import {useFileDropper} from '../Hooks/useFileDropper';
 import {viewImageFile} from '../Utils/FancyboxUtils';
 import {AlertSnack} from './AlertSnack';
+import {useAlertSnack} from '../Hooks/useAlertSnack';
 
 export function UploadDialog({
   open,
@@ -67,9 +67,7 @@ export function UploadDialog({
   const [duplicateTasks, setDuplicateTasks] = useState(0);
   const [totalTasks, setTotalTasks] = useState(1);
 
-  const [notificationText, setNotificationText] = useState('');
-  const [notificationSeverity, setNotificationSeverity] =
-    useState<AlertColor>('success');
+  const [alertProps, fireSnack] = useAlertSnack();
 
   const percentage = (completedTasks / totalTasks) * 100;
 
@@ -98,10 +96,10 @@ export function UploadDialog({
   }
 
   function notifyBadImg() {
-    setNotificationText(
-      'Invalid file type. Only jpeg, png, webp, gif image files are currently allowed.'
+    fireSnack(
+      'Invalid file type. Only jpeg, png, webp, gif image files are currently allowed.',
+      'error'
     );
-    setNotificationSeverity('error');
   }
 
   function selectImages() {
@@ -143,16 +141,14 @@ export function UploadDialog({
       .upload()
       .then(() => {
         setUploading(false);
-        setNotificationText(
+        fireSnack(
           `Upload completed. ${uploadService.current!.completedTasksCount} images uploaded.` +
             (uploadService.current!.errorTasksCount > 0
               ? ` ${uploadService.current!.errorTasksCount} images failed.`
               : '') +
             (uploadService.current!.duplicateTasksCount > 0
               ? ` ${uploadService.current!.duplicateTasksCount} images duplicated.`
-              : '')
-        );
-        setNotificationSeverity(
+              : ''),
           uploadService.current!.errorTasksCount > 0
             ? 'error'
             : uploadService.current!.duplicateTasksCount > 0
@@ -410,13 +406,7 @@ export function UploadDialog({
             />
           </Box>
         </Collapse>
-        <AlertSnack
-          open={!!notificationText}
-          text={notificationText}
-          severity={notificationSeverity}
-          onClose={() => setNotificationText('')}
-          autoHideDuration={6000}
-        />
+        <AlertSnack {...alertProps} autoHideDuration={6000} />
       </DialogContent>
       <DialogActions>
         <LoadingButton

@@ -26,6 +26,7 @@ import {ErrorProtocol} from '../Models/ApiResponse';
 import {AppSettings} from './Contexts';
 import {Favorite, FavoriteBorder, MoreVert} from '@mui/icons-material';
 import {AlertSnack} from './AlertSnack';
+import {useAlertSnack} from '../Hooks/useAlertSnack';
 
 const ImageGalleryItem = memo(function ImageGalleryItem({
   resultInfo,
@@ -131,8 +132,8 @@ export function ImageGallery({
   const [contextMenuItem, setContextMenuItem] = useState<SearchResult | null>(
     null
   );
-  const [notificationText, setNotificationText] = useState('');
-  const [notificationErr, setNotificationErr] = useState(false);
+
+  const [alertProps, fireSnack] = useAlertSnack();
 
   const contextMenuOpen = !!contextMenu || !!contextMenuEl;
 
@@ -205,20 +206,17 @@ export function ImageGallery({
     if (!contextMenuItem) return;
     deleteImage(contextMenuItem.img.id)
       .then(resp => {
-        setNotificationText(resp.data.message);
-        setNotificationErr(false);
+        fireSnack(resp.data.message, 'success');
         setSearchResult(
           searchResult.filter(t => t.img.id != contextMenuItem.img.id)
         );
       })
       .catch(err => {
         if (isAxiosError<ErrorProtocol>(err) && err.response?.data.detail) {
-          setNotificationText(err.response?.data?.detail);
+          fireSnack(err.response?.data?.detail, 'error');
         } else {
-          setNotificationText('Unknown error');
+          fireSnack('Unknown error', 'error');
         }
-
-        setNotificationErr(true);
       });
   }
 
@@ -231,10 +229,10 @@ export function ImageGallery({
     (item: SearchResult) => {
       updateOpt(item.img.id, !item.img.starred)
         .then(() => {
-          setNotificationText(
-            `Image ${item.img.starred ? 'unstarred' : 'starred'}.`
+          fireSnack(
+            `Image ${item.img.starred ? 'unstarred' : 'starred'}.`,
+            'success'
           );
-          setNotificationErr(false);
 
           setSearchResult(s =>
             s!.map(t => {
@@ -247,15 +245,13 @@ export function ImageGallery({
         })
         .catch(err => {
           if (isAxiosError<ErrorProtocol>(err) && err.response?.data.detail) {
-            setNotificationText(err.response?.data?.detail);
+            fireSnack(err.response?.data?.detail, 'error');
           } else {
-            setNotificationText('Unknown error');
+            fireSnack('Unknown error', 'error');
           }
-
-          setNotificationErr(true);
         });
     },
-    [setSearchResult]
+    [setSearchResult, fireSnack]
   );
 
   return (
@@ -302,13 +298,7 @@ export function ImageGallery({
           onSimilarSearch={handleSimilarSearch}
         />
       )}
-      <AlertSnack
-        open={!!notificationText}
-        text={notificationText}
-        severity={notificationErr ? 'error' : 'success'}
-        onClose={() => setNotificationText('')}
-        autoHideDuration={6000}
-      />
+      <AlertSnack {...alertProps} autoHideDuration={6000} />
     </Box>
   );
 }
