@@ -84,12 +84,15 @@ export function UploadDialog({
         e.preventDefault();
         e.returnValue = true;
 
-        fireSnack('Upload in progress. Closing the tab will cancel the upload.', 'warning');
+        fireSnack(
+          'Upload in progress. Closing the tab will cancel the upload.',
+          'warning'
+        );
       };
       window.addEventListener('beforeunload', handler);
       return () => {
         window.removeEventListener('beforeunload', handler);
-      }
+      };
     }
   }, [fireSnack, uploading]);
 
