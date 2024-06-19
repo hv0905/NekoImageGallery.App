@@ -35,7 +35,7 @@ import {
   Typography,
 } from '@mui/material';
 import {UploadTask, UploadTaskStatus} from '../Models/UploadTaskModel';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {LoadingButton} from '@mui/lab';
 import {
   imageFileTypes,
@@ -77,6 +77,21 @@ export function UploadDialog({
         t.status === UploadTaskStatus.Pending ||
         t.status === UploadTaskStatus.Error
     ).length > 0;
+
+  useEffect(() => {
+    if (uploading) {
+      const handler = (e: BeforeUnloadEvent) => {
+        e.preventDefault();
+        e.returnValue = true;
+
+        fireSnack('Upload in progress. Closing the tab will cancel the upload.', 'warning');
+      };
+      window.addEventListener('beforeunload', handler);
+      return () => {
+        window.removeEventListener('beforeunload', handler);
+      }
+    }
+  }, [fireSnack, uploading]);
 
   function mapSelect(pred: (t: UploadTask) => boolean) {
     setUploadQueue(uploadQueue.map(t => ({...t, selected: pred(t)})));
