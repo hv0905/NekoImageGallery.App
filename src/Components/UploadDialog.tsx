@@ -424,7 +424,7 @@ export function UploadDialog({
             />
           </Box>
         </Collapse>
-        <AlertSnack {...alertProps} autoHideDuration={6000} />
+        <AlertSnack {...alertProps} />
       </DialogContent>
       <DialogActions>
         <LoadingButton

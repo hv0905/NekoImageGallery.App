@@ -1,10 +1,12 @@
+import { DragEvent, ClipboardEvent } from "react";
+
 export function useFileDropper(
   fileAccept: string[] = ['*/*'],
   onSuccess?: (files: File[]) => void,
   onIncorrectType?: () => void
 ) {
   return {
-    onDrop(e: React.DragEvent<HTMLElement>) {
+    onDrop(e: DragEvent<HTMLElement>) {
       e.preventDefault();
       const files = Array.from(e.dataTransfer.files ?? []).filter(f =>
         fileAccept.includes(f.type)
@@ -15,10 +17,10 @@ export function useFileDropper(
         onIncorrectType?.();
       }
     },
-    onDragOver(e: React.DragEvent<HTMLElement>) {
+    onDragOver(e: DragEvent<HTMLElement>) {
       e.preventDefault();
     },
-    onPaste(e: React.ClipboardEvent<HTMLDivElement>) {
+    onPaste(e: ClipboardEvent<HTMLDivElement>) {
       const files = Array.from(e.clipboardData.items ?? [])
         .filter(t => t.kind === 'file')
         .map(t => t.getAsFile())

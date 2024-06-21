@@ -27,6 +27,7 @@ import {AppSettings} from './Contexts';
 import {Favorite, FavoriteBorder, MoreVert} from '@mui/icons-material';
 import {AlertSnack} from './AlertSnack';
 import {useAlertSnack} from '../Hooks/useAlertSnack';
+import ImageSearch from '../Assets/Icons/ImageSearch.svg?raw';
 
 const ImageGalleryItem = memo(function ImageGalleryItem({
   resultInfo,
@@ -152,7 +153,7 @@ export function ImageGallery({
       Toolbar: {
         items: {
           similar: {
-            tpl: `<button class="f-button">Similar Search</button>`,
+            tpl: `<button title="Similar Search" class="f-button f-button-custom">${ImageSearch}</button>`,
             click: () => {
               const index = Fancybox.getInstance()?.getSlide()?.index ?? -1;
               if (index == -1) return;
@@ -298,7 +299,7 @@ export function ImageGallery({
           onSimilarSearch={handleSimilarSearch}
         />
       )}
-      <AlertSnack {...alertProps} autoHideDuration={6000} />
+      <AlertSnack {...alertProps} />
     </Box>
   );
 }

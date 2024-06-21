@@ -16,6 +16,11 @@ body {
   backdrop-filter: blur(8px);
 }
 
+.f-button-custom svg {
+  --f-button-svg-fill: var(--f-button-color) !important;
+  stroke: none !important;
+}
+
 @media screen and (max-width: 700px) {
   .fancybox__toolbar__column.is-middle {
     display: none;
