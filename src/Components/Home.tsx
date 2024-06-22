@@ -56,9 +56,7 @@ export function Home() {
   }
 
   function search(query: SearchQuery, logInHistory = true) {
-    if (appSettings.useFilter) {
-      query.filterOptions = filterOptions.current;
-    }
+    query.filterOptions = appSettings.useFilter ? filterOptions.current : null;
     activeQuery.current = query;
     if (logInHistory) {
       setSearchHistory([...searchHistory, query]);

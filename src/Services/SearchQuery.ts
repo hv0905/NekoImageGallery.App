@@ -95,16 +95,22 @@ export class SimilarSearchQuery extends SearchQuery {
 }
 
 export class RandomSearchQuery extends SearchQuery {
-  constructor() {
+  public seed?: number;
+  constructor(reproducible = true) {
     super();
+    if (reproducible) {
+      this.seed = Math.floor(Math.random() * Math.pow(2, 31));
+    }
   }
 
-  async querySearch(count = 20): Promise<SearchApiResponse> {
+  async querySearch(count = 20, skip = 0): Promise<SearchApiResponse> {
     const response = await getClient().get<SearchApiResponse>(
       `/search/random`,
       {
         params: {
-          count: count,
+          seed: this.seed,
+          count,
+          skip,
           ...this.getFilterOptions(),
         },
       }
