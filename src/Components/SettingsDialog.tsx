@@ -94,6 +94,22 @@ export function SettingsDialog({
             />
           }
           label='Show info bar on each image'
+          sx={{width: '100%'}}
+        />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={editingSettings.autoPaging}
+              onChange={e =>
+                setEditingSettings({
+                  ...editingSettings,
+                  autoPaging: e.target.checked,
+                })
+              }
+            />
+          }
+          label='Auto load more images when scrolling to the end'
+          sx={{width: '100%'}}
         />
         <Typography variant='h6'>Admin</Typography>
         <FormControlLabel

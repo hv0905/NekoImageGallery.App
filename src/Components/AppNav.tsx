@@ -20,7 +20,7 @@ import {
 import {useContext, useState} from 'react';
 import {Environment} from '../environment';
 import {AppSettings} from './Contexts';
-import {SettingsDialog} from './SettingsModal';
+import {SettingsDialog} from './SettingsDialog';
 import {UploadDialog} from './UploadDialog';
 
 export function AppNav() {

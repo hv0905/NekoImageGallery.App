@@ -4,6 +4,7 @@ export class AppSettingsModel {
   public adminKey = '';
 
   public showInfoBar = false;
+  public autoPaging = true;
 }
 
 export function saveSettingsToLocalStorage(context: AppSettingsModel) {

@@ -1,4 +1,4 @@
-import { DragEvent, ClipboardEvent } from "react";
+import {DragEvent, ClipboardEvent} from 'react';
 
 export function useFileDropper(
   fileAccept: string[] = ['*/*'],
