@@ -1,3 +1,4 @@
+import {DuplicateValidationResponse} from '../Models/AdminModels';
 import {NekoProtocol} from '../Models/ApiResponse';
 import {getClient} from './Base';
 
@@ -29,4 +30,13 @@ export function uploadImage(
       categories,
     },
   });
+}
+
+export function duplicationValidate(hashes: string[]) {
+  return getClient().post<DuplicateValidationResponse>(
+    '/admin/duplication_validate',
+    {
+      hashes,
+    }
+  );
 }

@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   Switch,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import {AppSettings, ApiInfo} from './Contexts';
@@ -145,6 +146,23 @@ export function SettingsDialog({
                 })
               }
             />
+            <Tooltip title="[Alpha] When enabled, this option checks if an image already exists on the server by its SHA-1 digest before uploading. This can save time and reduce network traffic for potentially duplicate images. Duplicate images are always rejected by the server, even if this option is not enabled.">
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={editingSettings.duplicateAvoidMode}
+                    onChange={e =>
+                      setEditingSettings({
+                        ...editingSettings,
+                        duplicateAvoidMode: e.target.checked,
+                      })
+                    }
+                  />
+                }
+                label='Check for Duplicate Images Before Upload'
+                sx={{width: '100%'}}
+              />
+            </Tooltip>
           </Collapse>
         ) : (
           <Alert severity='info'>

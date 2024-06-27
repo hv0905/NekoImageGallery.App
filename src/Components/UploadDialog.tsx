@@ -35,7 +35,7 @@ import {
   Typography,
 } from '@mui/material';
 import {UploadTask, UploadTaskStatus} from '../Models/UploadTaskModel';
-import {useEffect, useRef, useState} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 import {LoadingButton} from '@mui/lab';
 import {
   imageFileTypes,
@@ -50,6 +50,7 @@ import {useFileDropper} from '../Hooks/useFileDropper';
 import {viewImageFile} from '../Utils/FancyboxUtils';
 import {AlertSnack} from './AlertSnack';
 import {useAlertSnack} from '../Hooks/useAlertSnack';
+import { AppSettings } from './Contexts';
 
 export function UploadDialog({
   open,
@@ -67,6 +68,7 @@ export function UploadDialog({
   const [duplicateTasks, setDuplicateTasks] = useState(0);
   const [totalTasks, setTotalTasks] = useState(1);
 
+  const [appSettings] = useContext(AppSettings);
   const [alertProps, fireSnack] = useAlertSnack();
 
   const percentage = (completedTasks / totalTasks) * 100;
@@ -153,7 +155,8 @@ export function UploadDialog({
     uploadService.current = new UploadService(
       queue,
       4,
-      updateRenderQueueFromWorking
+      updateRenderQueueFromWorking,
+      appSettings.duplicateAvoidMode
     );
     uploadService.current
       .upload()

@@ -1,13 +1,15 @@
 import {isAxiosError} from 'axios';
 import {ErrorProtocol} from '../Models/ApiResponse';
 import {UploadTask, UploadTaskStatus} from '../Models/UploadTaskModel';
-import {uploadImage} from './AdminApi';
+import {duplicationValidate, uploadImage} from './AdminApi';
+import { Sha1Hash } from '../Utils/FileHashing';
 
 export class UploadService {
   constructor(
     public queue: UploadTask[],
     public workersCount = 4,
-    public statusUpdateCallback?: () => void
+    public statusUpdateCallback?: () => void,
+    public enableAvoidDuplication = false
   ) {}
 
   private async uploadWorker() {
@@ -18,6 +20,15 @@ export class UploadService {
       item.status = UploadTaskStatus.Uploading;
       this.statusUpdateCallback?.();
       try {
+        if (this.enableAvoidDuplication) {
+          const hash = await Sha1Hash(item.file);
+          const response = await duplicationValidate([hash]);
+          if (response.data.exists[0]) {
+            item.status = UploadTaskStatus.Duplicate;
+            item.errorText = 'Duplicated';
+            continue;
+          }
+        }
         await uploadImage(
           item.file,
           true,
