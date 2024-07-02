@@ -1,7 +1,4 @@
-import {
-  AdvancedSearchModel,
-  CombinedSearchModel,
-} from '../Models/AdvancedSearchModel';
+import {AdvancedSearchModel, CombinedSearchModel} from '../Models/AdvancedSearchModel';
 import {Image} from '../Models/Image';
 import {SearchApiResponse} from '../Models/SearchApiResponse';
 import {SearchBasis} from '../Models/SearchBasis';
@@ -52,20 +49,16 @@ export class ImageSearchQuery extends SearchQuery {
   async querySearch(count = 20, skip = 0): Promise<SearchApiResponse> {
     const formData = new FormData();
     formData.append('image', this.image);
-    const response = await getClient().post<SearchApiResponse>(
-      `/search/image`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        params: {
-          count: count,
-          skip: skip,
-          ...this.getFilterOptions(),
-        },
-      }
-    );
+    const response = await getClient().post<SearchApiResponse>(`/search/image`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      params: {
+        count: count,
+        skip: skip,
+        ...this.getFilterOptions(),
+      },
+    });
     return response.data;
   }
 }
@@ -104,17 +97,14 @@ export class RandomSearchQuery extends SearchQuery {
   }
 
   async querySearch(count = 20, skip = 0): Promise<SearchApiResponse> {
-    const response = await getClient().get<SearchApiResponse>(
-      `/search/random`,
-      {
-        params: {
-          seed: this.seed,
-          count,
-          skip,
-          ...this.getFilterOptions(),
-        },
-      }
-    );
+    const response = await getClient().get<SearchApiResponse>(`/search/random`, {
+      params: {
+        seed: this.seed,
+        count,
+        skip,
+        ...this.getFilterOptions(),
+      },
+    });
     return response.data;
   }
 }

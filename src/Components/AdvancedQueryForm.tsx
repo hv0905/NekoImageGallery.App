@@ -12,11 +12,7 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material';
-import {
-  AdvancedSearchQuery,
-  CombinedSearchQuery,
-  SearchQuery,
-} from '../Services/SearchQuery';
+import {AdvancedSearchQuery, CombinedSearchQuery, SearchQuery} from '../Services/SearchQuery';
 import {FormEvent, useContext, useState} from 'react';
 import {
   AdvancedSearchMode,
@@ -36,14 +32,11 @@ export function AdvancedQueryForm({
   const [negativePrompt, setNegativePrompt] = useState('');
   const [combinedSearch, setCombinedSearch] = useState(false);
   const [combinedSearchPrompt, setCombinedSearchPrompt] = useState('');
-  const [mode, setMode] = useState<AdvancedSearchMode>(
-    AdvancedSearchMode.average
-  );
+  const [mode, setMode] = useState<AdvancedSearchMode>(AdvancedSearchMode.average);
   const [basis, setBasis] = useState<SearchBasis>(SearchBasis.vision);
   const apiInfo = useContext(ApiInfo);
 
-  const ocrAvail =
-    !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
+  const ocrAvail = !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
 
   const submitable =
     (positivePrompt.length > 0 || negativePrompt.length > 0) &&
@@ -74,12 +67,7 @@ export function AdvancedQueryForm({
   }
 
   return (
-    <Stack
-      component='form'
-      spacing={2}
-      sx={{width: '100%'}}
-      onSubmit={handleSubmit}
-    >
+    <Stack component='form' spacing={2} sx={{width: '100%'}} onSubmit={handleSubmit}>
       <TextField
         label='Positive criteria (seperated by comma)'
         variant='outlined'
@@ -115,17 +103,10 @@ export function AdvancedQueryForm({
             value={basis}
             onChange={e => setBasis(e.target.value as SearchBasis)}
           >
-            <FormLabel
-              id='basis-sel-group'
-              sx={{alignSelf: 'center', marginX: 2}}
-            >
+            <FormLabel id='basis-sel-group' sx={{alignSelf: 'center', marginX: 2}}>
               Basis
             </FormLabel>
-            <FormControlLabel
-              value='vision'
-              control={<Radio />}
-              label='Vision'
-            />
+            <FormControlLabel value='vision' control={<Radio />} label='Vision' />
             <FormControlLabel value='ocr' control={<Radio />} label='OCR' />
           </RadioGroup>
           <Tooltip

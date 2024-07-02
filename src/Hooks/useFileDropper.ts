@@ -8,9 +8,7 @@ export function useFileDropper(
   return {
     onDrop(e: DragEvent<HTMLElement>) {
       e.preventDefault();
-      const files = Array.from(e.dataTransfer.files ?? []).filter(f =>
-        fileAccept.includes(f.type)
-      );
+      const files = Array.from(e.dataTransfer.files ?? []).filter(f => fileAccept.includes(f.type));
       if (files.length > 0) {
         onSuccess?.(files);
       } else {

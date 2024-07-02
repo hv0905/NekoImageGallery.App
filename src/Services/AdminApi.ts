@@ -33,10 +33,7 @@ export function uploadImage(
 }
 
 export function duplicationValidate(hashes: string[]) {
-  return getClient().post<DuplicateValidationResponse>(
-    '/admin/duplication_validate',
-    {
-      hashes,
-    }
-  );
+  return getClient().post<DuplicateValidationResponse>('/admin/duplication_validate', {
+    hashes,
+  });
 }

@@ -3,3 +3,4 @@ jsxSingleQuote: true
 arrowParens: avoid
 trailingComma: es5
 bracketSpacing: false
+printWidth: 100

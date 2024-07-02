@@ -70,10 +70,7 @@ export function Home() {
   useEffect(() => {
     if (appSettings.autoPaging && result && !noMore && !loading) {
       const handleScroll = () => {
-        if (
-          window.innerHeight + window.scrollY >=
-          document.body.offsetHeight - 100
-        ) {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
           window.removeEventListener('scroll', handleScroll); // Remove the event immediately to prevent multiple queryNext() calls.
           queryNext();
         }

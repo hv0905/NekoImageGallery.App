@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Chip,
-  List,
-  ListItem,
-  ListItemButton,
-  Paper,
-  Typography,
-} from '@mui/material';
+import {Box, Button, Chip, List, ListItem, ListItemButton, Paper, Typography} from '@mui/material';
 import type {ChipProps} from '@mui/material';
 import {
   AdvancedSearchQuery,
@@ -35,9 +26,7 @@ function TextSearchRecord({query}: {query: TextSearchQuery}) {
       <TextsmsTwoTone />
       <Chip
         label={`${query.searchBasis}${query.exact ? ':exact' : ''}`}
-        color={
-          query.searchBasis === SearchBasis.vision ? 'primary' : 'secondary'
-        }
+        color={query.searchBasis === SearchBasis.vision ? 'primary' : 'secondary'}
       />
       <Typography>{query.query}</Typography>
     </>
@@ -66,10 +55,7 @@ function ImageBaseSearchRecord({
     <>
       <ImageSearchTwoTone />
       <Chip label={modeDesc} color={modeColor} />
-      <Box
-        height={100}
-        sx={{overflow: 'hidden', borderRadius: '4px', maxWidth: 400}}
-      >
+      <Box height={100} sx={{overflow: 'hidden', borderRadius: '4px', maxWidth: 400}}>
         <img
           src={imgUrl}
           style={{
@@ -89,13 +75,7 @@ function ImageSearchRecord({query}: {query: ImageSearchQuery}) {
     setImgUrl(url);
     return () => URL.revokeObjectURL(url);
   }, [query]);
-  return (
-    <ImageBaseSearchRecord
-      imgUrl={imgUrl}
-      modeDesc='image'
-      modeColor='primary'
-    />
-  );
+  return <ImageBaseSearchRecord imgUrl={imgUrl} modeDesc='image' modeColor='primary' />;
 }
 
 function SimilarSearchRecord({query}: {query: SimilarSearchQuery}) {
@@ -108,32 +88,19 @@ function SimilarSearchRecord({query}: {query: SimilarSearchQuery}) {
   );
 }
 
-function AdvancedSearchRecord({
-  query,
-}: {
-  query: AdvancedSearchQuery | CombinedSearchQuery;
-}) {
+function AdvancedSearchRecord({query}: {query: AdvancedSearchQuery | CombinedSearchQuery}) {
   return (
     <>
       <AutoFixHighTwoTone />
       <Chip label={'advanced: ' + query.searchBasis} />
       {!!query.searchModel.criteria.length && (
-        <Chip
-          label={'pos: ' + query.searchModel.criteria.join(', ')}
-          color='primary'
-        />
+        <Chip label={'pos: ' + query.searchModel.criteria.join(', ')} color='primary' />
       )}
       {!!query.searchModel.negative_criteria.length && (
-        <Chip
-          label={'neg: ' + query.searchModel.negative_criteria.join(', ')}
-          color='secondary'
-        />
+        <Chip label={'neg: ' + query.searchModel.negative_criteria.join(', ')} color='secondary' />
       )}
       {query instanceof CombinedSearchQuery && (
-        <Chip
-          label={'combined: ' + query.searchModel.extra_prompt}
-          color='info'
-        ></Chip>
+        <Chip label={'combined: ' + query.searchModel.extra_prompt} color='info'></Chip>
       )}
     </>
   );
@@ -146,10 +113,7 @@ function SearchRecord({query}: {query: SearchQuery}) {
     return <ImageSearchRecord query={query} />;
   } else if (query instanceof SimilarSearchQuery) {
     return <SimilarSearchRecord query={query} />;
-  } else if (
-    query instanceof AdvancedSearchQuery ||
-    query instanceof CombinedSearchQuery
-  ) {
+  } else if (query instanceof AdvancedSearchQuery || query instanceof CombinedSearchQuery) {
     return <AdvancedSearchRecord query={query} />;
   } else if (query instanceof RandomSearchQuery) {
     return <RandomPickRecord />;
@@ -173,22 +137,14 @@ export function SearchHistoryList({
           {history
             .map((t, i) => (
               <ListItem key={i}>
-                <ListItemButton
-                  onClick={() => onSubmit(t, false)}
-                  sx={{display: 'flex', gap: 1}}
-                >
+                <ListItemButton onClick={() => onSubmit(t, false)} sx={{display: 'flex', gap: 1}}>
                   <SearchRecord query={t} />
                 </ListItemButton>
               </ListItem>
             ))
             .reverse()}
           <ListItem key={-1}>
-            <Button
-              variant='text'
-              fullWidth
-              startIcon={<ClearAll />}
-              onClick={onClear}
-            >
+            <Button variant='text' fullWidth startIcon={<ClearAll />} onClick={onClear}>
               clear all
             </Button>
           </ListItem>
@@ -203,9 +159,7 @@ export function SearchHistoryList({
           gap={3}
         >
           <HistoryToggleOff sx={{width: 100, height: 100}} />
-          <Typography>
-            No history. Try searching for something first. 🍵
-          </Typography>
+          <Typography>No history. Try searching for something first. 🍵</Typography>
         </Box>
       )}
     </Paper>

@@ -1,10 +1,4 @@
-import {
-  Box,
-  IconButton,
-  Paper,
-  PopoverPosition,
-  Typography,
-} from '@mui/material';
+import {Box, IconButton, Paper, PopoverPosition, Typography} from '@mui/material';
 import {SearchResult} from '../Models/SearchResult';
 import {Environment} from '../environment';
 import {
@@ -74,10 +68,7 @@ const ImageGalleryItem = memo(function ImageGalleryItem({
         href={resultInfo.img.url}
         data-caption={`Similarity: ${(resultInfo.score * 100).toFixed(2)}%`}
       >
-        <img
-          src={resultInfo.img.thumbnail_url ?? resultInfo.img.url}
-          style={{width: '100%'}}
-        />
+        <img src={resultInfo.img.thumbnail_url ?? resultInfo.img.url} style={{width: '100%'}} />
       </Box>
       {showInfoBar && (
         <Box
@@ -98,17 +89,10 @@ const ImageGalleryItem = memo(function ImageGalleryItem({
               <FavoriteBorder fontSize='small' />
             )}
           </IconButton>
-          <Typography
-            variant='body1'
-            color='textSecondary'
-            sx={{userSelect: 'none'}}
-          >
+          <Typography variant='body1' color='textSecondary' sx={{userSelect: 'none'}}>
             {`Similarity: ${(resultInfo.score * 100).toFixed(2)}%`}
           </Typography>
-          <IconButton
-            size='small'
-            onClick={e => handleContextMenuWithButton(e, resultInfo)}
-          >
+          <IconButton size='small' onClick={e => handleContextMenuWithButton(e, resultInfo)}>
             <MoreVert fontSize='small' />
           </IconButton>
         </Box>
@@ -130,9 +114,7 @@ export function ImageGallery({
   const [appSettings] = useContext(AppSettings);
   const [contextMenu, setContextMenu] = useState<PopoverPosition | null>(null);
   const [contextMenuEl, setContextMenuEl] = useState<HTMLElement | null>(null);
-  const [contextMenuItem, setContextMenuItem] = useState<SearchResult | null>(
-    null
-  );
+  const [contextMenuItem, setContextMenuItem] = useState<SearchResult | null>(null);
 
   const [alertProps, fireSnack] = useAlertSnack();
 
@@ -157,23 +139,13 @@ export function ImageGallery({
             click: () => {
               const index = Fancybox.getInstance()?.getSlide()?.index ?? -1;
               if (index == -1) return;
-              onSimilarSearch?.(
-                new SimilarSearchQuery(searchResult[index].img)
-              );
+              onSimilarSearch?.(new SimilarSearchQuery(searchResult[index].img));
             },
           },
         },
         display: {
           left: ['infobar'],
-          middle: [
-            'zoomIn',
-            'zoomOut',
-            'toggle1to1',
-            'rotateCCW',
-            'rotateCW',
-            'flipX',
-            'flipY',
-          ],
+          middle: ['zoomIn', 'zoomOut', 'toggle1to1', 'rotateCCW', 'rotateCW', 'flipX', 'flipY'],
           right: ['similar', 'download', 'thumbs', 'close'],
         },
       },
@@ -185,14 +157,11 @@ export function ImageGallery({
     };
   }, [containerRef, searchResult, onSimilarSearch]);
 
-  const handleContextMenu = useCallback(
-    (e: React.MouseEvent, item: SearchResult) => {
-      e.preventDefault();
-      setContextMenuItem(item);
-      setContextMenu({top: e.clientY - 6, left: e.clientX + 2});
-    },
-    []
-  );
+  const handleContextMenu = useCallback((e: React.MouseEvent, item: SearchResult) => {
+    e.preventDefault();
+    setContextMenuItem(item);
+    setContextMenu({top: e.clientY - 6, left: e.clientX + 2});
+  }, []);
 
   // onclick event
   const handleContextMenuWithButton = useCallback(
@@ -208,9 +177,7 @@ export function ImageGallery({
     deleteImage(contextMenuItem.img.id)
       .then(resp => {
         fireSnack(resp.data.message, 'success');
-        setSearchResult(
-          searchResult.filter(t => t.img.id != contextMenuItem.img.id)
-        );
+        setSearchResult(searchResult.filter(t => t.img.id != contextMenuItem.img.id));
       })
       .catch(err => {
         if (isAxiosError<ErrorProtocol>(err) && err.response?.data.detail) {
@@ -230,10 +197,7 @@ export function ImageGallery({
     (item: SearchResult) => {
       updateOpt(item.img.id, !item.img.starred)
         .then(() => {
-          fireSnack(
-            `Image ${item.img.starred ? 'unstarred' : 'starred'}.`,
-            'success'
-          );
+          fireSnack(`Image ${item.img.starred ? 'unstarred' : 'starred'}.`, 'success');
 
           setSearchResult(s =>
             s!.map(t => {

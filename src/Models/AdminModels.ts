@@ -1,4 +1,4 @@
-import { NekoProtocol } from "./ApiResponse";
+import {NekoProtocol} from './ApiResponse';
 
 export interface ImageOptUpdateModel {
   starred?: boolean;

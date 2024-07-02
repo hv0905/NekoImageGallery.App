@@ -12,14 +12,11 @@ export function useAlertSnack() {
     setOpen(false);
   }, []);
 
-  const fireSnack = useCallback(
-    (text: string, severity: AlertSeverity = 'success') => {
-      setText(text);
-      setSeverity(severity);
-      setOpen(true);
-    },
-    []
-  );
+  const fireSnack = useCallback((text: string, severity: AlertSeverity = 'success') => {
+    setText(text);
+    setSeverity(severity);
+    setOpen(true);
+  }, []);
 
   return [{open, text, severity, onClose: handleClose}, fireSnack] as const;
 }

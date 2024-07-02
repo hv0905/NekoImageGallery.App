@@ -5,11 +5,7 @@ import {thumbnail} from '../Utils/ImageOps';
 import {imageFileTypes, selectFiles} from '../Utils/SystemDialog';
 import {useFileDropper} from '../Hooks/useFileDropper';
 
-export function ImageQueryForm({
-  onSubmit,
-}: {
-  onSubmit?: (query: SearchQuery) => void;
-}) {
+export function ImageQueryForm({onSubmit}: {onSubmit?: (query: SearchQuery) => void}) {
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [notificationOpen, setNotificationOpen] = useState(false);
@@ -83,11 +79,7 @@ export function ImageQueryForm({
         </Box>
       </Card>
       <Collapse in={notificationOpen}>
-        <Alert
-          severity='error'
-          onClose={() => setNotificationOpen(false)}
-          sx={{mb: 2}}
-        >
+        <Alert severity='error' onClose={() => setNotificationOpen(false)} sx={{mb: 2}}>
           Invalid file type. Please select a PNG or JPEG image.
         </Alert>
       </Collapse>

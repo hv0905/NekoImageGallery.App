@@ -1,12 +1,6 @@
 import '../Styles/App.css';
 import {AppNav} from './AppNav';
-import {
-  CssBaseline,
-  ThemeProvider,
-  colors,
-  createTheme,
-  useMediaQuery,
-} from '@mui/material';
+import {CssBaseline, ThemeProvider, colors, createTheme, useMediaQuery} from '@mui/material';
 import {useEffect, useMemo, useState} from 'react';
 import {Home} from './Home';
 import {ApiInfo, AppSettings} from './Contexts';
@@ -22,9 +16,7 @@ import type {} from '@mui/lab/themeAugmentation';
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-  const [appSettings, setAppSettings] = useState<AppSettingsModel>(
-    loadFromLocalStorage()
-  );
+  const [appSettings, setAppSettings] = useState<AppSettingsModel>(loadFromLocalStorage());
 
   const [apiInfo, setApiInfo] = useState<HomeApiResponse | null>(null);
 

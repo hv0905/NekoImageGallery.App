@@ -20,8 +20,7 @@ export function QueryArea({
   const [tab, setTab] = useState(1);
   const apiInfo = useContext(ApiInfo);
 
-  const ocrAvail =
-    !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
+  const ocrAvail = !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
 
   const inputs = [
     <SearchHistoryList
@@ -31,9 +30,7 @@ export function QueryArea({
       onClear={onClearHistory}
     />,
     <TextQueryForm key={1} onSubmit={onSubmit} />,
-    ...(ocrAvail
-      ? [<TextQueryForm key={2} onSubmit={onSubmit} ocrSearch />]
-      : []),
+    ...(ocrAvail ? [<TextQueryForm key={2} onSubmit={onSubmit} ocrSearch />] : []),
     <ImageQueryForm key={3} onSubmit={onSubmit} />,
     <AdvancedQueryForm key={4} onSubmit={onSubmit} />,
   ];

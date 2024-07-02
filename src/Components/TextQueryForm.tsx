@@ -1,17 +1,6 @@
 import {Search, Casino, Spellcheck} from '@mui/icons-material';
-import {
-  Box,
-  TextField,
-  Button,
-  IconButton,
-  ToggleButton,
-  Tooltip,
-} from '@mui/material';
-import {
-  RandomSearchQuery,
-  SearchQuery,
-  TextSearchQuery,
-} from '../Services/SearchQuery';
+import {Box, TextField, Button, IconButton, ToggleButton, Tooltip} from '@mui/material';
+import {RandomSearchQuery, SearchQuery, TextSearchQuery} from '../Services/SearchQuery';
 import {useState} from 'react';
 import {SearchBasis} from '../Models/SearchBasis';
 

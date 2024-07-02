@@ -4,6 +4,7 @@ import {AppSettingsModel} from '../Models/AppSettings';
 
 export const ApiInfo = createContext<HomeApiResponse | null>(null);
 
-export const AppSettings = createContext<
-  [AppSettingsModel, (newVal: AppSettingsModel) => void]
->([new AppSettingsModel(), () => undefined]);
+export const AppSettings = createContext<[AppSettingsModel, (newVal: AppSettingsModel) => void]>([
+  new AppSettingsModel(),
+  () => undefined,
+]);

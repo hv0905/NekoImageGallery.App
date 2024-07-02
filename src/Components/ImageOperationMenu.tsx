@@ -90,9 +90,7 @@ export function ImageOperationMenu({
         )}
         <Divider />
         <MenuItem disabled>
-          <ListItemText>
-            Score: {(context.score * 100).toFixed(2)}%
-          </ListItemText>
+          <ListItemText>Score: {(context.score * 100).toFixed(2)}%</ListItemText>
         </MenuItem>
         <MenuItem disabled>
           <ListItemText>
@@ -101,9 +99,7 @@ export function ImageOperationMenu({
         </MenuItem>
         {!!context.img.categories?.length && (
           <MenuItem disabled>
-            <ListItemText>
-              Categories: {context.img.categories.join(', ')}
-            </ListItemText>
+            <ListItemText>Categories: {context.img.categories.join(', ')}</ListItemText>
           </MenuItem>
         )}
         {settings.useAdminPortal && (
@@ -115,12 +111,8 @@ export function ImageOperationMenu({
                 onClose();
               }}
             >
-              <ListItemIcon>
-                {context.img.starred ? <Favorite /> : <FavoriteBorder />}
-              </ListItemIcon>
-              <ListItemText>
-                {context.img.starred ? 'Unstar' : 'Star'}
-              </ListItemText>
+              <ListItemIcon>{context.img.starred ? <Favorite /> : <FavoriteBorder />}</ListItemIcon>
+              <ListItemText>{context.img.starred ? 'Unstar' : 'Star'}</ListItemText>
             </MenuItem>
             <MenuItem onClick={handleDelete}>
               <ListItemIcon>

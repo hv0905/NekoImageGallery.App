@@ -1,14 +1,6 @@
-export const imageFileTypes = [
-  'image/png',
-  'image/jpeg',
-  'image/webp',
-  'image/gif',
-];
+export const imageFileTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
 
-export function selectFiles(
-  multiple = false,
-  accept = imageFileTypes
-): Promise<File[]> {
+export function selectFiles(multiple = false, accept = imageFileTypes): Promise<File[]> {
   return new Promise((resolve, reject) => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -16,9 +8,9 @@ export function selectFiles(
     input.accept = accept.join(', ');
     input.multiple = multiple;
     input.onchange = e => {
-      const files = Array.from(
-        (e.target as HTMLInputElement).files ?? []
-      ).filter(t => accept.includes(t.type));
+      const files = Array.from((e.target as HTMLInputElement).files ?? []).filter(t =>
+        accept.includes(t.type)
+      );
       if (files.length > 0) {
         resolve(files);
       } else {
@@ -29,9 +21,7 @@ export function selectFiles(
   });
 }
 
-export function selectDirectory(
-  accept: string[] | null = imageFileTypes
-): Promise<File[]> {
+export function selectDirectory(accept: string[] | null = imageFileTypes): Promise<File[]> {
   return new Promise((resolve, reject) => {
     const input = document.createElement('input');
     input.type = 'file';

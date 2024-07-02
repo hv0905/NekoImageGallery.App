@@ -10,13 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import {
-  FilterList,
-  FilterListOff,
-  GitHub,
-  Settings,
-  Upload,
-} from '@mui/icons-material';
+import {FilterList, FilterListOff, GitHub, Settings, Upload} from '@mui/icons-material';
 import {useContext, useState} from 'react';
 import {Environment} from '../environment';
 import {AppSettings} from './Contexts';
@@ -114,12 +108,7 @@ export function AppNav() {
           open={menuOpen}
           onClose={handleClose}
         >
-          <MenuItem
-            component='a'
-            onClick={handleClose}
-            href='https://edgeneko.com'
-            target='_blank'
-          >
+          <MenuItem component='a' onClick={handleClose} href='https://edgeneko.com' target='_blank'>
             <ListItemIcon>
               <OpenInNewIcon />
             </ListItemIcon>
@@ -153,10 +142,7 @@ export function AppNav() {
         onClose={() => setDisplaySettings(false)}
       ></SettingsDialog>
       {appSettings.useAdminPortal && (
-        <UploadDialog
-          open={displayUpload}
-          onClose={() => setDisplayUpload(false)}
-        />
+        <UploadDialog open={displayUpload} onClose={() => setDisplayUpload(false)} />
       )}
     </>
   );

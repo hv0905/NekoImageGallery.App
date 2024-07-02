@@ -17,11 +17,7 @@ function preserveAspectRatio(
   return [x, y];
 }
 
-export function thumbnail(
-  blobUrl: string,
-  maxWidth: number,
-  maxHeight: number
-): Promise<Blob> {
+export function thumbnail(blobUrl: string, maxWidth: number, maxHeight: number): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {

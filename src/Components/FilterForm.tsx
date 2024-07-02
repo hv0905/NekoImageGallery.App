@@ -97,22 +97,13 @@ function LabelledSwitch({
 }) {
   return (
     <FormControlLabel
-      control={
-        <Switch
-          checked={checked}
-          onChange={e => setChecked(e.target.checked)}
-        />
-      }
+      control={<Switch checked={checked} onChange={e => setChecked(e.target.checked)} />}
       label={label}
     />
   );
 }
 
-export function FilterForm({
-  onChange,
-}: {
-  onChange?: (newFilterModel: SearchFilterOptions) => void;
-}) {
+export function FilterForm({onChange}: {onChange?: (newFilterModel: SearchFilterOptions) => void}) {
   const [aspectRatioEnabled, setAspectRatioEnabled] = useState(false);
   const [aspectRatio, setAspectRatio] = useState('16:9');
   const [aspectRatioTolerance, setAspectRatioTolerance] = useState(10);
@@ -220,11 +211,7 @@ export function FilterForm({
             />
           </Box>
         </Collapse>
-        <LabelledSwitch
-          label='Min Size'
-          checked={minSizeEnabled}
-          setChecked={setMinSizeEnabled}
-        />
+        <LabelledSwitch label='Min Size' checked={minSizeEnabled} setChecked={setMinSizeEnabled} />
         <Collapse in={minSizeEnabled}>
           <Box display='flex' gap={2}>
             <StrictNumberInput
@@ -245,11 +232,7 @@ export function FilterForm({
             />
           </Box>
         </Collapse>
-        <LabelledSwitch
-          label='Starred only'
-          checked={starredOnly}
-          setChecked={setStarredOnly}
-        />
+        <LabelledSwitch label='Starred only' checked={starredOnly} setChecked={setStarredOnly} />
         <LabelledSwitch
           label='Categories'
           checked={categoriesEnabled}

@@ -52,8 +52,7 @@ export function AuthenticationDialog() {
       <DialogTitle>Authentication required</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          This server is protected by access token, please enter your token to
-          continue.
+          This server is protected by access token, please enter your token to continue.
         </DialogContentText>
         <TextField
           autoFocus

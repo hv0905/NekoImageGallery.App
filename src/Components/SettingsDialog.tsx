@@ -18,13 +18,7 @@ import {resetClient} from '../Services/Base';
 import {WelcomeApi} from '../Services/WelcomeApi';
 import {LoadingButton} from '@mui/lab';
 
-export function SettingsDialog({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
+export function SettingsDialog({open, onClose}: {open: boolean; onClose: () => void}) {
   const [prevOpen, setPrevOpen] = useState(false);
   const [appSettings, setAppSettings] = useContext(AppSettings);
   const apiInfo = useContext(ApiInfo);
@@ -72,13 +66,7 @@ export function SettingsDialog({
   const canSave = !editingSettings.useAdminPortal || editingSettings.adminKey;
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth='md'
-      fullWidth
-      scroll='paper'
-    >
+    <Dialog open={open} onClose={onClose} maxWidth='md' fullWidth scroll='paper'>
       <DialogTitle>Settings</DialogTitle>
       <DialogContent dividers>
         <Typography variant='h6'>Appearance</Typography>
@@ -146,7 +134,7 @@ export function SettingsDialog({
                 })
               }
             />
-            <Tooltip title="[Alpha] When enabled, this option checks if an image already exists on the server by its SHA-1 digest before uploading. This can save time and reduce network traffic for potentially duplicate images. Duplicate images are always rejected by the server, even if this option is not enabled.">
+            <Tooltip title='[Alpha] When enabled, this option checks if an image already exists on the server by its SHA-1 digest before uploading. This can save time and reduce network traffic for potentially duplicate images. Duplicate images are always rejected by the server, even if this option is not enabled.'>
               <FormControlLabel
                 control={
                   <Switch
@@ -165,20 +153,14 @@ export function SettingsDialog({
             </Tooltip>
           </Collapse>
         ) : (
-          <Alert severity='info'>
-            The admin portal of this server isn&apos;t enabled.
-          </Alert>
+          <Alert severity='info'>The admin portal of this server isn&apos;t enabled.</Alert>
         )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color='secondary'>
           Cancel
         </Button>
-        <LoadingButton
-          onClick={saveSettings}
-          disabled={!canSave}
-          loading={saving}
-        >
+        <LoadingButton onClick={saveSettings} disabled={!canSave} loading={saving}>
           Save
         </LoadingButton>
       </DialogActions>

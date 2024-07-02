@@ -12,8 +12,7 @@ export default defineConfig({
       manifest: {
         name: 'Neko Image Gallery',
         short_name: 'NekoGallery',
-        description:
-          'An AI-powered natural language & reverse Image Search Engine.',
+        description: 'An AI-powered natural language & reverse Image Search Engine.',
         theme_color: '#2196f3',
         icons: [
           {
