@@ -1,14 +1,8 @@
-import {
-  Autocomplete,
-  Box,
-  Collapse,
-  FormControlLabel,
-  Paper,
-  Switch,
-  TextField,
-} from '@mui/material';
+import {Autocomplete, Box, Collapse, Paper, TextField} from '@mui/material';
 import {useEffect, useState} from 'react';
 import {SearchFilterOptions} from '../Models/SearchFilterOptions';
+import {StrictNumberInput} from './StrictInputs';
+import {LabelledSwitch} from './LabelledSwitch';
 
 const commonAspectRatios = [
   '9:32',
@@ -39,68 +33,6 @@ function aspectRatioTextToNumber(aspectRatio: string) {
   } else {
     return -1;
   }
-}
-
-function StrictNumberInput({
-  value,
-  onChange,
-  label,
-  min,
-  max,
-  step,
-  ...props
-}: {
-  value: number;
-  onChange: (v: number) => void;
-  label: string;
-  min?: number;
-  max?: number;
-  step?: number;
-} & Omit<React.ComponentProps<typeof TextField>, 'value' | 'onChange'>) {
-  let err: string | null = null;
-
-  if (max != null && value > max) {
-    err = `Value should not be greater than ${max}`;
-  }
-  if (min != null && value < min) {
-    err = `Value should not be less than ${min}`;
-  }
-
-  return (
-    <TextField
-      label={label}
-      variant='standard'
-      type='number'
-      value={value}
-      onChange={e => {
-        const v = Number(e.target.value);
-        if (!isNaN(v)) {
-          onChange(v);
-        }
-      }}
-      error={!!err}
-      helperText={err}
-      inputProps={{min, max, step}}
-      {...props}
-    />
-  );
-}
-
-function LabelledSwitch({
-  label,
-  checked,
-  setChecked,
-}: {
-  label: string;
-  checked: boolean;
-  setChecked: (v: boolean) => void;
-}) {
-  return (
-    <FormControlLabel
-      control={<Switch checked={checked} onChange={e => setChecked(e.target.checked)} />}
-      label={label}
-    />
-  );
 }
 
 export function FilterForm({onChange}: {onChange?: (newFilterModel: SearchFilterOptions) => void}) {
@@ -177,7 +109,7 @@ export function FilterForm({onChange}: {onChange?: (newFilterModel: SearchFilter
         <LabelledSwitch
           label='Aspect Ratio'
           checked={aspectRatioEnabled}
-          setChecked={setAspectRatioEnabled}
+          onCheckedChange={setAspectRatioEnabled}
         />
         <Collapse in={aspectRatioEnabled}>
           <Box display='flex' gap={2}>
@@ -211,7 +143,11 @@ export function FilterForm({onChange}: {onChange?: (newFilterModel: SearchFilter
             />
           </Box>
         </Collapse>
-        <LabelledSwitch label='Min Size' checked={minSizeEnabled} setChecked={setMinSizeEnabled} />
+        <LabelledSwitch
+          label='Min Size'
+          checked={minSizeEnabled}
+          onCheckedChange={setMinSizeEnabled}
+        />
         <Collapse in={minSizeEnabled}>
           <Box display='flex' gap={2}>
             <StrictNumberInput
@@ -232,11 +168,15 @@ export function FilterForm({onChange}: {onChange?: (newFilterModel: SearchFilter
             />
           </Box>
         </Collapse>
-        <LabelledSwitch label='Starred only' checked={starredOnly} setChecked={setStarredOnly} />
+        <LabelledSwitch
+          label='Starred only'
+          checked={starredOnly}
+          onCheckedChange={setStarredOnly}
+        />
         <LabelledSwitch
           label='Categories'
           checked={categoriesEnabled}
-          setChecked={setCategoriesEnabled}
+          onCheckedChange={setCategoriesEnabled}
         />
         <Collapse in={categoriesEnabled}>
           <TextField
@@ -250,7 +190,7 @@ export function FilterForm({onChange}: {onChange?: (newFilterModel: SearchFilter
         <LabelledSwitch
           label='Negative Categories'
           checked={categoriesNegEnabled}
-          setChecked={setCategoriesNegEnabled}
+          onCheckedChange={setCategoriesNegEnabled}
         />
         <Collapse in={categoriesNegEnabled}>
           <TextField

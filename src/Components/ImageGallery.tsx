@@ -146,7 +146,7 @@ export function ImageGallery({
         display: {
           left: ['infobar'],
           middle: ['zoomIn', 'zoomOut', 'toggle1to1', 'rotateCCW', 'rotateCW', 'flipX', 'flipY'],
-          right: ['similar', 'download', 'thumbs', 'close'],
+          right: ['slideshow', 'similar', 'download', 'thumbs', 'close'],
         },
       },
     });

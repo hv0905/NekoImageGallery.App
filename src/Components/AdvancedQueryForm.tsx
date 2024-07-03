@@ -8,7 +8,6 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  Switch,
   TextField,
   Tooltip,
 } from '@mui/material';
@@ -21,6 +20,7 @@ import {
 } from '../Models/AdvancedSearchModel';
 import {SearchBasis} from '../Models/SearchBasis';
 import {ApiInfo} from './Contexts';
+import {LabelledSwitch} from './LabelledSwitch';
 
 export function AdvancedQueryForm({
   onSubmit,
@@ -115,14 +115,10 @@ export function AdvancedQueryForm({
                   For example, you can search `Good Morning` with OCR search, than add `1girl` in the 
                   combined search cirteria to filter all the good-morning stickers with a girl in it.'
           >
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={combinedSearch}
-                  onChange={e => setCombinedSearch(e.target.checked)}
-                />
-              }
-              label='Combined search'
+            <LabelledSwitch
+              checked={combinedSearch}
+              onCheckedChange={e => setCombinedSearch(e)}
+              label='Combined Search'
             />
           </Tooltip>
           <Collapse in={combinedSearch}>

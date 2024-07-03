@@ -6,8 +6,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
-  Switch,
   TextField,
   Tooltip,
   Typography,
@@ -17,6 +15,7 @@ import {useContext, useState} from 'react';
 import {resetClient} from '../Services/Base';
 import {WelcomeApi} from '../Services/WelcomeApi';
 import {LoadingButton} from '@mui/lab';
+import {LabelledSwitch} from './LabelledSwitch';
 
 export function SettingsDialog({open, onClose}: {open: boolean; onClose: () => void}) {
   const [prevOpen, setPrevOpen] = useState(false);
@@ -70,51 +69,39 @@ export function SettingsDialog({open, onClose}: {open: boolean; onClose: () => v
       <DialogTitle>Settings</DialogTitle>
       <DialogContent dividers>
         <Typography variant='h6'>Appearance</Typography>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={editingSettings.showInfoBar}
-              onChange={e =>
-                setEditingSettings({
-                  ...editingSettings,
-                  showInfoBar: e.target.checked,
-                })
-              }
-            />
-          }
+        <LabelledSwitch
           label='Show info bar on each image'
           sx={{width: '100%'}}
-        />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={editingSettings.autoPaging}
-              onChange={e =>
-                setEditingSettings({
-                  ...editingSettings,
-                  autoPaging: e.target.checked,
-                })
-              }
-            />
+          checked={editingSettings.showInfoBar}
+          onCheckedChange={e =>
+            setEditingSettings({
+              ...editingSettings,
+              showInfoBar: e,
+            })
           }
+        />
+        <LabelledSwitch
           label='Auto load more images when scrolling to the end'
           sx={{width: '100%'}}
+          checked={editingSettings.autoPaging}
+          onCheckedChange={e =>
+            setEditingSettings({
+              ...editingSettings,
+              autoPaging: e,
+            })
+          }
         />
         <Typography variant='h6'>Admin</Typography>
-        <FormControlLabel
-          control={
-            <Switch
-              disabled={!adminPortalAvail}
-              checked={editingSettings.useAdminPortal}
-              onChange={e =>
-                setEditingSettings({
-                  ...editingSettings,
-                  useAdminPortal: e.target.checked,
-                })
-              }
-            />
-          }
+        <LabelledSwitch
           label='Use admin portal'
+          disabled={!adminPortalAvail}
+          checked={editingSettings.useAdminPortal}
+          onCheckedChange={e =>
+            setEditingSettings({
+              ...editingSettings,
+              useAdminPortal: e,
+            })
+          }
         />
         {adminPortalAvail ? (
           <Collapse in={editingSettings.useAdminPortal}>
@@ -135,20 +122,16 @@ export function SettingsDialog({open, onClose}: {open: boolean; onClose: () => v
               }
             />
             <Tooltip title='[Alpha] When enabled, this option checks if an image already exists on the server by its SHA-1 digest before uploading. This can save time and reduce network traffic for potentially duplicate images. Duplicate images are always rejected by the server, even if this option is not enabled.'>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={editingSettings.duplicateAvoidMode}
-                    onChange={e =>
-                      setEditingSettings({
-                        ...editingSettings,
-                        duplicateAvoidMode: e.target.checked,
-                      })
-                    }
-                  />
-                }
+              <LabelledSwitch
                 label='Check for Duplicate Images Before Upload'
                 sx={{width: '100%'}}
+                checked={editingSettings.duplicateAvoidMode}
+                onCheckedChange={e =>
+                  setEditingSettings({
+                    ...editingSettings,
+                    duplicateAvoidMode: e,
+                  })
+                }
               />
             </Tooltip>
           </Collapse>
