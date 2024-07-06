@@ -71,7 +71,7 @@ export function AuthenticationDialog() {
         <LoadingButton
           onClick={verifyToken}
           startIcon={<Key />}
-          disabled={token.length == 0}
+          disabled={token.length === 0}
           loadingPosition='start'
           loading={requesting}
         >

@@ -138,7 +138,7 @@ export function ImageGallery({
             tpl: `<button title="Similar Search" class="f-button f-button-custom">${ImageSearch}</button>`,
             click: () => {
               const index = Fancybox.getInstance()?.getSlide()?.index ?? -1;
-              if (index == -1) return;
+              if (index === -1) return;
               onSimilarSearch?.(new SimilarSearchQuery(searchResult[index].img));
             },
           },
@@ -177,7 +177,7 @@ export function ImageGallery({
     deleteImage(contextMenuItem.img.id)
       .then(resp => {
         fireSnack(resp.data.message, 'success');
-        setSearchResult(searchResult.filter(t => t.img.id != contextMenuItem.img.id));
+        setSearchResult(searchResult.filter(t => t.img.id !== contextMenuItem.img.id));
       })
       .catch(err => {
         if (isAxiosError<ErrorProtocol>(err) && err.response?.data.detail) {
@@ -201,7 +201,7 @@ export function ImageGallery({
 
           setSearchResult(s =>
             s!.map(t => {
-              if (t.img.id == item.img.id) {
+              if (t.img.id === item.img.id) {
                 return {...t, img: {...t.img, starred: !t.img.starred}};
               }
               return t;

@@ -61,7 +61,7 @@ export function TextQueryForm({
         <Button
           type='submit'
           variant='contained'
-          disabled={textPrompt.trim().length == 0}
+          disabled={textPrompt.trim().length === 0}
           color={exact ? 'secondary' : 'primary'}
           sx={{width: 'clamp(80px, 10%, 200px)'}}
           size='large'

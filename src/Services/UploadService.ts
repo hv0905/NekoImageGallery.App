@@ -14,7 +14,7 @@ export class UploadService {
 
   private async uploadWorker() {
     for (const item of this.queue) {
-      if (item.status != UploadTaskStatus.Pending) {
+      if (item.status !== UploadTaskStatus.Pending) {
         continue;
       }
       item.status = UploadTaskStatus.Uploading;
