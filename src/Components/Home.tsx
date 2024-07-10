@@ -15,7 +15,7 @@ export function Home() {
   const [result, setResult] = useState<SearchResult[] | null>(null);
 
   const [loading, setLoading] = useState(false);
-  const [noMore, setNoMore] = useState(false);
+  const [noMore, setNoMore] = useState(true);
 
   const [appSettings] = useContext(AppSettings);
 
@@ -92,24 +92,18 @@ export function Home() {
       </Collapse>
 
       {result && (
-        <>
-          <ImageGallery
-            searchResult={result}
-            setSearchResult={setResult}
-            onSimilarSearch={search}
-          ></ImageGallery>
-          {loading ? (
-            <Box display='flex' justifyContent='center' sx={{width: '100%'}}>
-              <CircularProgress sx={{my: '20px'}} />
-            </Box>
-          ) : (
-            !noMore && (
-              <Button fullWidth sx={{my: '20px'}} onClick={() => queryNext()}>
-                Load More
-              </Button>
-            )
-          )}
-        </>
+        <ImageGallery searchResult={result} setSearchResult={setResult} onSimilarSearch={search} />
+      )}
+      {loading ? (
+        <Box display='flex' justifyContent='center' sx={{width: '100%'}}>
+          <CircularProgress sx={{my: '20px'}} />
+        </Box>
+      ) : (
+        !noMore && (
+          <Button fullWidth sx={{my: '20px'}} onClick={() => queryNext()}>
+            Load More
+          </Button>
+        )
       )}
       <AuthenticationDialog />
     </>

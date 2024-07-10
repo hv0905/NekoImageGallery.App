@@ -52,6 +52,7 @@ const ImageGalleryItem = memo(function ImageGalleryItem({
         maxHeight: '500px',
         flexDirection: 'column',
         textDecoration: 'none',
+        animation: '0.4s ease-out fade-in',
       }}
     >
       <Box
