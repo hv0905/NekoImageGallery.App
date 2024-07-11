@@ -102,26 +102,25 @@ export function ImageOperationMenu({
             <ListItemText>Categories: {context.img.categories.join(', ')}</ListItemText>
           </MenuItem>
         )}
-        {settings.useAdminPortal && (
-          <>
-            <Divider />
-            <MenuItem
-              onClick={() => {
-                onStar();
-                onClose();
-              }}
-            >
-              <ListItemIcon>{context.img.starred ? <Favorite /> : <FavoriteBorder />}</ListItemIcon>
-              <ListItemText>{context.img.starred ? 'Unstar' : 'Star'}</ListItemText>
-            </MenuItem>
-            <MenuItem onClick={handleDelete}>
-              <ListItemIcon>
-                <Delete fontSize='small' color='error' />
-              </ListItemIcon>
-              <ListItemText sx={{color: 'error.main'}}>Delete</ListItemText>
-            </MenuItem>
-          </>
-        )}
+        {settings.useAdminPortal && [
+          <Divider key={0} />,
+          <MenuItem
+            key={1}
+            onClick={() => {
+              onStar();
+              onClose();
+            }}
+          >
+            <ListItemIcon>{context.img.starred ? <Favorite /> : <FavoriteBorder />}</ListItemIcon>
+            <ListItemText>{context.img.starred ? 'Unstar' : 'Star'}</ListItemText>
+          </MenuItem>,
+          <MenuItem onClick={handleDelete} key={2}>
+            <ListItemIcon>
+              <Delete fontSize='small' color='error' />
+            </ListItemIcon>
+            <ListItemText sx={{color: 'error.main'}}>Delete</ListItemText>
+          </MenuItem>,
+        ]}
       </Menu>
       <Dialog
         open={deleteDialogOpen}
