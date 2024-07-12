@@ -1,4 +1,4 @@
-import {Box, IconButton, Paper, PopoverPosition, Typography} from '@mui/material';
+import {Box, ButtonBase, IconButton, Paper, PopoverPosition, Typography} from '@mui/material';
 import {SearchResult} from '../Models/SearchResult';
 import {Environment} from '../environment';
 import {Dispatch, SetStateAction, memo, useCallback, useContext, useState} from 'react';
@@ -45,7 +45,7 @@ const ImageGalleryItem = memo(function ImageGalleryItem({
         animation: '0.4s ease-out fade-in',
       }}
     >
-      <Box
+      <ButtonBase
         sx={{
           flexGrow: 1,
           width: '100%',
@@ -60,7 +60,7 @@ const ImageGalleryItem = memo(function ImageGalleryItem({
         data-caption={`Similarity: ${(resultInfo.score * 100).toFixed(2)}%`}
       >
         <img src={resultInfo.img.thumbnail_url ?? resultInfo.img.url} style={{width: '100%'}} />
-      </Box>
+      </ButtonBase>
       {showInfoBar && (
         <Box
           display='flex'
