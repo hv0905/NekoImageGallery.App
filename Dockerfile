@@ -8,4 +8,7 @@ RUN yarn run build
 FROM hub.aiursoft.cn/aiursoft/static
 COPY --from=yarn-env /app/dist /data
 
-ENTRYPOINT [ "/app/static", "--port", "5000", "--path", "/data", "--not-found-page", "/" ]
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT [ "/app/entrypoint.sh" ]
