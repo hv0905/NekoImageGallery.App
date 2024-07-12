@@ -1,17 +1,7 @@
 import {Box, IconButton, Paper, PopoverPosition, Typography} from '@mui/material';
 import {SearchResult} from '../Models/SearchResult';
 import {Environment} from '../environment';
-import {
-  Dispatch,
-  SetStateAction,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import {Fancybox} from '@fancyapps/ui';
+import {Dispatch, SetStateAction, memo, useCallback, useContext, useState} from 'react';
 import {SearchQuery, SimilarSearchQuery} from '../Services/SearchQuery';
 import {ImageOperationMenu} from './ImageOperationMenu';
 import {deleteImage, updateOpt} from '../Services/AdminApi';
@@ -21,7 +11,7 @@ import {AppSettings} from './Contexts';
 import {Favorite, FavoriteBorder, MoreVert} from '@mui/icons-material';
 import {AlertSnack} from './AlertSnack';
 import {useAlertSnack} from '../Hooks/useAlertSnack';
-import ImageSearch from '../Assets/Icons/ImageSearch.svg?raw';
+import {FancyboxWrapper} from './FancyBoxWrapper';
 
 const ImageGalleryItem = memo(function ImageGalleryItem({
   resultInfo,
@@ -111,7 +101,6 @@ export function ImageGallery({
   setSearchResult: Dispatch<SetStateAction<SearchResult[] | null>>;
   onSimilarSearch?: (query: SearchQuery) => void;
 }) {
-  const containerRef = useRef(null);
   const [appSettings] = useContext(AppSettings);
   const [contextMenu, setContextMenu] = useState<PopoverPosition | null>(null);
   const [contextMenuEl, setContextMenuEl] = useState<HTMLElement | null>(null);
@@ -129,34 +118,6 @@ export function ImageGallery({
       t.img.thumbnail_url = Environment.ApiUrl + t.img.thumbnail_url;
     }
   });
-
-  useEffect(() => {
-    const container = containerRef.current;
-    Fancybox.bind(container, '[data-fancybox]', {
-      Toolbar: {
-        items: {
-          similar: {
-            tpl: `<button title="Similar Search" class="f-button f-button-custom">${ImageSearch}</button>`,
-            click: () => {
-              const index = Fancybox.getInstance()?.getSlide()?.index ?? -1;
-              if (index === -1) return;
-              onSimilarSearch?.(new SimilarSearchQuery(searchResult[index].img));
-            },
-          },
-        },
-        display: {
-          left: ['infobar'],
-          middle: ['zoomIn', 'zoomOut', 'toggle1to1', 'rotateCCW', 'rotateCW', 'flipX', 'flipY'],
-          right: ['slideshow', 'similar', 'download', 'thumbs', 'close'],
-        },
-      },
-    });
-
-    return () => {
-      Fancybox.unbind(container);
-      Fancybox.close();
-    };
-  }, [containerRef, searchResult, onSimilarSearch]);
 
   const handleContextMenu = useCallback((e: React.MouseEvent, item: SearchResult) => {
     e.preventDefault();
@@ -221,8 +182,7 @@ export function ImageGallery({
   );
 
   return (
-    <Box
-      ref={containerRef}
+    <FancyboxWrapper
       onContextMenu={e => {
         if (contextMenuOpen) {
           e.preventDefault();
@@ -237,6 +197,10 @@ export function ImageGallery({
         justifyItems: 'center',
         gap: 1,
       }}
+      onSimilarClick={useCallback(
+        (index: number) => onSimilarSearch?.(new SimilarSearchQuery(searchResult[index].img)),
+        [onSimilarSearch, searchResult]
+      )}
     >
       {searchResult.map(t => (
         <ImageGalleryItem
@@ -265,6 +229,6 @@ export function ImageGallery({
         />
       )}
       <AlertSnack {...alertProps} />
-    </Box>
+    </FancyboxWrapper>
   );
 }
