@@ -13,6 +13,12 @@ import {AlertSnack} from './AlertSnack';
 import {useAlertSnack} from '../Hooks/useAlertSnack';
 import {FancyboxWrapper} from './FancyBoxWrapper';
 
+function transformUrl(url: string) {
+    if (url.startsWith('/')) {
+      return Environment.ApiUrl + url;
+    }
+}
+
 const ImageGalleryItem = memo(function ImageGalleryItem({
   resultInfo,
   showInfoBar,
@@ -56,10 +62,10 @@ const ImageGalleryItem = memo(function ImageGalleryItem({
         }}
         component='a'
         data-fancybox='gallery'
-        href={resultInfo.img.url}
+        href={transformUrl(resultInfo.img.url)}
         data-caption={`Similarity: ${(resultInfo.score * 100).toFixed(2)}%`}
       >
-        <img src={resultInfo.img.thumbnail_url ?? resultInfo.img.url} style={{width: '100%'}} />
+        <img src={transformUrl(resultInfo.img.thumbnail_url ?? resultInfo.img.url)} style={{width: '100%'}} />
       </ButtonBase>
       {showInfoBar && (
         <Box
@@ -109,15 +115,6 @@ export function ImageGallery({
   const [alertProps, fireSnack] = useAlertSnack();
 
   const contextMenuOpen = !!contextMenu || !!contextMenuEl;
-
-  searchResult.forEach(t => {
-    if (t.img.url.startsWith('/')) {
-      t.img.url = Environment.ApiUrl + t.img.url;
-    }
-    if (t.img.thumbnail_url?.startsWith('/')) {
-      t.img.thumbnail_url = Environment.ApiUrl + t.img.thumbnail_url;
-    }
-  });
 
   const handleContextMenu = useCallback((e: React.MouseEvent, item: SearchResult) => {
     e.preventDefault();
