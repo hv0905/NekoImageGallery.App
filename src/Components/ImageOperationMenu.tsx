@@ -75,7 +75,7 @@ export function ImageOperationMenu({
           </ListItemIcon>
           <ListItemText>Similar search</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => handleCopyText(transformUrl(context.img.url))}>
+        <MenuItem onClick={() => handleCopyText(transformUrl(context.img.url, true))}>
           <ListItemIcon>
             <Link fontSize='small' />
           </ListItemIcon>
