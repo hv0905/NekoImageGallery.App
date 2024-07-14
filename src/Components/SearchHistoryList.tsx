@@ -19,6 +19,7 @@ import {
   TextsmsTwoTone,
 } from '@mui/icons-material';
 import {SearchBasis} from '../Models/SearchBasis';
+import { transformUrl } from '../Services/StaticFiles';
 
 function TextSearchRecord({query}: {query: TextSearchQuery}) {
   return (
@@ -81,7 +82,7 @@ function ImageSearchRecord({query}: {query: ImageSearchQuery}) {
 function SimilarSearchRecord({query}: {query: SimilarSearchQuery}) {
   return (
     <ImageBaseSearchRecord
-      imgUrl={query.img.thumbnail_url ?? query.img.url}
+      imgUrl={transformUrl(query.img.thumbnail_url ?? query.img.url)}
       modeDesc='similar'
       modeColor='secondary'
     />

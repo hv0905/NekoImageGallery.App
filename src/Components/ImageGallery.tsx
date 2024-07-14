@@ -1,6 +1,5 @@
 import {Box, ButtonBase, IconButton, Paper, PopoverPosition, Typography} from '@mui/material';
 import {SearchResult} from '../Models/SearchResult';
-import {Environment} from '../environment';
 import {Dispatch, SetStateAction, memo, useCallback, useContext, useState} from 'react';
 import {SearchQuery, SimilarSearchQuery} from '../Services/SearchQuery';
 import {ImageOperationMenu} from './ImageOperationMenu';
@@ -12,12 +11,7 @@ import {Favorite, FavoriteBorder, MoreVert} from '@mui/icons-material';
 import {AlertSnack} from './AlertSnack';
 import {useAlertSnack} from '../Hooks/useAlertSnack';
 import {FancyboxWrapper} from './FancyBoxWrapper';
-
-function transformUrl(url: string) {
-    if (url.startsWith('/')) {
-      return Environment.ApiUrl + url;
-    }
-}
+import { transformUrl } from '../Services/StaticFiles';
 
 const ImageGalleryItem = memo(function ImageGalleryItem({
   resultInfo,

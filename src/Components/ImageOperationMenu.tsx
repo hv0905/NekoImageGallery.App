@@ -24,6 +24,7 @@ import React, {useContext, useState} from 'react';
 import {SearchResult} from '../Models/SearchResult';
 import {copyTextToClipboard} from '../Utils/Clipboard';
 import {AppSettings} from './Contexts';
+import { transformUrl } from '../Services/StaticFiles';
 
 export function ImageOperationMenu({
   context,
@@ -57,7 +58,7 @@ export function ImageOperationMenu({
   return (
     <>
       <Menu open={open} onClose={onClose} {...props}>
-        <MenuItem component='a' href={context.img.url} target='_blank'>
+        <MenuItem component='a' href={transformUrl(context.img.url)} target='_blank'>
           <ListItemIcon>
             <OpenInNew fontSize='small' />
           </ListItemIcon>
@@ -74,7 +75,7 @@ export function ImageOperationMenu({
           </ListItemIcon>
           <ListItemText>Similar search</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => handleCopyText(context.img.url)}>
+        <MenuItem onClick={() => handleCopyText(transformUrl(context.img.url))}>
           <ListItemIcon>
             <Link fontSize='small' />
           </ListItemIcon>
