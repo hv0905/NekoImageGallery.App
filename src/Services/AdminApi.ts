@@ -15,7 +15,8 @@ export function uploadImage(
   local = true,
   starred = false,
   skipOcr = false,
-  categories = ''
+  categories = '',
+  comments: string | undefined = undefined
 ) {
   const formData = new FormData();
   formData.append('image_file', file);
@@ -28,6 +29,7 @@ export function uploadImage(
       starred,
       skip_ocr: skipOcr,
       categories,
+      comments,
     },
   });
 }

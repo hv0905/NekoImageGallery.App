@@ -134,6 +134,19 @@ export function SettingsDialog({open, onClose}: {open: boolean; onClose: () => v
                 }
               />
             </Tooltip>
+            <Tooltip title='This will include the name (and the relative path if using add directory) of the uploaded file as a comment. Comments are accessible for all users with access to the server. This might help containing extra context for the image.'>
+              <LabelledSwitch
+                label='Upload file name as file comment'
+                sx={{width: '100%'}}
+                checked={editingSettings.includeFilenameAsComment}
+                onCheckedChange={e =>
+                  setEditingSettings({
+                    ...editingSettings,
+                    includeFilenameAsComment: e,
+                  })
+                }
+              />
+            </Tooltip>
           </Collapse>
         ) : (
           <Alert severity='info'>The admin portal of this server isn&apos;t enabled.</Alert>

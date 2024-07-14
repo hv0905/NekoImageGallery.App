@@ -9,7 +9,8 @@ export class UploadService {
     public queue: UploadTask[],
     public workersCount = 4,
     public statusUpdateCallback?: () => void,
-    public enableAvoidDuplication = false
+    public enableAvoidDuplication = false,
+    public includeFilenameAsComment = false
   ) {}
 
   private async uploadWorker() {
@@ -29,7 +30,14 @@ export class UploadService {
             continue;
           }
         }
-        await uploadImage(item.file, true, item.starred, item.skipOcr, item.categories);
+        await uploadImage(
+          item.file,
+          true,
+          item.starred,
+          item.skipOcr,
+          item.categories,
+          this.includeFilenameAsComment ? item.file.name : undefined
+        );
         item.status = UploadTaskStatus.Complete;
       } catch (err) {
         if (isAxiosError<ErrorProtocol>(err)) {

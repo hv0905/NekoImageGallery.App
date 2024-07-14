@@ -132,7 +132,8 @@ export function UploadDialog({open, onClose}: {open: boolean; onClose: () => voi
       queue,
       4,
       updateRenderQueueFromWorking,
-      appSettings.duplicateAvoidMode
+      appSettings.duplicateAvoidMode,
+      appSettings.includeFilenameAsComment
     );
     uploadService.current
       .upload()
@@ -198,7 +199,7 @@ export function UploadDialog({open, onClose}: {open: boolean; onClose: () => voi
           <Box display='flex' alignItems='center' gap={1} maxWidth='100%' overflow='hidden'>
             {t.starred ? <Favorite /> : <FavoriteBorder />}
             <Typography textOverflow='ellipsis' maxWidth='100%' overflow='hidden' noWrap>
-              {t.file.name}
+              {t.uploadName}
             </Typography>
           </Box>
           <Box display='flex' gridRow='2/3' gap={1}>

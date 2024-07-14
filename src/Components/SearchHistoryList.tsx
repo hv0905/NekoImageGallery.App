@@ -19,7 +19,7 @@ import {
   TextsmsTwoTone,
 } from '@mui/icons-material';
 import {SearchBasis} from '../Models/SearchBasis';
-import { transformUrl } from '../Services/StaticFiles';
+import {transformUrl} from '../Services/StaticFiles';
 
 function TextSearchRecord({query}: {query: TextSearchQuery}) {
   return (

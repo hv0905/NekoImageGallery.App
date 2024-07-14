@@ -24,7 +24,7 @@ import React, {useContext, useState} from 'react';
 import {SearchResult} from '../Models/SearchResult';
 import {copyTextToClipboard} from '../Utils/Clipboard';
 import {AppSettings} from './Contexts';
-import { transformUrl } from '../Services/StaticFiles';
+import {transformUrl} from '../Services/StaticFiles';
 
 export function ImageOperationMenu({
   context,

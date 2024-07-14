@@ -11,7 +11,7 @@ import {Favorite, FavoriteBorder, MoreVert} from '@mui/icons-material';
 import {AlertSnack} from './AlertSnack';
 import {useAlertSnack} from '../Hooks/useAlertSnack';
 import {FancyboxWrapper} from './FancyBoxWrapper';
-import { transformUrl } from '../Services/StaticFiles';
+import {transformUrl} from '../Services/StaticFiles';
 
 const ImageGalleryItem = memo(function ImageGalleryItem({
   resultInfo,
@@ -59,7 +59,10 @@ const ImageGalleryItem = memo(function ImageGalleryItem({
         href={transformUrl(resultInfo.img.url)}
         data-caption={`Similarity: ${(resultInfo.score * 100).toFixed(2)}%`}
       >
-        <img src={transformUrl(resultInfo.img.thumbnail_url ?? resultInfo.img.url)} style={{width: '100%'}} />
+        <img
+          src={transformUrl(resultInfo.img.thumbnail_url ?? resultInfo.img.url)}
+          style={{width: '100%'}}
+        />
       </ButtonBase>
       {showInfoBar && (
         <Box
