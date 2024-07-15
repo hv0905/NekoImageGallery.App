@@ -36,7 +36,7 @@ export class UploadService {
           item.starred,
           item.skipOcr,
           item.categories,
-          this.includeFilenameAsComment ? item.file.name : undefined
+          this.includeFilenameAsComment ? item.uploadName : undefined
         );
         item.status = UploadTaskStatus.Complete;
       } catch (err) {
