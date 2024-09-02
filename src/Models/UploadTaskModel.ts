@@ -10,10 +10,10 @@ export class UploadTask {
   private static counter = 0;
   public errorText = '';
   public readonly id: number;
-  public uploadName = '';
 
   constructor(
     public file: File,
+    public uploadName = '',
     public progress = 0,
     public status: UploadTaskStatus = UploadTaskStatus.Pending,
     public categories = '',
@@ -22,6 +22,6 @@ export class UploadTask {
     public skipOcr = false
   ) {
     this.id = UploadTask.counter++;
-    this.uploadName = file.webkitRelativePath || file.name; // webkitRelativePath is empty string when not in a directory
+    this.uploadName = this.uploadName || file.webkitRelativePath || file.name; // webkitRelativePath is empty string when not in a directory
   }
 }

@@ -1,17 +1,17 @@
 import {DragEvent, ClipboardEvent} from 'react';
 
-function globFiles(item: FileSystemEntry, base = ''): Promise<File[]> {
+function traverseFiles(item: FileSystemEntry, base = ''): Promise<[File, string][]> {
   if (item.isFile) {
     return new Promise(resolve => {
       (item as FileSystemFileEntry).file(file => {
-        resolve([file]);
+        resolve([[file, base + item.name]]);
       });
     });
   } else if (item.isDirectory) {
     return new Promise(resolve => {
       const reader = (item as FileSystemDirectoryEntry).createReader();
       reader.readEntries(async entries => {
-        const files = await Promise.all(entries.map(t => globFiles(t, base + item.name + '/')));
+        const files = await Promise.all(entries.map(t => traverseFiles(t, base + item.name + '/')));
         resolve(files.flat());
       });
     });
@@ -22,7 +22,7 @@ function globFiles(item: FileSystemEntry, base = ''): Promise<File[]> {
 
 export function useFileDropper(
   fileAccept: string[] = ['*/*'],
-  onSuccess?: (files: File[]) => void,
+  onSuccess?: (files: [File, string][]) => void,
   onIncorrectType?: () => void
 ) {
   async function processList(items: DataTransferItemList) {
@@ -31,11 +31,11 @@ export function useFileDropper(
         Array.from(items ?? [])
           .map(t => t.webkitGetAsEntry())
           .filter(t => !!t)
-          .map(t => globFiles(t))
+          .map(t => traverseFiles(t))
       )
     )
       .flat()
-      .filter(t => fileAccept.includes(t.type));
+      .filter(t => fileAccept.includes(t[0].type));
 
     if (files.length > 0) {
       onSuccess?.(files);

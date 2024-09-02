@@ -60,7 +60,7 @@ export function ImageQueryForm({onSubmit}: {onSubmit?: (query: SearchQuery) => v
           }}
           {...useFileDropper(
             imageFileTypes,
-            f => setFile(f[0]),
+            f => setFile(f[0][0]),
             () => setNotificationOpen(true)
           )}
         >

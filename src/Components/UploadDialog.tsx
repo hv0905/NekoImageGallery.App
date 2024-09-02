@@ -95,6 +95,13 @@ export function UploadDialog({open, onClose}: {open: boolean; onClose: () => voi
     setUploadQueue([...uploadQueue, ...newEntries.map(file => new UploadTask(file))]);
   }
 
+  function addImagesWithCustomName(newEntries: [File, string][]) {
+    setUploadQueue([
+      ...uploadQueue,
+      ...newEntries.map(([file, name]) => new UploadTask(file, name)),
+    ]);
+  }
+
   function notifyBadImg() {
     fireSnack(
       'Invalid file type. Only jpeg, png, webp, gif image files are currently allowed.',
@@ -228,7 +235,7 @@ export function UploadDialog({open, onClose}: {open: boolean; onClose: () => voi
       fullWidth
       maxWidth='lg'
       scroll='paper'
-      {...useFileDropper(imageFileTypes, addImages, notifyBadImg)}
+      {...useFileDropper(imageFileTypes, addImagesWithCustomName, notifyBadImg)}
     >
       <DialogTitle>Upload new images</DialogTitle>
       <DialogContent>
