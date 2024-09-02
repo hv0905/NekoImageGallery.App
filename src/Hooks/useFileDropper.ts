@@ -3,13 +3,13 @@ import {DragEvent, ClipboardEvent} from 'react';
 function globFiles(item: FileSystemEntry, base = ''): Promise<File[]> {
   if (item.isFile) {
     return new Promise(resolve => {
-      (<FileSystemFileEntry>item).file(file => {
+      (item as FileSystemFileEntry).file(file => {
         resolve([file]);
       });
     });
   } else if (item.isDirectory) {
     return new Promise(resolve => {
-      const reader = (<FileSystemDirectoryEntry>item).createReader();
+      const reader = (item as FileSystemDirectoryEntry).createReader();
       reader.readEntries(async entries => {
         const files = await Promise.all(entries.map(t => globFiles(t, base + item.name + '/')));
         resolve(files.flat());
@@ -25,8 +25,7 @@ export function useFileDropper(
   onSuccess?: (files: File[]) => void,
   onIncorrectType?: () => void
 ) {
-
-  async function processList(items: DataTransferItemList){
+  async function processList(items: DataTransferItemList) {
     const files = (
       await Promise.all(
         Array.from(items ?? [])

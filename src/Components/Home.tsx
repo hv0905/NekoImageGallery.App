@@ -26,7 +26,7 @@ export function Home() {
       if (!activeQuery.current) return;
       setLoading(true);
       void activeQuery.current
-        .querySearch(30, reset ? 0 : result?.length ?? 0)
+        .querySearch(30, reset ? 0 : (result?.length ?? 0))
         .then(t => {
           if (reset) {
             setResult(t.result);

@@ -36,7 +36,7 @@ export function AdvancedQueryForm({
   const [basis, setBasis] = useState<SearchBasis>(SearchBasis.vision);
   const apiInfo = useContext(ApiInfo);
 
-  const ocrAvail = !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
+  const ocrAvail = !apiInfo?.available_basis || apiInfo.available_basis.includes('ocr');
 
   const submitable =
     (positivePrompt.length > 0 || negativePrompt.length > 0) &&

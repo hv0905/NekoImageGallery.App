@@ -20,7 +20,7 @@ export function QueryArea({
   const [tab, setTab] = useState(1);
   const apiInfo = useContext(ApiInfo);
 
-  const ocrAvail = !apiInfo?.available_basis || apiInfo.available_basis.indexOf('ocr') >= 0;
+  const ocrAvail = !apiInfo?.available_basis || apiInfo.available_basis.includes('ocr');
 
   const inputs = [
     <SearchHistoryList

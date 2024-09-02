@@ -14,7 +14,7 @@ export function selectFiles(multiple = false, accept = imageFileTypes): Promise<
       if (files.length > 0) {
         resolve(files);
       } else {
-        reject();
+        reject(new Error('No files selected'));
       }
     };
     input.click();
@@ -34,7 +34,7 @@ export function selectDirectory(accept: string[] | null = imageFileTypes): Promi
       if (files.length > 0) {
         resolve(Array.from(files));
       } else {
-        reject();
+        reject(new Error('No files selected'));
       }
     };
     input.click();

@@ -71,3 +71,5 @@ yarn run lint
 版权所有2023 EdgeNeko
 
 根据GPLv3许可证授权。
+
+请注意：本项目使用了FancyBox相关代码，如果您需要将其用于商业用途，您可能需要购买FancyBox商业许可。
