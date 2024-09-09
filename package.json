@@ -15,7 +15,7 @@
     "@emotion/styled": "^11.13.0",
     "@fancyapps/ui": "^5.0.36",
     "@mui/icons-material": "^6.0.1",
-    "@mui/lab": "^6.0.0-beta.8",
+    "@mui/lab": "^6.0.0-dev.240424162023-9968b4889d",
     "@mui/material": "^6.0.1",
     "axios": "^1.7.6",
     "react": "^18.3.1",
