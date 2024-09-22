@@ -29,9 +29,14 @@ export function useFileDropper(
     const files = (
       await Promise.all(
         Array.from(items ?? [])
-          .map(t => t.webkitGetAsEntry())
+          .map(t => t.webkitGetAsEntry() ?? t.getAsFile()) // t.webkitGetAsEntry() not work for copied images.
           .filter(t => !!t)
-          .map(t => traverseFiles(t))
+          .map(t => {
+            if (t instanceof File) {
+              return Promise.resolve([[t, t.name] as [File, string]]);
+            }
+            return traverseFiles(t);
+          })
       )
     )
       .flat()
