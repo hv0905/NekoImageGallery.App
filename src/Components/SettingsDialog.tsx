@@ -121,10 +121,17 @@ export function SettingsDialog({open, onClose}: {open: boolean; onClose: () => v
                 })
               }
             />
-            <Tooltip title='[Alpha] When enabled, this option checks if an image already exists on the server by its SHA-1 digest before uploading. This can save time and reduce network traffic for potentially duplicate images. Duplicate images are always rejected by the server, even if this option is not enabled.'>
+            <Tooltip
+              title={
+                window.isSecureContext
+                  ? '[Alpha] When enabled, this option checks if an image already exists on the server by its SHA-1 digest before uploading. This can save time and reduce network traffic for potentially duplicate images. Duplicate images are always rejected by the server, even if this option is not enabled.'
+                  : "Sorry, but this feature doesn't support on insecure context. Contact your admin for more information."
+              }
+            >
               <LabelledSwitch
                 label='Check for Duplicate Images Before Upload'
                 sx={{width: '100%'}}
+                disabled={!window.isSecureContext}
                 checked={editingSettings.duplicateAvoidMode}
                 onCheckedChange={e =>
                   setEditingSettings({

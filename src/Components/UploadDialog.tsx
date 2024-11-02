@@ -64,9 +64,9 @@ export function UploadDialog({open, onClose}: {open: boolean; onClose: () => voi
   const percentage = (completedTasks / totalTasks) * 100;
 
   const ready =
-    uploadQueue.filter(
+    uploadQueue.some(
       t => t.status === UploadTaskStatus.Pending || t.status === UploadTaskStatus.Error
-    ).length > 0;
+    );
 
   useEffect(() => {
     if (uploading) {
@@ -139,7 +139,7 @@ export function UploadDialog({open, onClose}: {open: boolean; onClose: () => voi
       queue,
       4,
       updateRenderQueueFromWorking,
-      appSettings.duplicateAvoidMode,
+      appSettings.duplicateAvoidMode && window.isSecureContext,
       appSettings.includeFilenameAsComment
     );
     uploadService.current
