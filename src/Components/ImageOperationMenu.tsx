@@ -1,4 +1,5 @@
 import {
+  Biotech,
   ContentCopy,
   Delete,
   Favorite,
@@ -31,6 +32,7 @@ export function ImageOperationMenu({
   open,
   onClose,
   onSimilarSearch,
+  onMixedSearch,
   onStar,
   onDelete,
   ...props
@@ -39,6 +41,7 @@ export function ImageOperationMenu({
   open: boolean;
   onClose: () => void;
   onSimilarSearch: () => void;
+  onMixedSearch?: () => void;
   onStar: () => void;
   onDelete: () => void;
 } & Omit<React.ComponentProps<typeof Menu>, 'open' | 'onClose' | 'children'>) {
@@ -74,6 +77,17 @@ export function ImageOperationMenu({
             <Search fontSize='small' />
           </ListItemIcon>
           <ListItemText>Similar search</ListItemText>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            onMixedSearch?.();
+            onClose();
+          }}
+        >
+          <ListItemIcon>
+            <Biotech fontSize='small' />
+          </ListItemIcon>
+          <ListItemText>Mixed search</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => handleCopyText(transformUrl(context.img.url, true))}>
           <ListItemIcon>

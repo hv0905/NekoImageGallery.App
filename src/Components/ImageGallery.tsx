@@ -1,7 +1,21 @@
-import {Box, ButtonBase, IconButton, Paper, PopoverPosition, Typography} from '@mui/material';
+import {
+  Box,
+  Button,
+  ButtonBase,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  Paper,
+  PopoverPosition,
+  TextField,
+  Typography,
+} from '@mui/material';
 import {SearchResult} from '../Models/SearchResult';
 import {Dispatch, SetStateAction, memo, useCallback, useContext, useState} from 'react';
-import {SearchQuery, SimilarSearchQuery} from '../Services/SearchQuery';
+import {MixedSearchQuery, SearchQuery, SimilarSearchQuery} from '../Services/SearchQuery';
 import {ImageOperationMenu} from './ImageOperationMenu';
 import {deleteImage, updateOpt} from '../Services/AdminApi';
 import {isAxiosError} from 'axios';
@@ -108,6 +122,8 @@ export function ImageGallery({
   const [contextMenu, setContextMenu] = useState<PopoverPosition | null>(null);
   const [contextMenuEl, setContextMenuEl] = useState<HTMLElement | null>(null);
   const [contextMenuItem, setContextMenuItem] = useState<SearchResult | null>(null);
+  const [mixedSearchItem, setMixedSearchItem] = useState<SearchResult | null>(null);
+  const [mixedSearchText, setMixedSearchText] = useState<string>('');
 
   const [alertProps, fireSnack] = useAlertSnack();
 
@@ -220,9 +236,42 @@ export function ImageGallery({
           onDelete={handleDelete}
           onStar={() => contextMenuItem && handleStar(contextMenuItem)}
           onSimilarSearch={handleSimilarSearch}
+          onMixedSearch={() => setMixedSearchItem(contextMenuItem)}
         />
       )}
       <AlertSnack {...alertProps} />
+      <Dialog open={!!mixedSearchItem} onClose={() => setMixedSearchItem(null)}>
+        <DialogTitle>Mixed Search</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Mixed search can search for similar images of the provide image with an addition
+            description.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin='dense'
+            label='Criteria'
+            fullWidth
+            variant='standard'
+            value={mixedSearchText}
+            onChange={e => setMixedSearchText(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setMixedSearchItem(null)}>Cancel</Button>
+          <Button
+            disabled={!mixedSearchText.trim()}
+            onClick={() => {
+              if (mixedSearchItem) {
+                onSimilarSearch?.(new MixedSearchQuery(mixedSearchText, mixedSearchItem.img));
+              }
+              setMixedSearchItem(null);
+            }}
+          >
+            Search
+          </Button>
+        </DialogActions>
+      </Dialog>
     </FancyboxWrapper>
   );
 }

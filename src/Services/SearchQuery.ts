@@ -1,5 +1,6 @@
 import {AdvancedSearchModel, CombinedSearchModel} from '../Models/AdvancedSearchModel';
 import {Image} from '../Models/Image';
+import { MixedSearchModel } from '../Models/MixedSearchModel';
 import {SearchApiResponse} from '../Models/SearchApiResponse';
 import {SearchBasis} from '../Models/SearchBasis';
 import {SearchFilterOptions} from '../Models/SearchFilterOptions';
@@ -85,6 +86,40 @@ export class SimilarSearchQuery extends SearchQuery {
     );
     return response.data;
   }
+}
+
+export class MixedSearchQuery extends SearchQuery {
+
+  constructor(
+    public text: string,
+    public image: Image | Blob) {
+      super();
+    }
+
+    async querySearch(count: number, skip: number): Promise<SearchApiResponse> {
+      const model: MixedSearchModel = {
+        text: this.text,
+      };
+
+      if (this.image instanceof Blob) {
+        model.image_b64encoded = await blobToBase64(this.image);
+      } else {
+        model.similar_with_id = this.image.id;
+      }
+
+      const response = await getClient().post<SearchApiResponse>(
+        `/search/mixed`,
+        model,
+        {
+          params: {
+            count: count,
+            skip: skip,
+            ...this.getFilterOptions(),
+          },
+        }
+      );
+      return response.data;
+    }
 }
 
 export class RandomSearchQuery extends SearchQuery {
