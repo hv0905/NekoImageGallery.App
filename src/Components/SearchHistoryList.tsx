@@ -4,6 +4,7 @@ import {
   AdvancedSearchQuery,
   CombinedSearchQuery,
   ImageSearchQuery,
+  MixedSearchQuery,
   RandomSearchQuery,
   SearchQuery,
   SimilarSearchQuery,
@@ -45,10 +46,12 @@ function RandomPickRecord() {
 
 function ImageBaseSearchRecord({
   imgUrl,
+  comment,
   modeDesc,
   modeColor = 'default',
 }: {
   imgUrl: string;
+  comment?: string;
   modeDesc: string;
   modeColor: ChipProps['color'];
 }) {
@@ -65,6 +68,7 @@ function ImageBaseSearchRecord({
           alt='searched image'
         />
       </Box>
+      {comment && <Typography>{comment}</Typography>}
     </>
   );
 }
@@ -107,6 +111,28 @@ function AdvancedSearchRecord({query}: {query: AdvancedSearchQuery | CombinedSea
   );
 }
 
+function MixedSearchRecord({query}: {query: MixedSearchQuery}) {
+  const [imgUrl, setImgUrl] = useState<string>('');
+  useEffect(() => {
+    if (query.image instanceof Blob) {
+      const url = URL.createObjectURL(query.image);
+      setImgUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setImgUrl(transformUrl(query.image.thumbnail_url ?? query.image.url));
+    }
+  }, [query]);
+
+  return (
+    <ImageBaseSearchRecord
+      imgUrl={imgUrl}
+      comment={query.text}
+      modeDesc='mixed'
+      modeColor='primary'
+    />
+  );
+}
+
 function SearchRecord({query}: {query: SearchQuery}) {
   if (query instanceof TextSearchQuery) {
     return <TextSearchRecord query={query} />;
@@ -118,6 +144,8 @@ function SearchRecord({query}: {query: SearchQuery}) {
     return <AdvancedSearchRecord query={query} />;
   } else if (query instanceof RandomSearchQuery) {
     return <RandomPickRecord />;
+  } else if (query instanceof MixedSearchQuery) {
+    return <MixedSearchRecord query={query} />;
   }
   throw new Error('Unknown search type');
 }
