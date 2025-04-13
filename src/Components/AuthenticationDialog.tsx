@@ -12,7 +12,6 @@ import {useState, useContext} from 'react';
 import {WelcomeApi} from '../Services/WelcomeApi';
 import {resetClient} from '../Services/Base';
 import {ApiInfo} from './Contexts';
-import {LoadingButton} from '@mui/lab';
 
 export function AuthenticationDialog() {
   const [open, setOpen] = useState(true);
@@ -68,7 +67,7 @@ export function AuthenticationDialog() {
         />
       </DialogContent>
       <DialogActions>
-        <LoadingButton
+        <Button
           onClick={verifyToken}
           startIcon={<Key />}
           disabled={token.length === 0}
@@ -76,7 +75,7 @@ export function AuthenticationDialog() {
           loading={requesting}
         >
           Unlock
-        </LoadingButton>
+        </Button>
         <Button onClick={() => setOpen(false)}>Cancel</Button>
       </DialogActions>
     </Dialog>

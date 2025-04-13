@@ -14,7 +14,6 @@ import {AppSettings, ApiInfo} from './Contexts';
 import {useContext, useState} from 'react';
 import {resetClient} from '../Services/Base';
 import {WelcomeApi} from '../Services/WelcomeApi';
-import {LoadingButton} from '@mui/lab';
 import {LabelledSwitch} from './LabelledSwitch';
 
 export function SettingsDialog({open, onClose}: {open: boolean; onClose: () => void}) {
@@ -163,9 +162,9 @@ export function SettingsDialog({open, onClose}: {open: boolean; onClose: () => v
         <Button onClick={onClose} color='secondary'>
           Cancel
         </Button>
-        <LoadingButton onClick={saveSettings} disabled={!canSave} loading={saving}>
+        <Button onClick={saveSettings} disabled={!canSave} loading={saving}>
           Save
-        </LoadingButton>
+        </Button>
       </DialogActions>
     </Dialog>
   );
