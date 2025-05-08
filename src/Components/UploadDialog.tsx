@@ -36,7 +36,6 @@ import {
 } from '@mui/material';
 import {UploadTask, UploadTaskStatus} from '../Models/UploadTaskModel';
 import {useContext, useEffect, useRef, useState} from 'react';
-import {LoadingButton} from '@mui/lab';
 import {imageFileTypes, selectDirectory, selectFiles} from '../Utils/SystemDialog';
 import {humanReadableBytes} from '../Utils/StringUtils';
 import {FixedSizeList, ListChildComponentProps} from 'react-window';
@@ -352,7 +351,7 @@ export function UploadDialog({open, onClose}: {open: boolean; onClose: () => voi
         <AlertSnack {...alertProps} />
       </DialogContent>
       <DialogActions>
-        <LoadingButton
+        <Button
           loading={uploading}
           loadingPosition='start'
           startIcon={<Check />}
@@ -360,7 +359,7 @@ export function UploadDialog({open, onClose}: {open: boolean; onClose: () => voi
           disabled={!ready}
         >
           {uploading ? 'Uploading' : 'Upload'}
-        </LoadingButton>
+        </Button>
         <Button onClick={onClose}>Close</Button>
       </DialogActions>
     </Dialog>
