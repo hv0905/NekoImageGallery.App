@@ -14,6 +14,7 @@ export function getClient() {
         'X-Access-Token': token ?? undefined,
         'X-Admin-Token': adminToken ?? undefined,
       },
+      withCredentials: true
     });
   }
 
