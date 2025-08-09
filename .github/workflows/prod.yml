@@ -82,6 +82,7 @@ jobs:
     - name: Prepare Python package
       run: |
         # Clear existing static files except .gitkeep
+        mkdir -p python-package/src/neko_image_gallery_app/static
         cd python-package/src/neko_image_gallery_app/static
         find . -type f ! -name '.gitkeep' -delete
         find . -type d -empty -delete 2>/dev/null || true
@@ -99,8 +100,6 @@ jobs:
         ls -la dist/
     
     - name: Publish to PyPI
-      env:
-        UV_PUBLISH_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
       run: |
         cd python-package
         uv publish
