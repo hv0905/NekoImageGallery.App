@@ -35,9 +35,6 @@ Repository = "https://github.com/NekoImageGallery/NekoImageGallery.App"
 Issues = "https://github.com/NekoImageGallery/NekoImageGallery.App/issues"
 Documentation = "https://github.com/NekoImageGallery/NekoImageGallery.App/blob/main/README.md"
 
-[project.scripts]
-neko-image-gallery-app = "neko_image_gallery_app:main"
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
