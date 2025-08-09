@@ -49,3 +49,8 @@ artifacts = [
   "src/neko_image_gallery_app/static/**/*",
   "src/neko_image_gallery_app/static/*"
 ]
+[tool.hatch.build.targets.wheel]
+artifacts = [
+  "src/neko_image_gallery_app/static/**/*",
+  "src/neko_image_gallery_app/static/*"
+]
