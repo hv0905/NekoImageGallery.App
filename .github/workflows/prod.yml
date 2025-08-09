@@ -1,0 +1,129 @@
+name: Build and Publish to PyPI
+
+on:
+  push:
+    branches: [ master, main ]
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '21'
+        cache: 'yarn'
+    
+    - name: Enable Corepack
+      run: corepack enable
+    
+    - name: Install dependencies
+      run: yarn install --immutable
+    
+    - name: Build frontend with environment variables
+      run: |
+        export VITE_API_URL=/api
+        export VITE_APP_DISPLAY_NAME=NekoImageGallery
+        yarn build
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-dist
+        path: dist/
+        retention-days: 5
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+    
+    - name: Determine version and release type
+      id: version
+      run: |
+        cd python-package
+        if [[ $GITHUB_REF == refs/tags/v* ]]; then
+          # Tag push - use tag version
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=${TAG_VERSION}" >> $GITHUB_OUTPUT
+          echo "is_release=true" >> $GITHUB_OUTPUT
+          echo "prerelease=false" >> $GITHUB_OUTPUT
+          echo "Tag release: ${TAG_VERSION}"
+        else
+          # Branch push - generate unique dev version
+          BASE_VERSION=$(grep -E '^version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          COMMIT_SHORT=$(git rev-parse --short HEAD)
+          NEW_VERSION="${BASE_VERSION}.dev${TIMESTAMP}+${COMMIT_SHORT}"
+          echo "version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+          echo "is_release=true" >> $GITHUB_OUTPUT
+          echo "prerelease=true" >> $GITHUB_OUTPUT
+          echo "Development release: ${NEW_VERSION}"
+        fi
+    
+    - name: Update version in pyproject.toml
+      run: |
+        cd python-package
+        sed -i "s/version = \".*\"/version = \"${{ steps.version.outputs.version }}\"/" pyproject.toml
+        echo "Updated pyproject.toml version to: ${{ steps.version.outputs.version }}"
+        grep "version = " pyproject.toml
+    
+    - name: Prepare Python package
+      run: |
+        # Clear existing static files except .gitkeep
+        cd python-package/src/neko_image_gallery_app/static
+        find . -type f ! -name '.gitkeep' -delete
+        find . -type d -empty -delete 2>/dev/null || true
+        
+        # Copy built frontend to Python package
+        cp -r ../../../../dist/* ./
+        echo "Copied frontend files to static directory"
+        ls -la
+    
+    - name: Build Python package
+      run: |
+        cd python-package
+        uv build
+        echo "Built package files:"
+        ls -la dist/
+    
+    - name: Publish to PyPI
+      env:
+        UV_PUBLISH_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+      run: |
+        cd python-package
+        uv publish
+    
+    - name: Create GitHub Release
+      if: steps.version.outputs.is_release == 'true'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ steps.version.outputs.version }}
+        name: Release v${{ steps.version.outputs.version }}
+        body: |
+          ## Changes
+          - Frontend build from commit ${{ github.sha }}
+          - Published to PyPI as neko-image-gallery-app v${{ steps.version.outputs.version }}
+          
+          ## Installation
+          ```bash
+          pip install neko-image-gallery-app==${{ steps.version.outputs.version }}
+          ```
+          
+          ## Package Contents
+          This package includes the complete NekoImageGallery frontend application as static files.
+        draft: false
+        prerelease: ${{ steps.version.outputs.prerelease == 'true' }}
+        files: |
+          python-package/dist/*
