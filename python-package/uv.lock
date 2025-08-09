@@ -69,7 +69,7 @@ wheels = [
 ]
 
 [[package]]
-name = "neko-image-gallery-explorer"
+name = "neko-image-gallery-app"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

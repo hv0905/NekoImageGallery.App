@@ -1,7 +1,7 @@
 [project]
-name = "neko-image-gallery-explorer"
+name = "neko-image-gallery-app"
 version = "0.1.0"
-description = "A web-based image gallery explorer and dashboard for Neko Image Gallery."
+description = "A web-based image gallery app and dashboard for Neko Image Gallery."
 readme = "README.md"
 authors = [
     { name = "EdgeNeko", email = "edgeneko@aiursoft.com" }
@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-neko-image-gallery-explorer = "neko_image_gallery_explorer:main"
+neko-image-gallery-app = "neko_image_gallery_app:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -24,6 +24,6 @@ dev = [
 ]
 [tool.hatch.build.targets.sdist]
 artifacts = [
-  "src/neko_image_gallery_explorer/static/**/*",
-  "src/neko_image_gallery_explorer/static/*"
+  "src/neko_image_gallery_app/static/**/*",
+  "src/neko_image_gallery_app/static/*"
 ]

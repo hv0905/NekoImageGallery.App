@@ -1,5 +1,5 @@
-src/neko_image_gallery_explorer/static/**/*
-src/neko_image_gallery_explorer/static/*
+src/neko_image_gallery_app/static/**/*
+src/neko_image_gallery_app/static/*
 __pycache__
 .venv/
 venv/
