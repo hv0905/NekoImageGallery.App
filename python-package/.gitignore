@@ -1,0 +1,5 @@
+src/neko_image_gallery_explorer/static/**/*
+src/neko_image_gallery_explorer/static/*
+__pycache__
+.venv/
+venv/

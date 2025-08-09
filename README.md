@@ -23,7 +23,7 @@ A react webui app, for [NekoImageGallery](https://github.com/hv0905/NekoImageGal
 
 - git
 - Node.js
-- yarn
+- yarn(v4)
 - Visual studio code (strongly recommended) or other code editor
 
 #### Install dependencies
