@@ -50,8 +50,7 @@ jobs:
     
     - name: Install uv
       uses: astral-sh/setup-uv@v4
-    
-    - name: Determine version and release type
+      - name: Determine version and release type
       id: version
       run: |
         cd python-package
@@ -63,11 +62,12 @@ jobs:
           echo "prerelease=false" >> $GITHUB_OUTPUT
           echo "Tag release: ${TAG_VERSION}"
         else
-          # Branch push - generate unique dev version
+          # Branch push - generate unique dev version (PyPI compatible)
           BASE_VERSION=$(grep -E '^version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/')
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
-          COMMIT_SHORT=$(git rev-parse --short HEAD)
-          NEW_VERSION="${BASE_VERSION}.dev${TIMESTAMP}+${COMMIT_SHORT}"
+          # Remove the '+' separator as PyPI doesn't allow local versions
+          # Use only dev version format: 0.1.0.dev20250809133946
+          NEW_VERSION="${BASE_VERSION}.dev${TIMESTAMP}"
           echo "version=${NEW_VERSION}" >> $GITHUB_OUTPUT
           echo "is_release=true" >> $GITHUB_OUTPUT
           echo "prerelease=true" >> $GITHUB_OUTPUT
